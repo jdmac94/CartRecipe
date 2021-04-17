@@ -48,21 +48,24 @@ const usuarioSchema = new mongoose.Schema({
 });
 
 usuarioSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({
-    _id: this.id,
-    correo: this.correo,
-    nombre: this.nombre,
-    alergias: this.alergias,
-    dieta: this.dieta,
-    tags: this.tags,
-    nivel_cocina: this.nivel_cocina,
-    sistema_unidades: this.sistema_unidades,
-    recetas_favs: this.recetas_favs,
-  });
+  const token = jwt.sign(
+    {
+      _id: this.id,
+      correo: this.correo,
+      nombre: this.nombre,
+      alergias: this.alergias,
+      dieta: this.dieta,
+      tags: this.tags,
+      nivel_cocina: this.nivel_cocina,
+      sistema_unidades: this.sistema_unidades,
+      recetas_favs: this.recetas_favs,
+    },
+    config.get("jwtPrivateKey")
+  );
   return token;
 };
 
-const Usuario = mongoose.model("Usuario", userSchema);
+const Usuario = mongoose.model("Usuario", usuarioSchema);
 
 function validateUsuario(usuario) {
   const schema = {

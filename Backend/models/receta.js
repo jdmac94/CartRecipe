@@ -17,17 +17,17 @@ const recetaSchema = new mongoose.Schema({
     required: true,
   },
   tiempo: {
-    type: TimeRanges,//revisar
+    type: TimeRanges, //revisar
     required: true,
   },
   imagenes: {
     type: Array,
-    default: []
+    default: [],
   },
   ingredientes: {
     type: Array,
     required: true,
-    default: []
+    default: [],
   },
   pasos: {
     type: Array,
@@ -48,8 +48,7 @@ const recetaSchema = new mongoose.Schema({
   }, */
 });
 
-const Receta = mongoose.model(
-    "Receta", userSchema);
+const Receta = mongoose.model("Receta", userSchema);
 
 function validateReceta(receta) {
   const schema = {

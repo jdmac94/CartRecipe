@@ -4,8 +4,12 @@ const helmet = require("helmet");
 const compression = require("compression");
 const cors = require("cors");
 
+require("./database");
+
 const home = require("./routes/home");
 const error = require("./routes/error");
+
+const auth = require("./routes/auth");
 
 const app = express();
 app.use(express.static("public"));
@@ -20,7 +24,7 @@ if (!config.get("jwtPrivateKey")) {
 }
 
 app.use("/", home);
-
+app.use("/api/v1/auth", auth);
 app.use("*", error);
 
 const port = process.env.PORT || 3000;
