@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  server:
+    image: node:12-alpine
+    working_dir: /Backend
+    command: sh -c "npm install && npm start"
+    container_name: server
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "9009:9009"
+    volumes:
+      - ./:/Backend
+    networks:
+      - app-network
+  db:
+    image: mongo:4.4.4
+    container_name: db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
+    volumes:
+      - ../../data/dbdata:/data/db
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge

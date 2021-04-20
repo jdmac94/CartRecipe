@@ -29,7 +29,7 @@ app.use("/api/v1/auth", auth);
 app.use("/api/v1/nevera", nevera);
 app.use("*", error);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 9009;
 
 app.listen(port, function () {
   console.log(`Server started on port ${port}`);
