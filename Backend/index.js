@@ -1,5 +1,6 @@
 const express = require("express");
 const config = require("config");
+require("dotenv").config();
 const helmet = require("helmet");
 const compression = require("compression");
 const cors = require("cors");

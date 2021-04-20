@@ -8,10 +8,16 @@ services:
     container_name: server
     restart: unless-stopped
     env_file: .env
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=db
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
     ports:
-      - "9009:9009"
+      - "80:$PORT"
     volumes:
-      - ./:/Backend
+      - .:/Backend
     networks:
       - app-network
   db:
