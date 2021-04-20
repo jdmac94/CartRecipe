@@ -21,6 +21,10 @@ const usuarioSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  googleId: {
+    type: String,
+    default: null
+  },
   alergias: {
     type: Array,
     default: [],

@@ -3,6 +3,11 @@ const router = express.Router();
 const bcriptjs = require("bcryptjs");
 const { Usuario } = require("../models/usuario");
 const _ = require("lodash");
+const passport = require("passport");
+require('../passport-setup');
+
+router.use(passport.initialize())
+//router.use(passport.session())
 
 const authMiddle = require("../middlewares/auth");
 
@@ -22,7 +27,7 @@ router.post("/login", authMiddle, async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  let user = await Usuario.findOne({ email: req.body.email });
+  let user = await Usuario.findOne({ correo: req.body.correo });
   if (user)
     return res.status(400).send("El usuario ya se encuentra registrado.");
   user = new Usuario(
@@ -32,6 +37,23 @@ router.post("/register", async (req, res) => {
   user.password = await bcriptjs.hash(user.password, salt);
   const result = user.save();
   if (result) res.send(user.generateAuthToken());
+});
+
+router.get('/auth/google', passport.authenticate('google', { scope: [ 'profile' ] }
+));
+
+router.get( '/auth/google/callback',
+    passport.authenticate( 'google', {
+        successRedirect: '/auth/google/success',
+        failureRedirect: '/auth/google/failure'
+}));
+
+router.get("/auth/google/failure", async (req, res) => {
+  res.send("test google auth FAILED")
+});
+
+router.get("/auth/google/success", async (req, res) => {
+  res.send("test google auth SUCCEEDED")
 });
 
 module.exports = router;
