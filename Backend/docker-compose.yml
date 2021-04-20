@@ -15,7 +15,7 @@ services:
       - MONGO_PORT=$MONGO_PORT
       - MONGO_DB=$MONGO_DB
     ports:
-      - "80:$PORT"
+      - "$PORT:$PORT"
     volumes:
       - .:/Backend
     networks:
