@@ -1,4 +1,5 @@
 const express = require("express");
+const https = require("https");
 const router = express.Router();
 const { Nevera } = require("../models/nevera");
 const { Producto } = require("../models/producto");
@@ -8,10 +9,35 @@ router.get("/getProd", async (req, res) => {
 
     //db.products.find( { _id: req.body.barcode } )
     //let producto = await Producto.find( { _id: req.body.barcode } );
+    let url = 'https://world.openfoodfacts.org/api/v0/product/' + req.body.barcode + '.json';
 
-    //let data = JSON.parse("https://world.openfoodfacts.org/api/v0/product/5449000000996.json");
-    //console.log(data);
-    //res.send(data);
+    let parsedData;
+    
+    https.get(url, function(res) {
+        console.log("Got response: " + res.statusCode);
+
+        res.setEncoding('utf8');
+        let rawData = '';
+        
+        res.on('data', (chunk) => { rawData += chunk; });
+        res.on('end', () => {
+            try {
+            parsedData = JSON.parse(rawData);
+
+            console.log(parsedData.product.selected_images);//impresión del fragmento de JSON que incluye las imágenes
+
+            } catch (e) {
+            console.error(e.message);
+            }
+        });
+
+      }).on('error', function(e) {
+        console.log("ERROR: " + e.message);
+      });
+    
+    console.log(parsedData);//no incluye los datos del JSON parseado
+    //res.json(parsedData.product.selected_images); //definir campos en función de lo que quiera front
+    res.send(req.body.barcode);
 
 });
 
