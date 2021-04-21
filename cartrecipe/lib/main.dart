@@ -14,6 +14,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'CartRecipe',
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+        accentColor: Colors.amberAccent,
+      ),
       initialRoute: '/',
       routes: {
         '/': (ctx) => TabsScreen(),

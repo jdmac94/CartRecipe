@@ -60,13 +60,13 @@ class _TabsScreenState extends State<TabsScreen> {
         onTap: _selectPage,
         backgroundColor: Theme.of(context).primaryColor,
         selectedItemColor: Theme.of(context).accentColor,
-        unselectedItemColor: Colors.black,
+        unselectedItemColor: Colors.white,
         currentIndex: _selectedPageIndex,
         type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(
             //backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.receipt),
+            icon: Icon(Icons.menu_book),
             label: 'Recetas',
           ),
           BottomNavigationBarItem(
@@ -76,17 +76,17 @@ class _TabsScreenState extends State<TabsScreen> {
           ),
           BottomNavigationBarItem(
             //backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.scanner),
+            icon: Icon(Icons.qr_code_scanner),
             label: 'Escáner',
           ),
           BottomNavigationBarItem(
             //backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.bookmark),
+            icon: Icon(Icons.kitchen),
             label: 'Mi nevera',
           ),
           BottomNavigationBarItem(
             //backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.verified_user),
+            icon: Icon(Icons.account_circle),
             label: 'Perfil',
           ),
         ],
