@@ -88,7 +88,7 @@ router.get("/getNevera", async (req, res) => {
         nevera.productos = ["0000000018449", "5449000000996"];
         //nevera.usuario = req.body.user;
         //nevera.productos = [];
-        const result = nevera.save();    
+        const result = nevera.save();
     }
     
 
@@ -124,7 +124,7 @@ router.get("/getNeveraArray", async (req, res) => {
     "toDeleteArr": ["111111111111111"]
 }
  */
-router.delete("/deleteNevera", async (req, res) => {
+router.post("/deleteNevera", async (req, res) => {
 
     // let nevera = await Nevera.find( { usuario: req.body.user } )
     let nevera = await Nevera.findOne();
