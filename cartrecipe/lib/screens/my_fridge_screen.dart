@@ -81,6 +81,8 @@ class MyFridgeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String displayText = "Same Text Everywhere";
+
     return Scaffold(
         body: ListView(
           children: <Widget>[
@@ -88,7 +90,7 @@ class MyFridgeScreen extends StatelessWidget {
               child: ListTile(
                 leading: FlutterLogo(size: 72.0),
                 title: Text('Item 1'),
-                onTap: () => print('Descripccion Item 1'),
+                onTap: () => showMyDialog(context, displayText),
               ),
             ),
             Card(
@@ -101,5 +103,59 @@ class MyFridgeScreen extends StatelessWidget {
           ],
         ),
         floatingActionButton: buildSpeedDial());
+  }
+
+  Future<void> showMyDialog(BuildContext context, String displayText) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: detailedViewProduct(),
+        );
+      },
+    );
+  }
+
+  Widget detailedViewProduct() {
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          Image.network(
+              "https://static.openfoodfacts.org/images/products/073/762/806/4502/front_en.6.200.jpg"),
+          ListTile(
+            title: const Text('Card title 1'),
+            subtitle: Text(
+              'Secondary Text',
+              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
+              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            ),
+          ),
+          ButtonBar(
+            alignment: MainAxisAlignment.start,
+            children: [
+              TextButton(
+                onPressed: () {
+                  // Perform some action
+                },
+                child: const Text('ACTION 1'),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Perform some action
+                },
+                child: const Text('ACTION 2'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
