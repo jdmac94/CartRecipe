@@ -2,10 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:cartrecipe/models/product.dart';
 
-class MyFridgeScreen extends StatelessWidget {
-  void _printar() {
-    print('Botón pulsado');
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+
+class MyFridgeScreen extends StatefulWidget {
+  @override
+  _MyFridgeScreenState createState() => _MyFridgeScreenState();
+}
+
+class _MyFridgeScreenState extends State<MyFridgeScreen> {
+  static const String endpoint = "762b0d7b9720.ngrok.io";
+  static const String api = "api/v1/nevera/getNeveraList";
+
+  Future<List<Product>> _getProducts() async {
+    final response = await http.get(Uri.https(endpoint, api));
+    if (response.statusCode == 200) {
+      print('Recibida la respuesta de la petición');
+
+      List<Product> prods = [];
+
+      Iterable l = json.decode(response.body);
+      prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
+      return prods;
+    } else {
+      throw Exception('Failed to load product');
+    }
   }
 
   SpeedDial buildSpeedDial() {
@@ -84,23 +108,32 @@ class MyFridgeScreen extends StatelessWidget {
     String displayText = "Same Text Everywhere";
 
     return Scaffold(
-        body: ListView(
-          children: <Widget>[
-            Card(
-              child: ListTile(
-                leading: FlutterLogo(size: 72.0),
-                title: Text('Item 1'),
-                onTap: () => showMyDialog(context, displayText),
-              ),
-            ),
-            Card(
-              child: ListTile(
-                leading: FlutterLogo(size: 72.0),
-                title: Text('Item 2'),
-                onTap: () => print('Descripccion Item 2'),
-              ),
-            ),
-          ],
+        body: Container(
+          child: FutureBuilder(
+            future: _getProducts(),
+            builder: (BuildContext context, snapshot) {
+              if (!snapshot.hasData) {
+                print('No data in snapshot');
+              } else {
+                return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        child: ListTile(
+                          leading: FlutterLogo(size: 72.0),
+                          title: Text(snapshot.data[index].name),
+                          onTap: () => showMyDialog(context, displayText),
+                        ),
+                      );
+                    });
+              }
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+                ),
+              );
+            },
+          ),
         ),
         floatingActionButton: buildSpeedDial());
   }
