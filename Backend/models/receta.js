@@ -17,7 +17,7 @@ const recetaSchema = new mongoose.Schema({
     required: true,
   },
   tiempo: {
-    type: TimeRanges, //revisar
+    type: String,
     required: true,
   },
   imagenes: {
@@ -46,6 +46,9 @@ const recetaSchema = new mongoose.Schema({
     type: Array,
     default: [],
   }, */
+  rating_num : {
+    type: Number
+  }
 });
 
 const Receta = mongoose.model("Receta", userSchema);
@@ -53,9 +56,9 @@ const Receta = mongoose.model("Receta", userSchema);
 function validateReceta(receta) {
   const schema = {
     usuario: Joi.String().required(),
-    titulo: Joi.String().required(),
-    dificultad: Joi.String().required(),
-    tiempo: Joi.String.required(),
+    // titulo: Joi.String().required(),
+    // dificultad: Joi.String().required(),
+    // tiempo: Joi.String.required(),
     /*ingredientes: Joi.String().required(),
     pasos: this.pasos,
     consejos: this.consejos,

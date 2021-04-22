@@ -12,6 +12,7 @@ const error = require("./routes/error");
 
 const auth = require("./routes/auth");
 const nevera = require("./routes/nevera");
+//const receta = require("./routes/receta");
 
 const app = express();
 app.use(express.static("public"));
@@ -28,6 +29,7 @@ if (!config.get("jwtPrivateKey")) {
 app.use("/", home);
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/nevera", nevera);
+//app.use("/api/v1/receta", receta);
 app.use("*", error);
 
 const port = process.env.PORT || 9009;
