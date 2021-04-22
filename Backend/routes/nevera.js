@@ -7,99 +7,31 @@ const { Product } = require("../models/product");
 let OFFurl = 'https://world.openfoodfacts.org/api/v0/product/';
 
 
-router.post("/apiImg", async (req, res) => {
+function getImgByAPI(code) {
 
-    let url = OFFurl + req.body.barcode + '.json';
+    let url = OFFurl + code + '.json';
 
-    let fotos;
-    // fetch(url)
-    //     .then(res => res.json())
-    //     .then(json => {
-    //         var x = json.product.selected_images.front.display;
-    //         console.log(x);
-    //     });
-        //fotos = json.product.selected_images.front);
+    var fotos = fetch(url)
+    .then(function(response) {
+        return response.json();
+    });
 
-        fetch(url)
-        //.then(res => res.json())
-        .then(function(response) {
-            return response.json();
-        })
-        .then(json => {
-            var x = json.product.selected_images.front.display;
-            console.log(x[0]);
-            res.send(x);
-        });
-
-    
-    res.send(fotos);
-});
-
-router.post("/getProdbyAPI", async (req, res) => {
-
-    //let producto = await Product.find( { _id: req.body.barcode } );
-    let url = OFFurl + req.body.barcode + '.json';
-    let parsedData;
-    
-    https.get(url, function(res) {
-        console.log("Got response: " + res.statusCode);
-
-        res.setEncoding('utf8');
-        let rawData = '';
-        
-        res.on('data', (chunk) => { rawData += chunk; });
-        res.on('end', () => {
-            try {
-            parsedData = JSON.parse(rawData);
-
-            console.log(parsedData.product.selected_images.front);//impresión del fragmento de JSON que incluye las imágenes
-
-            } catch (e) {
-            console.error(e.message);
-            }
-        });
-
-      }).on('error', function(e) {
-        console.log("ERROR: " + e.message);
-      });
-    
-    console.log(parsedData);//no incluye los datos del JSON parseado
-    //res.json(parsedData.product.selected_images); //definir campos en función de lo que quiera front
-    res.send(req.body.barcode);
-
-});
-
+    return fotos;
+}
 
 router.post("/getProd", async (req, res) => {
 
     console.log("GETTING PROD: " + req.body.barcode);
 
-    let bc = req.body.barcode;
-
-    var producto = await Product.findById(bc);
-
-    // const producto = await Product.findById(req.body.barcode);
+    var producto = await Product.findById(req.body.barcode);
 
     if (!producto)
         return res.status(404).send("El producto solicitado no existe");
-    
-    // if (!producto.selected_images) {
-    //     console.log("GETTING IMAGES FROM OFF API FOR PRODUCT: " + req.body.barcode);
-    //     //llamada a la función encargada de ello
-    //     let url = OFFurl + req.body.barcode + '.json';
-    //     let parsedData;
-        
-    //     //const result = nevera.save();
 
-    //     //return res.send(producto);
-    //     return res.send(producto);
-    // } //else
-        //res.send(producto);
-    
+    var fotos = await getImgByAPI(req.body.barcode);
+    var pics = fotos.product.selected_images.front.display;
 
-    let img = "https://static.openfoodfacts.org/images/products/073/762/806/4502/front_en.6.200.jpg";
-
-    producto.imgs = [ img ];
+    producto.imgs = [ pics ];
 
     res.send(producto);    
 
@@ -111,97 +43,46 @@ router.get("/getNevera", async (req, res) => {
     // let nevera = await Nevera.find( { usuario: req.body.user } )
     let nevera = await Nevera.findOne();
 
-    //test
-    if (!nevera) {
-        nevera = new Nevera();
-        nevera.usuario = "0";
-        nevera.productos = ["0000000018449", "5449000000996"];
-        //nevera.usuario = req.body.user;
-        //nevera.productos = [];
-        const result = nevera.save();
-    }
-    
-
     let prodArray = nevera.productos;
-    let listedPords = await Product.find( { _id: { $in: prodArray } }, { _keywords:1, allergens_from_user:1, product_name_es:1, nutriscore_data:1, nova_group:1} );
+    let listedProds = await Product.find( { _id: { $in: prodArray } }, { _keywords:1, allergens_from_user:1, product_name_es:1, nutriscore_data:1, nova_group:1} );
 
-    res.send(listedPords);
+    for (let element of listedProds) {
+
+        var fotos = await getImgByAPI(element._id);
+
+        var pics = fotos.product.selected_images.front.display;
+        element.imgs = [ pics ];
+    }
+
+    res.send(listedProds);
 
 });
 
 
 router.get("/getNeveraList", async (req, res) => {
 
-    console.log("GETTING NEVERA LIST"+ Date.now());
+    //var date = Date.now();
+    //var timeStr = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    
+    console.log("GETTING NEVERA LIST ");
     // let nevera = await Nevera.find( { usuario: req.body.user } )
     let nevera = await Nevera.findOne();
-
-    //test
-    if (!nevera) {
-        nevera = new Nevera();
-        nevera.usuario = "0";
-        nevera.productos = ["0000000018449", "5449000000996"];
-        //nevera.usuario = req.body.user;
-        //nevera.productos = [];
-        const result = nevera.save();
-    }
-    
 
     let prodArray = nevera.productos;
-    let listedPords = await Product.find( { _id: { $in: prodArray } }, { product_name:1, allergens_from_user:1, product_name_es:1,} );
+    let listedProds = await Product.find( { _id: { $in: prodArray } }, { product_name:1, allergens_from_user:1, product_name_es:1,} );
 
-    res.send(listedPords);
+    for (let element of listedProds) {
 
-});
+        var fotos = await getImgByAPI(element._id);
 
-router.get("/getNeveraListIMG", async (req, res) => {
-
-    console.log("GETTING NEVERA LIST");
-    // let nevera = await Nevera.find( { usuario: req.body.user } )
-    let nevera = await Nevera.findOne();
-
-    //test
-    if (!nevera) {
-        nevera = new Nevera();
-        nevera.usuario = "0";
-        nevera.productos = ["5449000000996"];
-        //nevera.usuario = req.body.user;
-        //nevera.productos = [];
-        const result = nevera.save();
-    }
-    
-
-    let prodArray = nevera.productos;
-    let listedPords = await Product.find( { _id: { $in: prodArray } }, { product_name:1, allergens_from_user:1, product_name_es:1,} );
-
-    let img = "https://static.openfoodfacts.org/images/products/073/762/806/4502/front_en.6.200.jpg";
-
-    listedPords.forEach(function(element) {
-        element.imgs = [ img ];
-    });
-
-    res.send(listedPords);
-
-});
-
-router.get("/getNeveraArray", async (req, res) => {
-
-    // let nevera = await Nevera.find( { usuario: req.body.user } )
-    let nevera = await Nevera.findOne();
-
-    //test
-    if (!nevera) {
-        nevera = new Nevera();
-        nevera.usuario = "0";
-        nevera.productos = ["0000000018449", "5449000000996"];
-        //nevera.usuario = req.body.user;
-        //nevera.productos = [];
-        const result = nevera.save();    
+        var pics = fotos.product.selected_images.front.display;
+        element.imgs = [ pics ];
     }
 
-    res.send(nevera.productos);
+    res.send(listedProds);
 
 });
+
 
 /*
 {
@@ -281,19 +162,34 @@ router.put("/addNevera", async (req, res) => {
         return res.status(400).send("El Producto ya exsite en la nevera");
 });
 
+router.post("/apiImg", async (req, res) => {
+
+    var fotos = await getImgByAPI(req.body.barcode);
+
+    var pics = fotos.product.selected_images.front.display;
+    console.log(pics);
+    res.send(pics);
+});
 
 router.get("/restoreNevera", async (req, res) => {
 
-    console.log("GETTING NEVERA LIST");
+    console.log("RESETTING NEVERA");
     // let nevera = await Nevera.find( { usuario: req.body.user } )
-    let nevera = await Nevera.remove( { } );
-
-    nevera = new Nevera();
+    let nevera = new Nevera();
     nevera.usuario = "0";
-    nevera.productos = ["5449000000996"];
+    nevera.productos = ["5449000000996", "8422904015553", "3033710065967"];
     //nevera.usuario = req.body.user;
     //nevera.productos = [];
     const result = nevera.save();
+
+});
+
+router.get("/getNeveraArray", async (req, res) => {
+
+    // let nevera = await Nevera.find( { usuario: req.body.user } )
+    let nevera = await Nevera.findOne();
+
+    res.send(nevera.productos);
 
 });
 
