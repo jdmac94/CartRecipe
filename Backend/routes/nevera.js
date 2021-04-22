@@ -41,7 +41,7 @@ router.get("/getProdbyAPI", async (req, res) => {
 });
 
 
-router.get("/getProd", async (req, res) => {
+router.post("/getProd", async (req, res) => {
 
     console.log("GETTING PROD: " + req.body.barcode);
 
@@ -93,7 +93,7 @@ router.get("/getNevera", async (req, res) => {
     
 
     let prodArray = nevera.productos;
-    let listedPords = await Product.find( { _id: { $in: prodArray } }, { _keywords:1} );
+    let listedPords = await Product.find( { _id: { $in: prodArray } }, { _keywords:1, allergens_from_user, product_name_es, nutriscore_data, nova_group} );
 
     res.send(listedPords);
 

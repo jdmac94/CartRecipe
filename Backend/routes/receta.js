@@ -72,7 +72,8 @@ router.get("/addRecetaFIXED", async (req, res) => {
 
 router.get("/addReceta", async (req, res) => {
 
-
+    receta.usuario = "0";
+    receta.titulo = res.body.titulo;
     let receta = new Receta();
     receta.usuario = "0";
     receta.titulo = res.body.titulo;
