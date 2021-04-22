@@ -84,13 +84,19 @@ class MyFridgeScreen extends StatelessWidget {
     return Scaffold(
         body: ListView(
           children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.map),
-              title: Text('Item 1'),
+            Card(
+              child: ListTile(
+                leading: FlutterLogo(size: 72.0),
+                title: Text('Item 1'),
+                onTap: () => print('Descripccion Item 1'),
+              ),
             ),
-            ListTile(
-              leading: Icon(Icons.photo_album),
-              title: Text('Item 2'),
+            Card(
+              child: ListTile(
+                leading: FlutterLogo(size: 72.0),
+                title: Text('Item 2'),
+                onTap: () => print('Descripccion Item 2'),
+              ),
             ),
           ],
         ),
