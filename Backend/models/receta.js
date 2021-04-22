@@ -51,7 +51,7 @@ const recetaSchema = new mongoose.Schema({
   }
 });
 
-const Receta = mongoose.model("Receta", userSchema);
+const Receta = mongoose.model("Receta", recetaSchema);
 
 function validateReceta(receta) {
   const schema = {
