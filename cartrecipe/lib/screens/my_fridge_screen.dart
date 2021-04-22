@@ -82,13 +82,17 @@ class MyFridgeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-          children: [
-            Center(
-              child: Text('Pantalla de nevera'),
+        body: ListView(
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.map),
+              title: Text('Item 1'),
+            ),
+            ListTile(
+              leading: Icon(Icons.photo_album),
+              title: Text('Item 2'),
             ),
           ],
-          //floatingActionButton: buildSpeedDial()],,
         ),
         floatingActionButton: buildSpeedDial());
   }
