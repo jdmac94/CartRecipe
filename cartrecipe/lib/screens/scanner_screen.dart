@@ -11,7 +11,6 @@ class ScannerScreen extends StatefulWidget {
 
 class _ScannerScreenState extends State<ScannerScreen> {
   String _data = "";
-  String _productname = "";
 
   _scan() async {
     await FlutterBarcodeScanner.scanBarcode(
