@@ -41,10 +41,10 @@ router.post("/getProdKeyWord", async (req, res) => {
 
     console.log("GETTING PROD WITH KEYWORD: " + req.body._keywords);
 
-    var productos = await Product.find(req.body._keywords).limit(10);
+    var productos = await Product.find({ _keywords: req.body._keywords}).exec();
 
     if (!productos)
-        return res.status(404).send("El producto solicitado no existe");
+        return res.status(404).send("No hay productos con la keyword solicitada");
     for (producto in productos)
         var fotos = await getImgByAPI(producto.barcode);
         var pics = fotos.product.selected_images.front.display;
