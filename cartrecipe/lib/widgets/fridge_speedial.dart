@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:cartrecipe/widgets/add_product_form.dart';
 
 class FridgeSpeedDial extends StatelessWidget {
+  Future<void> dialogAddForm(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AddProductForm();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SpeedDial(
@@ -58,7 +68,7 @@ class FridgeSpeedDial extends StatelessWidget {
           foregroundColor: Colors.white,
           label: 'Añadir manualmente',
           labelStyle: TextStyle(fontSize: 18),
-          onTap: () => print('FIRST CHILD'),
+          onTap: () => dialogAddForm(context),
           onLongPress: () => print('FIRST CHILD LONG PRESS'),
         ),
         SpeedDialChild(

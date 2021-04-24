@@ -16,7 +16,7 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
   //http://db6bc548365b.ngrok.io/api/v1/nevera/getProdKeyWord
   //TODO! Cambiar cada vez que se levante el servidor por el momento
 
-  Future<void> showMyDialog(BuildContext context, Product product) {
+  Future<void> dialogProduct(BuildContext context, Product product) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -76,7 +76,7 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
                                           height: 70,
                                         ),
                                   title: Text(snapshot.data[index].name),
-                                  onTap: () => showMyDialog(
+                                  onTap: () => dialogProduct(
                                       context, snapshot.data[index]),
                                   //!ESTO PARA TRATAR DE HACER SELECCION MULTIPLE
                                   // trailing: CheckboxListTile(
