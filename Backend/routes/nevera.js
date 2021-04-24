@@ -19,6 +19,19 @@ function getImgByAPI(code) {
     return fotos;
 }
 
+async function checkImgFromAPI(code) {
+
+    var fotos = await getImgByAPI(code);
+
+        if (fotos.product.selected_images)
+            if (fotos.product.selected_images.front)
+                if (fotos.product.selected_images.front.display) {
+                    
+                    return [ fotos.product.selected_images.front.display ];
+                }
+    return [];
+}
+
 router.post("/getProd", async (req, res) => {
 
     console.log("GETTING PROD: " + req.body.barcode);
@@ -28,10 +41,7 @@ router.post("/getProd", async (req, res) => {
     if (!producto)
         return res.status(404).send("El producto solicitado no existe");
 
-    var fotos = await getImgByAPI(req.body.barcode);
-    var pics = fotos.product.selected_images.front.display;
-
-    producto.imgs = [ pics ];
+    producto.imgs = await checkImgFromAPI(req.body.barcode);
 
     res.send(producto);    
 
@@ -40,15 +50,20 @@ router.post("/getProd", async (req, res) => {
 router.post("/getProdKeyWord", async (req, res) => {
 
     console.log("GETTING PROD WITH KEYWORD: " + req.body._keywords);
-
-    var productos = await Product.find({ _keywords: req.body._keywords}).exec();
-
+    /*TODO:
+        - hacer dinamico el limite de resultados y que desde la request se pueda cambiar
+        - tema de los tags de popularidad
+        - busqueda con "LIKE" (keywords parciales)
+    */
+    var productos = await Product.find( { _keywords: req.body._keywords } ).limit( 10 );
+    
     if (!productos)
         return res.status(404).send("No hay productos con la keyword solicitada");
-    for (producto in productos)
-        var fotos = await getImgByAPI(producto.barcode);
-        var pics = fotos.product.selected_images.front.display;
-        producto.imgs = [ pics ];
+
+    for (producto of productos) {
+        producto.imgs = await checkImgFromAPI(producto._id);
+    }
+    
 
     res.send(productos);    
 
@@ -68,10 +83,8 @@ router.get("/getNevera", async (req, res) => {
 
     for (let element of listedProds) {
 
-        var fotos = await getImgByAPI(element._id);
-
-        var pics = fotos.product.selected_images.front.display;
-        element.imgs = [ pics ];
+        element.imgs = await checkImgFromAPI(element._id);
+        
     }
 
     res.send(listedProds);
@@ -99,10 +112,8 @@ router.get("/getNeveraList", async (req, res) => {
 
     for (let element of listedProds) {
 
-        var fotos = await getImgByAPI(element._id);
-
-        var pics = fotos.product.selected_images.front.display;
-        element.imgs = [ pics ];
+        element.imgs = await checkImgFromAPI(element._id);
+    
     }
 
     res.send(listedProds);
@@ -206,9 +217,7 @@ router.put("/addNevera", async (req, res) => {
 
 router.post("/apiImg", async (req, res) => {
 
-    var fotos = await getImgByAPI(req.body.barcode);
-
-    var pics = fotos.product.selected_images.front.display;
+    var pics = element.imgs = await checkImgFromAPI(req.body.barcode);
     console.log(pics);
     res.send(pics);
 });
