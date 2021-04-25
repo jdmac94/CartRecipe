@@ -9,7 +9,8 @@ class AddProductForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: Card(
+      title: Text('Añadir producto'),
+      content: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
@@ -23,7 +24,6 @@ class AddProductForm extends StatelessWidget {
                     validator: (value) {
                       String patttern = r'(^[0-9]*$)';
                       RegExp regExp = new RegExp(patttern);
-
                       if (value == null || value.isEmpty) {
                         return 'Porfavor introduzca texto';
                       } else if (!regExp.hasMatch(value)) {
@@ -54,6 +54,13 @@ class AddProductForm extends StatelessWidget {
                     },
                     child: Text('Submit'),
                   ),
+                ),
+                // ignore: deprecated_member_use
+                FlatButton(
+                  child: Text("Cancelar"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
               ]),
         ),
