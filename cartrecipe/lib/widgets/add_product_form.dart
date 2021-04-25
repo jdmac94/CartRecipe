@@ -27,9 +27,9 @@ class AddProductForm extends StatelessWidget {
                       if (value == null || value.isEmpty) {
                         return 'Porfavor introduzca texto';
                       } else if (!regExp.hasMatch(value)) {
-                        return 'El codigo de barras solo debe contener numeros 0-9';
+                        return 'Solo debe contener numeros 0-9';
                       } else if (value.length < 13) {
-                        return 'Porfavor introduzca los 13 caracteres del codigo de barras';
+                        return 'Introduzca los 13 caracteres';
                       }
 
                       return null;

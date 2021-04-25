@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:cartrecipe/widgets/add_product_form.dart';
+import 'package:cartrecipe/widgets/delete_alert.dart';
 
 class FridgeSpeedDial extends StatelessWidget {
   Future<void> dialogAddForm(BuildContext context) {
@@ -8,6 +9,15 @@ class FridgeSpeedDial extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AddProductForm();
+      },
+    );
+  }
+
+  Future<void> confirmDelete(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return DeleteAlert();
       },
     );
   }
@@ -77,7 +87,7 @@ class FridgeSpeedDial extends StatelessWidget {
           foregroundColor: Colors.white,
           label: 'Añadir mediante escaner',
           labelStyle: TextStyle(fontSize: 18),
-          onTap: () => print('SECOND CHILD'),
+          onTap: () => confirmDelete(context),
           onLongPress: () => print('SECOND CHILD LONG PRESS'),
         ),
       ],
