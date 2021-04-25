@@ -21,9 +21,17 @@ class AddProductForm extends StatelessWidget {
                     controller: productText,
                     // The validator receives the text that the user has entered.
                     validator: (value) {
+                      String patttern = r'(^[0-9]*$)';
+                      RegExp regExp = new RegExp(patttern);
+
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
+                        return 'Porfavor introduzca texto';
+                      } else if (!regExp.hasMatch(value)) {
+                        return 'El codigo de barras solo debe contener numeros 0-9';
+                      } else if (value.length < 13) {
+                        return 'Porfavor introduzca los 13 caracteres del codigo de barras';
                       }
+
                       return null;
                     },
                   ),
