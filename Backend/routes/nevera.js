@@ -221,6 +221,7 @@ router.put("/addNevera", async (req, res) => {
 
 router.post("/apiImg", async (req, res) => {
 
+    console.log("apiImg");
     var pics = element.imgs = await checkImgFromAPI(req.body.barcode);
     console.log(pics);
     res.send(pics);
