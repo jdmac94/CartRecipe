@@ -8,19 +8,22 @@ let OFFurl = 'https://world.openfoodfacts.org/api/v0/product/';
 const barcodeRegEx = /^[0-9]{13}$/;
 
 async function getImgByAPI(code) {
-
+    console.log("getImgByAPI");
     let url = OFFurl + code + '.json';
+    console.log(url);
 
     var fotos = fetch(url)
     .then(function(response) {
         return response.json();
     });
 
+    console.log("fotos");
+    console.log(fotos);
     return fotos;
 }
 
 async function checkImgFromAPI(code) {
-
+    console.log("checkImgFromAPI");
     var fotos = await getImgByAPI(code);
 
         if (fotos.product.selected_images)
