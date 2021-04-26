@@ -18,6 +18,7 @@ class DeleteAllAlert extends StatelessWidget {
           onPressed: () {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text('Vaciando nevera')));
+            //llamar funcion delete all fridge o
             //Devuelve a la vista ANTERIOR, no NUEVA ( con el product eliminado)
             Navigator.of(context, rootNavigator: true).pop(context);
           },

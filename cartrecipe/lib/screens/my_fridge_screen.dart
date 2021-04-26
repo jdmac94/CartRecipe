@@ -6,6 +6,7 @@ import 'package:cartrecipe/models/product.dart';
 
 import 'package:cartrecipe/widgets/fridge_speedial.dart';
 import 'package:cartrecipe/widgets/detail_view_product.dart';
+import 'package:flutter/rendering.dart';
 
 import 'dart:io';
 
@@ -19,6 +20,8 @@ class MyFridgeScreen extends StatefulWidget {
 class _MyFridgeScreenState extends State<MyFridgeScreen> {
   //http://db6bc548365b.ngrok.io/api/v1/nevera/getProdKeyWord
   //TODO! Cambiar cada vez que se levante el servidor por el momento
+
+  List<int> selectedList = [];
 
   Future<void> dialogProduct(BuildContext context, Product product) {
     return showDialog<void>(
@@ -97,21 +100,33 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
                               },
                               child: Card(
                                 child: ListTile(
-                                  leading: (snapshot.data[index].image == null)
-                                      ? FlutterLogo(size: 70)
-                                      : Image.network(
-                                          snapshot.data[index].image,
-                                          width: 70,
-                                          height: 70,
-                                        ),
-                                  title: Text(snapshot.data[index].name),
-                                  onTap: () => dialogProduct(
-                                      context, snapshot.data[index]),
-                                  //!ESTO PARA TRATAR DE HACER SELECCION MULTIPLE
-                                  // trailing: CheckboxListTile(
-                                  //   controlAffinity: ListTileControlAffinity,
-                                  // ),
-                                ),
+                                    leading:
+                                        (snapshot.data[index].image == null)
+                                            ? FlutterLogo(size: 70)
+                                            : Image.network(
+                                                snapshot.data[index].image,
+                                                width: 70,
+                                                height: 70,
+                                              ),
+                                    title: Text(snapshot.data[index].name),
+                                    onTap: () => dialogProduct(
+                                        context, snapshot.data[index]),
+                                    //!ESTO PARA TRATAR DE HACER SELECCION MULTIPLE
+                                    // trailing: CheckboxListTile(
+                                    //   controlAffinity: ListTileControlAffinity,
+                                    // ),
+                                    selected: selectedList.contains(index),
+                                    onLongPress: () {
+                                      setState(() {
+                                        if (selectedList.contains(index)) {
+                                          selectedList.remove(index);
+                                          print('Remove' + index.toString());
+                                        } else {
+                                          selectedList.add(index);
+                                          print('Add' + index.toString());
+                                        }
+                                      });
+                                    }),
                               ),
                             );
                           });
