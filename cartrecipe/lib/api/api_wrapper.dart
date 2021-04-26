@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:cartrecipe/models/product.dart';
 
 class ApiWrapper {
-  static const String endpoint = "db6bc548365b.ngrok.io";
+  static const String endpoint = "bbf4d07438ae.ngrok.io";
 
   Future<List<Product>> getFridgeProducts() async {
     const String api = "api/v1/nevera/getNeveraList";
@@ -23,7 +23,7 @@ class ApiWrapper {
       return prods;
     } else {
       print('Petición de respuesta');
-      throw Exception('Failed to load product');
+      //throw Exception('Failed to load product');
     }
   }
 
@@ -32,12 +32,18 @@ class ApiWrapper {
     const String api = "api/v1/nevera/deleteNevera";
 
     Map<String, List<String>> parameters = Map<String, List<String>>();
-    parameters['toDeleteArr'] = [barcode];
+    parameters['toDeleteArr'] = [barcode, '8422904015553'];
+
+    print(parameters is Map<String, List<String>>);
+    //print(parameters);
+    print([barcode] is List<String>);
 
     print('Parámetros: ${parameters}');
 
     http.Response response =
         await http.post(Uri.https(endpoint, api), body: jsonEncode(parameters));
+
+    print(response.body);
     //print([barcode]);
     if (response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
@@ -47,11 +53,11 @@ class ApiWrapper {
       Iterable l = json.decode(response.body);
       prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
 
-      print('Entro aquí si es bien  $prods');
+      print('Entro aquí si es bien $prods');
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
-      throw Exception('Failed to load product');
+      //throw Exception('Failed to load product');
     }
   }
 }

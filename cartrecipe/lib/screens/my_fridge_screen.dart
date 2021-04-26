@@ -7,6 +7,10 @@ import 'package:cartrecipe/models/product.dart';
 import 'package:cartrecipe/widgets/fridge_speedial.dart';
 import 'package:cartrecipe/widgets/detail_view_product.dart';
 
+import 'dart:io';
+
+import 'package:cartrecipe/data/dummy_data.dart';
+
 class MyFridgeScreen extends StatefulWidget {
   @override
   _MyFridgeScreenState createState() => _MyFridgeScreenState();
@@ -25,6 +29,29 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
     );
   }
 
+  Future<List<Product>> getListProducts() async {
+    bool connection = false;
+
+    try {
+      final result = await InternetAddress.lookup(
+          'bbf4d07438ae.ngrok.io/api/v1/nevera/getNeveraList/');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        connection = true;
+        print('Connected');
+      }
+    } on SocketException catch (_) {
+      print('No connection');
+    }
+
+    if (connection) {
+      return ApiWrapper().getFridgeProducts();
+    } else {
+      return DUMMY_PRODUCTS;
+    }
+
+    //return connection;
+  }
+
   void undo() {}
 
   @override
@@ -37,7 +64,9 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
               Text('Productos en la nevera'),
               Expanded(
                 child: FutureBuilder(
-                  future: ApiWrapper().getFridgeProducts(),
+                  //TODO! REVISAR
+                  future:
+                      getListProducts(), //if(checkConnection() == true) ?  : DUMMY_DATA,
                   builder: (BuildContext context, snapshot) {
                     if (!snapshot.hasData) {
                       print('No data in snapshot');

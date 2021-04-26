@@ -6,6 +6,7 @@ class AddProductForm extends StatelessWidget {
   //variable para guardar el texto introducido
   final productText = TextEditingController();
 
+  //TODO Mirar que te aparezca el teclado numérico
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
