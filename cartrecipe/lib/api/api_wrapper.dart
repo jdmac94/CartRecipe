@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:cartrecipe/models/product.dart';
 
 class ApiWrapper {
-  static const String endpoint = "db6bc548365b.ngrok.io";
+  static const String endpoint = "bbf4d07438ae.ngrok.io";
 
   Future<List<Product>> getFridgeProducts() async {
     const String api = "api/v1/nevera/getNeveraList";
