@@ -7,7 +7,7 @@ const { Product } = require("../models/product");
 let OFFurl = 'https://world.openfoodfacts.org/api/v0/product/';
 const barcodeRegEx = /^[0-9]{13}$/;
 
-function getImgByAPI(code) {
+async function getImgByAPI(code) {
 
     let url = OFFurl + code + '.json';
 
@@ -127,7 +127,8 @@ router.get("/getNeveraList", async (req, res) => {
 }
  */
 router.post("/deleteNevera", async (req, res) => {
-
+    
+    console.log("DELETING NEVERA CONTENT");
     deleteArr = req.body.toDeleteArr;
     console.log(deleteArr);
 
