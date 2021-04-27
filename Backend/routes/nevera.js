@@ -311,7 +311,7 @@ router.delete("/clearNevera", async (req, res) => {
  */
 router.put("/addToNevera", async (req, res) => {
   console.log("ADDING NEVERA CONTENT");
-
+  console.log(req.body);
   let nevera = await Nevera.findOne();
 
   if (!nevera)
