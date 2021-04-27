@@ -29,10 +29,38 @@ class ApiWrapper {
 
   //TODO! REVISAR PORQUE PETA MUY FUERTE (undefined al recibirlo en back)
   void deleteProduct(List<String> productsToBeDeleted) async {
-    const String api = "api/v1/nevera/deleteNevera";
+    const String api = "api/v1/nevera/deleteNeveraInt";
 
-    Map<String, List<String>> parameters = Map<String, List<String>>();
-    parameters['toDeleteArr'] = productsToBeDeleted;
+    // print("Estamos en el deleteProduct de la API");
+    // productsToBeDeleted.forEach((element) {
+    //   element = '\"' + element + '\"';
+    //   print(element);
+    // });
+    //
+    //String allProducts = productsToBeDeleted[0];
+
+    //print('Todo en uno: $allProducts');
+
+    // for (int i = 1; i < productsToBeDeleted.length; i++) {
+    //   allProducts += ',' + productsToBeDeleted[i];
+    // }
+
+    //print('Todo en uno: $allProducts');
+
+    //print('test con comillas $productsToBeDeleted');
+    //
+    //
+    List<int> integers = [];
+    productsToBeDeleted.forEach((element) {
+      //element = '\"' + element + '\"';
+      integers.add(int.parse(element));
+    });
+
+    // Map<String, List<String>> parameters = Map<String, List<String>>();
+    // parameters['toDeleteArr'] = productsToBeDeleted;
+    //
+    Map<String, List<int>> parameters = Map<String, List<int>>();
+    parameters['toDeleteArr'] = integers;
 
     print(parameters is Map<String, List<String>>);
     //print(parameters);
@@ -40,17 +68,18 @@ class ApiWrapper {
 
     print('Parámetros: $parameters');
 
-    http.Response response =
-        await http.post(Uri.http(endpoint, api), body: jsonEncode(parameters));
+    http.Response request = await http.post(Uri.http(endpoint, api),
+        body: jsonEncode(parameters),
+        encoding: Encoding.getByName("application/json"));
 
-    print(response.body);
+    print(request.body);
     //print([barcode]);
-    if (response.statusCode == 200) {
+    if (request.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
       List<Product> prods = [];
 
-      Iterable l = json.decode(response.body);
+      Iterable l = json.decode(request.body);
       prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
 
       print('Entro aquí si es bien $prods');
@@ -63,7 +92,71 @@ class ApiWrapper {
 
   void addProduct(String barcode) async {
     const String api = "api/v1/nevera/addToNevera";
+    var uri = Uri.http(endpoint, api);
+
+    String parameters = barcode;
+
+    print('URI: $uri');
+    print('Parámetros añadir: $parameters');
+
+    var encodedBody = json.encode(parameters);
+    print('Encoded json: -- $encodedBody');
+
+    http.Response response = await http.post(
+      uri,
+      body: encodedBody,
+      encoding: Encoding.getByName('application/json'),
+    );
+
+    print('Response');
+
+    print(response.body.toString());
+
+    if (response.statusCode == 200) {
+      print('Recibido bien');
+    } else {
+      print('Status code: ${response.statusCode}');
+      print('Recibido mal');
+    }
   }
 
-  ///addToNevera
+  void deleteSingleProduct(String barcode) async {
+    //TODO CAMBIAR
+    var api = 'api/v1/nevera/deleteNeveraSingle';
+    var uri = Uri.http(endpoint, api);
+    Map<String, String> parameters = Map<String, String>();
+    parameters["toDeleteArr"] = barcode;
+
+    print('URI: $uri');
+    print('Parámetros single: $parameters');
+
+    var encodedBody = json.encode(parameters);
+
+    print('Encoded json: -- $encodedBody');
+
+    http.Response response = await http.post(
+      uri,
+      body: encodedBody,
+      encoding: Encoding.getByName('application/json'),
+    );
+
+    print('TODO response');
+
+    print(response.body.toString());
+
+    if (response.statusCode == 200) {
+      print('Recibido bien');
+    } else {
+      print('Status code: ${response.statusCode}');
+      print('Recibido mal');
+    }
+  }
+
+  void printJson(String input) {
+    const JsonDecoder decoder = JsonDecoder();
+    const JsonEncoder encoder = JsonEncoder.withIndent('  ');
+    final dynamic object = decoder.convert(input);
+    final dynamic prettyString = encoder.convert(object);
+    prettyString.split('\n').forEach((dynamic element) => print(element));
+  }
 }

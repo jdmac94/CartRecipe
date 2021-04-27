@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:cartrecipe/api/api_wrapper.dart';
+
 class AddProductForm extends StatelessWidget {
   //variable para la validacion
   final _formKey = GlobalKey<FormState>();
@@ -44,11 +46,13 @@ class AddProductForm extends StatelessWidget {
                       // Validate returns true if the form is valid, or false otherwise.
                       if (_formKey.currentState.validate()) {
                         // If the form is valid, display a snackbar.
+                        ApiWrapper().addProduct(productText.text);
                         // ****call a server or save the information in a database****
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content:
                                 //productText.text es el contenido del form
                                 Text('Processing Data:' + productText.text)));
+
                         //Devuelve a la vista ANTERIOR, no NUEVA ( con el product añadido )
                         Navigator.of(context, rootNavigator: true).pop(context);
                       }
