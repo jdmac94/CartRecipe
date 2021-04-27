@@ -338,7 +338,7 @@ router.put("/addToNevera", async (req, res) => {
 
   var prod = await Product.findById(req.body.barcode);
 
-  // if (!prod) return res.status(404).send("El producto a insertar no existe");
+  if (!prod) return res.status(404).send("El producto a insertar no existe");
 
   let neveraContent = nevera.productos;
   delIndex = neveraContent.indexOf(req.body.barcode);
