@@ -197,7 +197,7 @@ router.post("/deleteNevera", async (req, res) => {
   if (result) res.send(nevera.productos);
 });
 
-router.post("/deleteNeveraSingle", async (req, res) => {
+router.delete("/deleteNeveraSingle", async (req, res) => {
   console.log("DELETING NEVERA PROD: " + req.body);
   console.log(req.body);
   deleteArr = req.body.toDeleteArr;
@@ -205,8 +205,8 @@ router.post("/deleteNeveraSingle", async (req, res) => {
   // if (!deleteArr)
   //   return res.status(400).send("Datos del body mal formateados (1)");
 
-  // if (typeof deleteArr === "string")
-  //   return res.status(400).send("Datos del body mal formateados (2)");
+  if (typeof deleteArr === "string")
+    return res.status(400).send("Datos del body mal formateados (2)");
 
   let nevera = await Nevera.findOne();
 
