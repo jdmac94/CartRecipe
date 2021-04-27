@@ -22,7 +22,8 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
   //http://db6bc548365b.ngrok.io/api/v1/nevera/getProdKeyWord
   //TODO! Cambiar cada vez que se levante el servidor por el momento
 
-  List<int> selectedList = [];
+  Map selectedMap = new Map<int,
+      String>(); //Primer camp sera el Index, segon el Codi de Barres
 
   bool connection = false;
 
@@ -37,11 +38,12 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
     );
   }
 
-  Future<void> confirmDelete(BuildContext context, List<int> selectedItems) {
+  Future<void> confirmDelete(
+      BuildContext context, Map<int, String> selectedMap) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return DeleteAlert(selectedItems);
+        return DeleteAlert(selectedMap);
       },
     );
   }
@@ -137,15 +139,18 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
                                   // trailing: CheckboxListTile(
                                   //   controlAffinity: ListTileControlAffinity,
                                   // ),
-                                  selected: selectedList.contains(index),
+                                  selected: selectedMap.containsKey(index),
                                   onLongPress: () {
                                     setState(() {
-                                      if (selectedList.contains(index)) {
-                                        selectedList.remove(index);
-                                        print('Remove' + index.toString());
+                                      if (selectedMap.containsKey(index)) {
+                                        print('Remove Selected id: ' +
+                                            selectedMap[index].toString());
+                                        selectedMap.remove(index);
                                       } else {
-                                        selectedList.add(index);
-                                        print('Add' + index.toString());
+                                        selectedMap[index] =
+                                            snapshot.data[index].id;
+                                        print('Add Selected id: ' +
+                                            selectedMap[index].toString());
                                       }
                                     });
                                   }),
@@ -163,13 +168,13 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
               ),
             ),
             Visibility(
-              visible: selectedList.isNotEmpty,
+              visible: selectedMap.isNotEmpty,
               child: Align(
                 alignment: Alignment.bottomLeft,
                 child: FloatingActionButton(
                   child: Icon(Icons.delete),
                   onPressed: () {
-                    confirmDelete(context, selectedList);
+                    confirmDelete(context, selectedMap);
                   },
                   backgroundColor: Colors.redAccent,
                 ),
