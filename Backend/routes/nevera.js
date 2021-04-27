@@ -162,7 +162,7 @@ router.get("/getNeveraList", async (req, res) => {
     "toDeleteArr": ["111111111111111"]
 }
  */
-router.post("/deleteNevera", async (req, res) => {
+router.delete("/deleteNevera", async (req, res) => {
   console.log("DELETING NEVERA CONTENT");
   deleteArr = req.body.toDeleteArr;
   console.log(deleteArr);
