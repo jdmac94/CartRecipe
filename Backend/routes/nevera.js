@@ -182,10 +182,10 @@ router.post("/deleteNeveraInt", async (req, res) => {
     console.log(deleteArr);
 
     if (!deleteArr)
-        return res.status(400).send("Datos del body mal formateados");
+        return res.status(400).send("Datos del body mal formateados (1)");
 
     if (!(typeof deleteArr[Symbol.iterator] === 'function' && !(typeof deleteArr === 'string')))
-        return res.status(400).send("Datos del body mal formateados");
+        return res.status(400).send("Datos del body mal formateados (2)");
         
     // let nevera = await Nevera.find( { usuario: req.body.user } )
     let nevera = await Nevera.findOne();
@@ -218,16 +218,16 @@ router.post("/deleteNeveraSplit", async (req, res) => {
     
     console.log("DELETING NEVERA CONTENT (SPLITTED VERSION)");
     console.log(req.body.toDeleteArr);
-    
+
     deleteArr = req.body.toDeleteArr.split(",");
     
     console.log(deleteArr);
 
-    if (!deleteArr)
-        return res.status(400).send("Datos del body mal formateados");
+    if (!req.body.toDeleteArr)
+        return res.status(400).send("Datos del body mal formateados (1)");
 
     if (!(typeof deleteArr[Symbol.iterator] === 'function' && !(typeof deleteArr === 'string')))
-        return res.status(400).send("Datos del body mal formateados");
+        return res.status(400).send("Datos del body mal formateados (2)");
         
     // let nevera = await Nevera.find( { usuario: req.body.user } )
     let nevera = await Nevera.findOne();
@@ -239,11 +239,12 @@ router.post("/deleteNeveraSplit", async (req, res) => {
     let neveraContent = nevera.productos;
     
     deleteArr.forEach(function(element) {
-
-        delIndex = neveraContent.indexOf(element)
-        
-        if (delIndex != -1)
-            neveraContent.splice(delIndex, 1);
+        if (barcodeRegEx.test(element)) {
+            delIndex = neveraContent.indexOf(element)
+            
+            if (delIndex != -1)
+                neveraContent.splice(delIndex, 1);
+        }
 
     });
     
