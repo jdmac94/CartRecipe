@@ -41,6 +41,22 @@ async function checkImgFromAPI(code) {
 
 router.post("/deleteToNevera", async (req, res) => {
   console.log(req.body);
+
+  console.log("DELETING NEVERA PROD: " + req.body);
+  console.log(req.body);
+  deleteArr = req.body.toDeleteArr;
+
+  let nevera = await Nevera.findOne();
+
+  let neveraContent = nevera.productos;
+
+  delIndex = neveraContent.indexOf(deleteArr);
+
+  neveraContent.splice(delIndex, 1);
+
+  nevera.productos = neveraContent;
+  nevera.save();
+
 });
 
 router.post("/getProd", async (req, res) => {
