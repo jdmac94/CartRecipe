@@ -40,9 +40,7 @@ async function checkImgFromAPI(code) {
 }
 
 router.post("/delete", async (req, res) => {
-  req.body.toDeleteArr.map((index) => {
-    console.log(index);
-  });
+  console.log(req.body);
 });
 
 router.post("/getProd", async (req, res) => {
