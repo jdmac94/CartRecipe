@@ -50,17 +50,17 @@ class ApiWrapper {
     //print('test con comillas $productsToBeDeleted');
     //
     //
-    List<int> integers = [];
-    productsToBeDeleted.forEach((element) {
-      //element = '\"' + element + '\"';
-      integers.add(int.parse(element));
-    });
+    // List<int> integers = [];
+    // productsToBeDeleted.forEach((element) {
+    //   //element = '\"' + element + '\"';
+    //   integers.add(int.parse(element));
+    // });
 
     // Map<String, List<String>> parameters = Map<String, List<String>>();
     // parameters['toDeleteArr'] = productsToBeDeleted;
     //
-    Map<String, List<int>> parameters = Map<String, List<int>>();
-    parameters['toDeleteArr'] = integers;
+    Map<String, List<String>> parameters = Map<String, List<String>>();
+    parameters['toDeleteArr'] = productsToBeDeleted;
 
     print(parameters is Map<String, List<String>>);
     //print(parameters);
@@ -68,9 +68,14 @@ class ApiWrapper {
 
     print('Parámetros: $parameters');
 
-    http.Response request = await http.post(Uri.http(endpoint, api),
-        body: jsonEncode(parameters),
-        encoding: Encoding.getByName("application/json"));
+    var encodedBody = json.encode(parameters);
+    print('Encoded json: -- $encodedBody');
+
+    http.Response request = await http.post(
+      Uri.http(endpoint, api),
+      body: encodedBody,
+      encoding: Encoding.getByName("application/json"),
+    );
 
     print(request.body);
     //print([barcode]);
