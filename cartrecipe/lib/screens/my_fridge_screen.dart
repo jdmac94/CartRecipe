@@ -101,15 +101,15 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
                             onDismissed: (direction) {
                               setState(() {
                                 //snapshot.data.removeAt(index);
-                                print(
-                                    'Borrando este producto ${snapshot.data[index].id}');
+                                //print(
+                                //  'Borrando este producto ${snapshot.data[index].id}');
 
                                 //TODO BORAR SI YA NO ES NECESARIO
-                                if (!delete.contains(snapshot.data[index].id))
-                                  delete.add(snapshot.data[index].id);
-                                print(delete);
-                                print(
-                                    'Delete es lista: ${delete is List<String>}');
+                                // if (!delete.contains(snapshot.data[index].id))
+                                //   delete.add(snapshot.data[index].id);
+                                // print(delete);
+                                // print(
+                                //     'Delete es lista: ${delete is List<String>}');
 
                                 // delete.forEach((element) {
                                 //   element = '"' + element + '"';
@@ -117,7 +117,8 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
                                 // });
                                 //String test = snapshot.data[index].id;
 
-                                ApiWrapper().deleteProduct(delete);
+                                ApiWrapper()
+                                    .deleteAndreh([snapshot.data[index].id]);
                               });
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(

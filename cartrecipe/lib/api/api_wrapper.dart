@@ -27,141 +27,54 @@ class ApiWrapper {
     }
   }
 
-  //TODO! REVISAR PORQUE PETA MUY FUERTE (undefined al recibirlo en back)
-  void deleteProduct(List<String> productsToBeDeleted) async {
-    const String api = "api/v1/nevera/deleteNeveraInt";
-
-    // print("Estamos en el deleteProduct de la API");
-    // productsToBeDeleted.forEach((element) {
-    //   element = '\"' + element + '\"';
-    //   print(element);
-    // });
-    //
-    //String allProducts = productsToBeDeleted[0];
-
-    //print('Todo en uno: $allProducts');
-
-    // for (int i = 1; i < productsToBeDeleted.length; i++) {
-    //   allProducts += ',' + productsToBeDeleted[i];
-    // }
-
-    //print('Todo en uno: $allProducts');
-
-    //print('test con comillas $productsToBeDeleted');
-    //
-    //
-    // List<int> integers = [];
-    // productsToBeDeleted.forEach((element) {
-    //   //element = '\"' + element + '\"';
-    //   integers.add(int.parse(element));
-    // });
-
-    // Map<String, List<String>> parameters = Map<String, List<String>>();
-    // parameters['toDeleteArr'] = productsToBeDeleted;
-    //
-    Map<String, List<String>> parameters = Map<String, List<String>>();
-    parameters['toDeleteArr'] = productsToBeDeleted;
-
-    print(parameters is Map<String, List<String>>);
-    //print(parameters);
-    print([productsToBeDeleted] is List<String>);
-
-    print('Parámetros: $parameters');
-
-    var encodedBody = json.encode(parameters);
-    print('Encoded json: -- $encodedBody');
-
-    http.Response request = await http.post(
-      Uri.http(endpoint, api),
-      body: encodedBody,
-      encoding: Encoding.getByName("application/json"),
-    );
-
-    print(request.body);
-    //print([barcode]);
-    if (request.statusCode == 200) {
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
-      List<Product> prods = [];
-
-      Iterable l = json.decode(request.body);
-      prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
-
-      print('Entro aquí si es bien $prods');
-    } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      //throw Exception('Failed to load product');
-    }
-  }
-
   void addProduct(String barcode) async {
-    const String api = "api/v1/nevera/addToNevera";
-    var uri = Uri.http(endpoint, api);
+    var api = '/api/v1/nevera/addToNevera';
 
-    String parameters = barcode;
+    print('Codigo es $barcode');
+    print('Barcode es string $barcode' is String);
+    //var uri = Uri.http(endpoint, api);
 
-    print('URI: $uri');
-    print('Parámetros añadir: $parameters');
-
-    var encodedBody = json.encode(parameters);
-    print('Encoded json: -- $encodedBody');
-
-    http.Response response = await http.post(
-      uri,
-      body: encodedBody,
-      encoding: Encoding.getByName('application/json'),
+    http.Response response = await http.put(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'barcode': barcode,
+      }),
     );
 
-    print('Response');
+    print(jsonEncode(<String, String>{
+      'barcode': barcode,
+    }));
 
-    print(response.body.toString());
+    print('Body: ${response.body.toString()}');
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200)
       print('Recibido bien');
-    } else {
-      print('Status code: ${response.statusCode}');
-      print('Recibido mal');
-    }
+    else
+      print('F');
   }
 
-  void deleteSingleProduct(String barcode) async {
-    //TODO CAMBIAR
-    var api = 'api/v1/nevera/deleteNeveraSingle';
-    var uri = Uri.http(endpoint, api);
-    Map<String, String> parameters = Map<String, String>();
-    parameters["toDeleteArr"] = barcode;
+  //TODO! TRY CATCH TO GUAPO
+  void deleteAndreh(List<String> barcode) async {
+    var api = 'api/v1/nevera/deleteNevera';
 
-    print('URI: $uri');
-    print('Parámetros single: $parameters');
-
-    var encodedBody = json.encode(parameters);
-
-    print('Encoded json: -- $encodedBody');
-
-    http.Response response = await http.post(
-      uri,
-      body: encodedBody,
-      encoding: Encoding.getByName('application/json'),
+    http.Response response = await http.delete(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, List<String>>{
+        'toDeleteArr': barcode,
+      }),
     );
 
-    print('TODO response');
+    print('Body: ${response.statusCode}');
 
-    print(response.body.toString());
-
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200)
       print('Recibido bien');
-    } else {
-      print('Status code: ${response.statusCode}');
-      print('Recibido mal');
-    }
-  }
-
-  void printJson(String input) {
-    const JsonDecoder decoder = JsonDecoder();
-    const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-    final dynamic object = decoder.convert(input);
-    final dynamic prettyString = encoder.convert(object);
-    prettyString.split('\n').forEach((dynamic element) => print(element));
+    else
+      print('F');
   }
 }

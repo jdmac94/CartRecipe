@@ -1,3 +1,4 @@
+import 'package:cartrecipe/api/api_wrapper.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -26,6 +27,17 @@ class DeleteAlert extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                     'Eliminando productos:' + selectedMap.values.toString())));
+            print('Multiselect $selectedMap.values');
+
+            List<String> test = [];
+
+            selectedMap.values.forEach((element) {
+              test.add(element);
+            });
+
+            print('Selected values $test');
+
+            ApiWrapper().deleteAndreh(test);
             //Devuelve a la vista ANTERIOR, no NUEVA ( con el product eliminado)
             Navigator.of(context, rootNavigator: true).pop(context);
           },
