@@ -39,7 +39,7 @@ async function checkImgFromAPI(code) {
   return [];
 }
 
-router.post("/delete", async (req, res) => {
+router.post("/deleteToNevera", async (req, res) => {
   console.log(req.body);
 });
 
