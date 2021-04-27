@@ -330,8 +330,8 @@ router.put("/addToNevera", async (req, res) => {
   console.log(req.body);
   let nevera = await Nevera.findOne();
 
-  // if (!nevera)
-  //   return res.status(404).send("No se encuentran los datos de la nevera");
+  if (!nevera)
+    return res.status(404).send("No se encuentran los datos de la nevera");
 
   // if (!barcodeRegEx.test(req.body.barcode))
   //   return res.status(400).send("Datos del body mal formateados");
