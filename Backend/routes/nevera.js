@@ -349,7 +349,7 @@ router.put("/addToNevera", async (req, res) => {
     prodArray.push(req.body.barcode);
     nevera.productos = prodArray;
     const result = nevera.save();
-    ///if (result) res.send(nevera.productos);
+    if (result) res.send(nevera.productos);
   } //else return res.status(400).send("El Producto ya exsite en la nevera");
 });
 
