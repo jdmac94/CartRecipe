@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class DeleteAlert extends StatelessWidget {
-  List<int> listSelectedId = [];
+  Map selectedMap = new Map<int, String>();
 
-  DeleteAlert(this.listSelectedId);
+  DeleteAlert(this.selectedMap);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class DeleteAlert extends StatelessWidget {
         child: ListBody(
           children: <Widget>[
             Text('Estas seguro de eliminar ' +
-                listSelectedId.length.toString() +
+                selectedMap.length.toString() +
                 ' productos de la nevera?'),
           ],
         ),
@@ -24,8 +24,8 @@ class DeleteAlert extends StatelessWidget {
           child: Text('Eliminar'),
           onPressed: () {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content:
-                    Text('Eliminando productos:' + listSelectedId.toString())));
+                content: Text(
+                    'Eliminando productos:' + selectedMap.values.toString())));
             //Devuelve a la vista ANTERIOR, no NUEVA ( con el product eliminado)
             Navigator.of(context, rootNavigator: true).pop(context);
           },
