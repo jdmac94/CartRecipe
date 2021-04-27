@@ -8,9 +8,9 @@ let OFFurl = 'https://world.openfoodfacts.org/api/v0/product/';
 const barcodeRegEx = /^[0-9]{13}$/;
 
 async function getImgByAPI(code) {
-    console.log("getImgByAPI");
+    // console.log("getImgByAPI");
     let url = OFFurl + code + '.json';
-    console.log(url);
+    // console.log(url);
 
     var fotos = fetch(url)
     .then(function(response) {
@@ -20,13 +20,13 @@ async function getImgByAPI(code) {
         console.log('Hubo un problema con la petición Fetch:' + error.message);
         return undefined;
     });
-    console.log("fotos");
+    // console.log("fotos");
     console.log(fotos);
     return fotos;
 }
 
 async function checkImgFromAPI(code) {
-    console.log("checkImgFromAPI");
+    // console.log("checkImgFromAPI");
     var fotos = await getImgByAPI(code);
     
     if (fotos)
