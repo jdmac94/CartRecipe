@@ -175,6 +175,45 @@ router.post("/deleteNevera", async (req, res) => {
 
 });
 
+router.post("/deleteNeveraInt", async (req, res) => {
+    
+    console.log("DELETING NEVERA CONTENT");
+    deleteArr = req.body.toDeleteArr;
+    console.log(deleteArr);
+
+    if (!deleteArr)
+        return res.status(400).send("Datos del body mal formateados");
+
+    if (!(typeof deleteArr[Symbol.iterator] === 'function' && !(typeof deleteArr === 'string')))
+        return res.status(400).send("Datos del body mal formateados");
+        
+    // let nevera = await Nevera.find( { usuario: req.body.user } )
+    let nevera = await Nevera.findOne();
+    
+    if (!nevera)
+        return res.status(404).send("No se encuentran los datos de la nevera");
+
+
+    let neveraContent = nevera.productos;
+    
+    deleteArr.forEach(function(element) {
+        
+        x = element.toString();
+        delIndex = neveraContent.indexOf(x);
+        
+        if (delIndex != -1)
+            neveraContent.splice(delIndex, 1);
+
+    });
+    
+    nevera.productos = neveraContent;
+    const result = nevera.save();
+
+    if (result) 
+        res.send(nevera.productos);
+
+});
+
 router.post("/deleteNeveraSplit", async (req, res) => {
     
     console.log("DELETING NEVERA CONTENT (SPLITTED VERSION)");
