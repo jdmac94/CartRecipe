@@ -197,7 +197,7 @@ router.post("/deleteNeveraInt", async (req, res) => {
     let neveraContent = nevera.productos;
     
     deleteArr.forEach(function(element) {
-        
+
         x = element.toString();
         delIndex = neveraContent.indexOf(x);
         
@@ -217,6 +217,8 @@ router.post("/deleteNeveraInt", async (req, res) => {
 router.post("/deleteNeveraSplit", async (req, res) => {
     
     console.log("DELETING NEVERA CONTENT (SPLITTED VERSION)");
+    console.log(req.body.toDeleteArr);
+    
     deleteArr = req.body.toDeleteArr.split(",");
     
     console.log(deleteArr);
