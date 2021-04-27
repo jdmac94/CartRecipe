@@ -77,4 +77,17 @@ class ApiWrapper {
     else
       print('F');
   }
+
+  void clearNevera() async {
+    const String api = "api/v1/nevera/clearNevera";
+
+    http.Response response = await http.delete(Uri.http(endpoint, api));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print("Se ha vaciado la nevera");
+      print(response.body.toString());
+    } else {
+      throw Exception('Failed to empty fridge');
+    }
+  }
 }
