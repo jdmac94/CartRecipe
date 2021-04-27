@@ -24,7 +24,6 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
 
   Map selectedMap = new Map<int,
       String>(); //Primer camp sera el Index, segon el Codi de Barres
-  List<int> selectedList = [];
 
   Future<void> dialogProduct(BuildContext context, Product product) {
     return showDialog<void>(
@@ -130,7 +129,7 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
                                   selected: selectedMap.containsKey(index),
                                   onLongPress: () {
                                     setState(() {
-                                      if (selectedList.contains(index)) {
+                                      if (selectedMap.containsKey(index)) {
                                         print('Remove Selected id: ' +
                                             selectedMap[index].toString());
                                         selectedMap.remove(index);
