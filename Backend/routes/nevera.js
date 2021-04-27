@@ -202,16 +202,16 @@ router.post("/deleteNeveraSingle", async (req, res) => {
   console.log(req.body);
   deleteArr = req.body.toDeleteArr;
 
-  if (!deleteArr)
-    return res.status(400).send("Datos del body mal formateados (1)");
+  // if (!deleteArr)
+  //   return res.status(400).send("Datos del body mal formateados (1)");
 
-  if (typeof deleteArr === "string")
-    return res.status(400).send("Datos del body mal formateados (2)");
+  // if (typeof deleteArr === "string")
+  //   return res.status(400).send("Datos del body mal formateados (2)");
 
   let nevera = await Nevera.findOne();
 
-  if (!nevera)
-    return res.status(404).send("No se encuentran los datos de la nevera");
+  // if (!nevera)
+  //   return res.status(404).send("No se encuentran los datos de la nevera");
 
   let neveraContent = nevera.productos;
 
@@ -330,15 +330,15 @@ router.put("/addToNevera", async (req, res) => {
   console.log(req.body);
   let nevera = await Nevera.findOne();
 
-  if (!nevera)
-    return res.status(404).send("No se encuentran los datos de la nevera");
+  // if (!nevera)
+  //   return res.status(404).send("No se encuentran los datos de la nevera");
 
-  if (!barcodeRegEx.test(req.body.barcode))
-    return res.status(400).send("Datos del body mal formateados");
+  // if (!barcodeRegEx.test(req.body.barcode))
+  //   return res.status(400).send("Datos del body mal formateados");
 
   var prod = await Product.findById(req.body.barcode);
 
-  if (!prod) return res.status(404).send("El producto a insertar no existe");
+  // if (!prod) return res.status(404).send("El producto a insertar no existe");
 
   let neveraContent = nevera.productos;
   delIndex = neveraContent.indexOf(req.body.barcode);
@@ -350,7 +350,7 @@ router.put("/addToNevera", async (req, res) => {
     nevera.productos = prodArray;
     const result = nevera.save();
     if (result) res.send(nevera.productos);
-  } else return res.status(400).send("El Producto ya exsite en la nevera");
+  } //else return res.status(400).send("El Producto ya exsite en la nevera");
 });
 
 ////////////////////////////////////////////////////////////////
