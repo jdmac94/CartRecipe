@@ -15,8 +15,11 @@ async function getImgByAPI(code) {
     var fotos = fetch(url)
     .then(function(response) {
         return response.json();
+    })
+    .catch(function(error) {
+        console.log('Hubo un problema con la petición Fetch:' + error.message);
+        return undefined;
     });
-
     console.log("fotos");
     console.log(fotos);
     return fotos;
@@ -25,13 +28,15 @@ async function getImgByAPI(code) {
 async function checkImgFromAPI(code) {
     console.log("checkImgFromAPI");
     var fotos = await getImgByAPI(code);
-
+    
+    if (fotos)
         if (fotos.product.selected_images)
             if (fotos.product.selected_images.front)
                 if (fotos.product.selected_images.front.display) {
                     
                     return [ fotos.product.selected_images.front.display ];
                 }
+
     return [];
 }
 
@@ -108,6 +113,9 @@ router.get("/getNeveraList", async (req, res) => {
         return res.status(404).send("No se encuentran los datos de la nevera");
 
     let prodArray = nevera.productos;
+
+    console.log(prodArray);
+
     let listedProds = await Product.find( { _id: { $in: prodArray } }, { product_name:1, allergens_from_user:1, product_name_es:1,} );
 
     if (!(typeof listedProds[Symbol.iterator] === 'function' && !(typeof listedProds === 'string')))
@@ -169,6 +177,7 @@ router.post("/deleteNevera", async (req, res) => {
 
 router.delete("/clearNevera", async (req, res) => {
     
+    console.log("CLEARING NEVERA CONTENT");
     let nevera = await Nevera.findOne();
 
     if (!nevera)
@@ -190,7 +199,9 @@ router.delete("/clearNevera", async (req, res) => {
  }
 
  */
-router.put("/addNevera", async (req, res) => {
+router.put("/addToNevera", async (req, res) => {
+
+    console.log("ADDING NEVERA CONTENT");
 
     let nevera = await Nevera.findOne();
 
@@ -200,12 +211,17 @@ router.put("/addNevera", async (req, res) => {
     if (!barcodeRegEx.test(req.body.barcode))
         return res.status(400).send("Datos del body mal formateados");
 
+    var prod = await Product.findById(req.body.barcode);
+
+    if (!prod)
+        return res.status(404).send("El producto a insertar no existe");
+
     let neveraContent = nevera.productos;
     delIndex = neveraContent.indexOf(req.body.barcode)
-
+    
     if (delIndex == -1) {
         let prodArray = nevera.productos;
-
+        
         prodArray.push(req.body.barcode);
         nevera.productos = prodArray;
         const result = nevera.save();
@@ -247,9 +263,8 @@ router.get("/restoreNevera", async (req, res) => {
 router.get("/dropNeveraCol", async (req, res) => {
     console.log("DROPPING NEVERA");
     let nevera = await Nevera.deleteMany({});
-    const result = nevera.save();
 
-    if (result) 
+    if (nevera) 
         return res.send("Nevera collection dropped");
     else 
         return res.status(400).send();
