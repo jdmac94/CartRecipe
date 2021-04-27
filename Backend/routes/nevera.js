@@ -178,7 +178,8 @@ router.post("/deleteNevera", async (req, res) => {
 
 router.post("/deleteNeveraSingle", async (req, res) => {
     
-    console.log("DELETING NEVERA PROD: " + req.body.toDeleteArr);
+    console.log("DELETING NEVERA PROD: " + req.body);
+    console.log(req.body);
     deleteArr = req.body.toDeleteArr;
 
     if (!deleteArr)
