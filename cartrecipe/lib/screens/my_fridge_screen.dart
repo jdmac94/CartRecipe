@@ -24,6 +24,10 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
 
   List<int> selectedList = [];
 
+  bool connection = false;
+
+  List<String> delete = [];
+
   Future<void> dialogProduct(BuildContext context, Product product) {
     return showDialog<void>(
       context: context,
@@ -43,26 +47,27 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
   }
 
   Future<List<Product>> getListProducts() async {
-    bool connection = false;
+    print('Tengo conexión: $connection');
 
-    try {
-      final result = await InternetAddress.lookup(
-          'bbf4d07438ae.ngrok.io/api/v1/nevera/getNeveraList/');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        connection = true;
-        print('Connected');
-      }
-    } on SocketException catch (_) {
-      print('No connection');
-    }
-
-    if (connection) {
+    if (connection)
       return ApiWrapper().getFridgeProducts();
-    } else {
+    else
       return DUMMY_PRODUCTS;
-    }
+  }
 
-    //return connection;
+  @override
+  bool initState() {
+    Socket.connect('158.109.74.46', 55005, timeout: Duration(seconds: 5))
+        .then((socket) {
+      print("Hay conexión");
+      connection = true;
+      socket.destroy();
+    }).catchError((error) {
+      print("Exception on Socket " + error.toString());
+    });
+    super.initState();
+
+    return connection;
   }
 
   void undo() {}
@@ -80,6 +85,7 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
                 //TODO! REVISAR
                 future:
                     getListProducts(), //if(checkConnection() == true) ?  : DUMMY_DATA,
+                //ApiWrapper.getFridgeProducts(),
                 builder: (BuildContext context, snapshot) {
                   if (!snapshot.hasData) {
                     print('No data in snapshot');
@@ -95,8 +101,15 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
                                 //snapshot.data.removeAt(index);
                                 print(
                                     'Borrando este producto ${snapshot.data[index].id}');
-                                ApiWrapper()
-                                    .deleteProduct(snapshot.data[index].id);
+
+                                //TODO BORAR SI YA NO ES NECESARIO
+                                if (!delete.contains(snapshot.data[index].id))
+                                  delete.add(snapshot.data[index].id);
+                                print(delete);
+                                print(
+                                    'Delete es lista: ${delete is List<String>}');
+
+                                ApiWrapper().deleteProduct(delete);
                               });
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(

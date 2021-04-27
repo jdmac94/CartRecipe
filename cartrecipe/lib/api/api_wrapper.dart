@@ -5,11 +5,11 @@ import 'dart:async';
 import 'package:cartrecipe/models/product.dart';
 
 class ApiWrapper {
-  static const String endpoint = "bbf4d07438ae.ngrok.io";
+  final String endpoint = "158.109.74.46:55005";
 
   Future<List<Product>> getFridgeProducts() async {
     const String api = "api/v1/nevera/getNeveraList";
-    final response = await http.get(Uri.https(endpoint, api));
+    final response = await http.get(Uri.http(endpoint, api));
     if (response.statusCode == 200) {
       print('Recibida la respuesta de la petición');
 
@@ -28,20 +28,20 @@ class ApiWrapper {
   }
 
   //TODO! REVISAR PORQUE PETA MUY FUERTE (undefined al recibirlo en back)
-  void deleteProduct(String barcode) async {
+  void deleteProduct(List<String> productsToBeDeleted) async {
     const String api = "api/v1/nevera/deleteNevera";
 
     Map<String, List<String>> parameters = Map<String, List<String>>();
-    parameters['toDeleteArr'] = [barcode, '8422904015553'];
+    parameters['toDeleteArr'] = productsToBeDeleted;
 
     print(parameters is Map<String, List<String>>);
     //print(parameters);
-    print([barcode] is List<String>);
+    print([productsToBeDeleted] is List<String>);
 
-    print('Parámetros: ${parameters}');
+    print('Parámetros: $parameters');
 
     http.Response response =
-        await http.post(Uri.https(endpoint, api), body: jsonEncode(parameters));
+        await http.post(Uri.http(endpoint, api), body: jsonEncode(parameters));
 
     print(response.body);
     //print([barcode]);
@@ -60,4 +60,10 @@ class ApiWrapper {
       //throw Exception('Failed to load product');
     }
   }
+
+  void addProduct(String barcode) async {
+    const String api = "api/v1/nevera/addToNevera";
+  }
+
+  ///addToNevera
 }
