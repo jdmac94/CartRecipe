@@ -24,7 +24,7 @@ class AddProductForm extends StatelessWidget {
                   child: TextFormField(
                     controller: productText,
                     // The validator receives the text that the user has entered.
-                    validator: (value) {
+/*                  validator: (value) {
                       String patttern = r'(^[0-9]*$)';
                       RegExp regExp = new RegExp(patttern);
                       if (value == null || value.isEmpty) {
@@ -36,7 +36,7 @@ class AddProductForm extends StatelessWidget {
                       }
 
                       return null;
-                    },
+                    },*/
                   ),
                 ),
                 Padding(
@@ -44,18 +44,18 @@ class AddProductForm extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       // Validate returns true if the form is valid, or false otherwise.
-                      if (_formKey.currentState.validate()) {
-                        // If the form is valid, display a snackbar.
-                        ApiWrapper().addProduct(productText.text);
-                        // ****call a server or save the information in a database****
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content:
-                                //productText.text es el contenido del form
-                                Text('Processing Data:' + productText.text)));
+                      //if (_formKey.currentState.validate()) {
+                      // If the form is valid, display a snackbar.
+                      ApiWrapper().addProduct(productText.text);
+                      // ****call a server or save the information in a database****
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content:
+                              //productText.text es el contenido del form
+                              Text('Processing Data:' + productText.text)));
 
-                        //Devuelve a la vista ANTERIOR, no NUEVA ( con el product añadido )
-                        Navigator.of(context, rootNavigator: true).pop(context);
-                      }
+                      //Devuelve a la vista ANTERIOR, no NUEVA ( con el product añadido )
+                      Navigator.of(context, rootNavigator: true).pop(context);
+                      //}
                     },
                     child: Text('Submit'),
                   ),
