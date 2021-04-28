@@ -72,6 +72,12 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
     return connection;
   }
 
+  //TODO! MIRAR QUE ACTUALICE AUTOMATICAMENTE CADA VEZ QUE SE LLAMA
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
   void undo() {}
 
   @override
