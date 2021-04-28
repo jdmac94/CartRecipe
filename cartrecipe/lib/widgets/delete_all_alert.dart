@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cartrecipe/api/api_wrapper.dart';
 
 class DeleteAllAlert extends StatelessWidget {
   @override
@@ -18,8 +19,10 @@ class DeleteAllAlert extends StatelessWidget {
           onPressed: () {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text('Vaciando nevera')));
-            //llamar funcion delete all fridge o
+
+            ApiWrapper().clearNevera();
             //Devuelve a la vista ANTERIOR, no NUEVA ( con el product eliminado)
+
             Navigator.of(context, rootNavigator: true).pop(context);
           },
         ),
