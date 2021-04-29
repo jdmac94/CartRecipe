@@ -39,8 +39,24 @@ async function checkImgFromAPI(code) {
   return [];
 }
 
-router.post("/delete", async (req, res) => {
+router.post("/deleteToNevera", async (req, res) => {
   console.log(req.body);
+
+  console.log("DELETING NEVERA PROD: " + req.body);
+  console.log(req.body);
+  deleteArr = req.body.toDeleteArr;
+
+  let nevera = await Nevera.findOne();
+
+  let neveraContent = nevera.productos;
+
+  delIndex = neveraContent.indexOf(deleteArr);
+
+  neveraContent.splice(delIndex, 1);
+
+  nevera.productos = neveraContent;
+  nevera.save();
+
 });
 
 router.post("/getProd", async (req, res) => {
@@ -146,7 +162,7 @@ router.get("/getNeveraList", async (req, res) => {
     "toDeleteArr": ["111111111111111"]
 }
  */
-router.post("/deleteNevera", async (req, res) => {
+router.delete("/deleteNevera", async (req, res) => {
   console.log("DELETING NEVERA CONTENT");
   deleteArr = req.body.toDeleteArr;
   console.log(deleteArr);
@@ -181,113 +197,6 @@ router.post("/deleteNevera", async (req, res) => {
   if (result) res.send(nevera.productos);
 });
 
-router.post("/deleteNeveraSingle", async (req, res) => {
-  console.log("DELETING NEVERA PROD: " + req.body);
-  console.log(req.body);
-  deleteArr = req.body.toDeleteArr;
-
-  if (!deleteArr)
-    return res.status(400).send("Datos del body mal formateados (1)");
-
-  if (typeof deleteArr === "string")
-    return res.status(400).send("Datos del body mal formateados (2)");
-
-  let nevera = await Nevera.findOne();
-
-  if (!nevera)
-    return res.status(404).send("No se encuentran los datos de la nevera");
-
-  let neveraContent = nevera.productos;
-
-  //x = deleteArr.toString();
-  delIndex = neveraContent.indexOf(deleteArr);
-
-  if (delIndex != -1) neveraContent.splice(delIndex, 1);
-
-  nevera.productos = neveraContent;
-  const result = nevera.save();
-
-  if (result) res.send(nevera.productos);
-});
-
-router.post("/deleteNeveraInt", async (req, res) => {
-  console.log("DELETING NEVERA CONTENT");
-  deleteArr = req.body.toDeleteArr;
-  console.log(deleteArr);
-
-  if (!deleteArr)
-    return res.status(400).send("Datos del body mal formateados (1)");
-
-  if (
-    !(
-      typeof deleteArr[Symbol.iterator] === "function" &&
-      !(typeof deleteArr === "string")
-    )
-  )
-    return res.status(400).send("Datos del body mal formateados (2)");
-
-  // let nevera = await Nevera.find( { usuario: req.body.user } )
-  let nevera = await Nevera.findOne();
-
-  if (!nevera)
-    return res.status(404).send("No se encuentran los datos de la nevera");
-
-  let neveraContent = nevera.productos;
-
-  deleteArr.forEach(function (element) {
-    x = element.toString();
-    delIndex = neveraContent.indexOf(x);
-
-    if (delIndex != -1) neveraContent.splice(delIndex, 1);
-  });
-
-  nevera.productos = neveraContent;
-  const result = nevera.save();
-
-  if (result) res.send(nevera.productos);
-});
-
-router.post("/deleteNeveraSplit", async (req, res) => {
-  console.log("DELETING NEVERA CONTENT (SPLITTED VERSION)");
-  console.log(req.body.toDeleteArr);
-
-  deleteArr = req.body.toDeleteArr.split(",");
-
-  console.log(deleteArr);
-
-  if (!req.body.toDeleteArr)
-    return res.status(400).send("Datos del body mal formateados (1)");
-
-  if (
-    !(
-      typeof deleteArr[Symbol.iterator] === "function" &&
-      !(typeof deleteArr === "string")
-    )
-  )
-    return res.status(400).send("Datos del body mal formateados (2)");
-
-  // let nevera = await Nevera.find( { usuario: req.body.user } )
-  let nevera = await Nevera.findOne();
-
-  if (!nevera)
-    return res.status(404).send("No se encuentran los datos de la nevera");
-
-  let neveraContent = nevera.productos;
-
-  deleteArr.forEach(function (element) {
-    if (barcodeRegEx.test(element)) {
-      delIndex = neveraContent.indexOf(element);
-
-      if (delIndex != -1) neveraContent.splice(delIndex, 1);
-    }
-  });
-
-  nevera.productos = neveraContent;
-  const result = nevera.save();
-
-  if (result) res.send(nevera.productos);
-});
-
 router.delete("/clearNevera", async (req, res) => {
   console.log("CLEARING NEVERA CONTENT");
   let nevera = await Nevera.findOne();
@@ -311,7 +220,7 @@ router.delete("/clearNevera", async (req, res) => {
  */
 router.put("/addToNevera", async (req, res) => {
   console.log("ADDING NEVERA CONTENT");
-
+  console.log(req.body);
   let nevera = await Nevera.findOne();
 
   if (!nevera)
@@ -334,7 +243,7 @@ router.put("/addToNevera", async (req, res) => {
     nevera.productos = prodArray;
     const result = nevera.save();
     if (result) res.send(nevera.productos);
-  } else return res.status(400).send("El Producto ya exsite en la nevera");
+  } //else return res.status(400).send("El Producto ya exsite en la nevera");
 });
 
 ////////////////////////////////////////////////////////////////

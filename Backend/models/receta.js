@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 
 const recetaSchema = new mongoose.Schema({
+  _id: { 
+    type: String 
+  },
   usuario: {
     type: String,
     required: true,

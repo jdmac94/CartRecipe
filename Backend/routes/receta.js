@@ -6,7 +6,7 @@ const { Receta } = require("../models/receta");
 
 router.get("/getAllRecetas", async (req, res) => {
 
-    let recetaList = await Receta.find();
+    let recetaList = await Receta.find().limit(10);
 
     // if (!recetaList) {
     //     let receta = new Receta();
@@ -91,4 +91,12 @@ router.get("/addReceta", async (req, res) => {
 
 });
 
+
+router.get("/getReceta", async (req, res) => {
+
+    let receta = await Receta.findById(req.body._id)
+    if (!receta)
+        return res.status(404).send("La receta solicitada no existe");
+    res.send(receta)
+});
 module.exports = router;
