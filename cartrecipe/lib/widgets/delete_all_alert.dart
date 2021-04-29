@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cartrecipe/api/api_wrapper.dart';
 
 class DeleteAllAlert extends StatelessWidget {
+  static String input;
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

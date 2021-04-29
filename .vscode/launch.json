@@ -14,7 +14,8 @@
             "name": "meals",
             "cwd": "ejemplo curso flutter\\meals",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "flutterMode": "profile"
         }
     ]
 }

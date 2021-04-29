@@ -9,25 +9,23 @@ import 'package:cartrecipe/widgets/detail_view_product.dart';
 import 'package:cartrecipe/widgets/delete_alert.dart';
 import 'package:flutter/rendering.dart';
 
-import 'dart:io';
-
-import 'package:cartrecipe/data/dummy_data.dart';
+import 'dart:async';
 
 class MyFridgeScreen extends StatefulWidget {
+  static const String routeNamed = '/fridge';
+
   @override
   _MyFridgeScreenState createState() => _MyFridgeScreenState();
 }
 
+//TODO! Mirar de conseguir el valor del tetxfield para añadirlo a la lista
 class _MyFridgeScreenState extends State<MyFridgeScreen> {
-  //http://db6bc548365b.ngrok.io/api/v1/nevera/getProdKeyWord
-  //TODO! Cambiar cada vez que se levante el servidor por el momento
-
-  Map selectedMap = new Map<int,
-      String>(); //Primer camp sera el Index, segon el Codi de Barres
-
-  bool connection = false;
-
+  //Primer camp sera el Index, segon el Codi de Barres
+  Map selectedMap = new Map<int, String>();
   List<String> delete = [];
+  List listedProduct;
+  String productToAdd;
+  Timer timer;
 
   Future<void> dialogProduct(BuildContext context, Product product) {
     return showDialog<void>(
@@ -35,6 +33,13 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
       builder: (BuildContext context) {
         return DetailViewProduct(product);
       },
+    );
+  }
+
+  moveToButton(BuildContext context) async {
+    productToAdd = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => FridgeSpeedDial()),
     );
   }
 
@@ -48,155 +53,177 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
     );
   }
 
-  Future<List<Product>> getListProducts() async {
-    print('Tengo conexión: $connection');
-
-    if (connection)
-      return ApiWrapper().getFridgeProducts();
-    else
-      return DUMMY_PRODUCTS;
-  }
-
-  @override
-  bool initState() {
-    Socket.connect('158.109.74.46', 55005, timeout: Duration(seconds: 5))
-        .then((socket) {
-      print("Hay conexión");
-      connection = true;
-      socket.destroy();
-    }).catchError((error) {
-      print("Exception on Socket " + error.toString());
-    });
-    super.initState();
-
-    return connection;
-  }
-
-  //TODO! MIRAR QUE ACTUALICE AUTOMATICAMENTE CADA VEZ QUE SE LLAMA
+  //TODO!
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
 
+  @override
+  void initState() {
+    resfreshScreen();
+    super.initState();
+  }
+
+  void resfreshScreen() {
+    ApiWrapper().getFridgeProducts().then((products) {
+      if (mounted) {
+        setState(() {
+          listedProduct = products;
+        });
+      }
+
+      // Timer.periodic(Duration(seconds: 3), (timer) {
+      //   setState(() {
+      //     //List temporary;
+      //     ApiWrapper()
+      //         .getFridgeProducts()
+      //         .then((products) => listedProduct = products);
+      //   });
+      // });
+    });
+  }
+
+  void deleteProduct(List<String> product, int index) {
+    if (mounted)
+      setState(() {
+        listedProduct.removeAt(index);
+        ApiWrapper().deleteAndreh(product);
+        ApiWrapper()
+            .getFridgeProducts()
+            .then((products) => listedProduct = products);
+
+        //I assume you want to remove favorites as well otherwise the two indeces will go out of sync? Maybe?
+        //favourites.removeAt(index)
+      });
+  }
+
+  void deleteMultipleProducts(List<int> positions) {
+    if (mounted) {
+      setState(() {
+        positions.forEach((position) {
+          print('Se borra la posicion $position de los selected');
+          listedProduct.removeAt(position);
+        });
+
+        //ApiWrapper().deleteAndreh(product);
+        //I assume you want to remove favorites as well otherwise the two indeces will go out of sync? Maybe?
+        //favourites.removeAt(index)
+      });
+    }
+  }
+
+  Future refresh() async {
+    setState(() {
+      ApiWrapper()
+          .getFridgeProducts()
+          .then((products) => listedProduct = products);
+    });
+  }
+
   void undo() {}
+
+  Future refreshAfterAdd() async {
+    setState(() {
+      ApiWrapper()
+          .getFridgeProducts()
+          .then((products) => listedProduct = products);
+    });
+
+    return FridgeSpeedDial();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          children: [
-            Text('Productos en la nevera'),
-            Expanded(
-              child: FutureBuilder(
-                //TODO! REVISAR
-                future:
-                    getListProducts(), //if(checkConnection() == true) ?  : DUMMY_DATA,
-                //ApiWrapper.getFridgeProducts(),
-                builder: (BuildContext context, snapshot) {
-                  if (!snapshot.hasData) {
-                    print('No data in snapshot');
-                  } else {
-                    return ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Dismissible(
-                            background: Container(color: Colors.red),
-                            key: UniqueKey(),
-                            onDismissed: (direction) {
-                              setState(() {
-                                //snapshot.data.removeAt(index);
-                                //print(
-                                //  'Borrando este producto ${snapshot.data[index].id}');
+        body: Container(
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Column(
+            children: [
+              Text('Productos en la nevera'),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: refresh,
+                  child: new ListView.builder(
+                      key: UniqueKey(),
+                      itemCount:
+                          listedProduct == null ? 0 : listedProduct.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        //return ProductCard(snapshot, index);
+                        Product item = listedProduct[index];
+                        return Dismissible(
+                          background: Container(color: Colors.red),
+                          key: UniqueKey(),
+                          onDismissed: (direction) {
+                            deleteProduct([item.id], index);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("${item.name} eliminado"),
+                              action: SnackBarAction(
+                                  label: 'Deshacer',
+                                  onPressed: undo //!YA SE HARÁ,
+                                  ),
+                            ));
+                          },
+                          child: Card(
+                            child: ListTile(
+                                leading: (item.image == null)
+                                    ? FlutterLogo(size: 70)
+                                    : Image.network(
+                                        item.image,
+                                        width: 70,
+                                        height: 70,
+                                      ),
+                                title: Text(item.name),
+                                onTap: () => dialogProduct(context, item),
+                                //!ESTO PARA TRATAR DE HACER SELECCION MULTIPLE
+                                // trailing: CheckboxListTile(
+                                //   controlAffinity: ListTileControlAffinity,
+                                // ),
+                                selected: selectedMap.containsKey(index),
+                                onLongPress: () {
+                                  setState(() {
+                                    if (selectedMap.containsKey(index)) {
+                                      print('Remove Selected id: ' +
+                                          selectedMap[index].toString());
 
-                                //TODO BORAR SI YA NO ES NECESARIO
-                                // if (!delete.contains(snapshot.data[index].id))
-                                //   delete.add(snapshot.data[index].id);
-                                // print(delete);
-                                // print(
-                                //     'Delete es lista: ${delete is List<String>}');
-
-                                // delete.forEach((element) {
-                                //   element = '"' + element + '"';
-                                //   print(element);
-                                // });
-                                //String test = snapshot.data[index].id;
-
-                                ApiWrapper()
-                                    .deleteAndreh([snapshot.data[index].id]);
-                              });
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(
-                                    "${snapshot.data[index].name} eliminado"),
-                                action: SnackBarAction(
-                                    label: 'Deshacer',
-                                    onPressed: undo //!YA SE HARÁ,
-                                    ),
-                              ));
-                            },
-                            child: Card(
-                              child: ListTile(
-                                  leading: (snapshot.data[index].image == null)
-                                      ? FlutterLogo(size: 70)
-                                      : Image.network(
-                                          snapshot.data[index].image,
-                                          width: 70,
-                                          height: 70,
-                                        ),
-                                  title: Text(snapshot.data[index].name),
-                                  onTap: () => dialogProduct(
-                                      context, snapshot.data[index]),
-                                  //!ESTO PARA TRATAR DE HACER SELECCION MULTIPLE
-                                  // trailing: CheckboxListTile(
-                                  //   controlAffinity: ListTileControlAffinity,
-                                  // ),
-                                  selected: selectedMap.containsKey(index),
-                                  onLongPress: () {
-                                    setState(() {
-                                      if (selectedMap.containsKey(index)) {
-                                        print('Remove Selected id: ' +
-                                            selectedMap[index].toString());
-                                        selectedMap.remove(index);
-                                      } else {
-                                        selectedMap[index] =
-                                            snapshot.data[index].id;
-                                        print('Add Selected id: ' +
-                                            selectedMap[index].toString());
-                                      }
-                                    });
-                                  }),
-                            ),
-                          );
-                        });
-                  }
-                  return Center(
-                    child: CircularProgressIndicator(
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(Colors.deepPurple),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Visibility(
-              visible: selectedMap.isNotEmpty,
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: FloatingActionButton(
-                  child: Icon(Icons.delete),
-                  onPressed: () {
-                    confirmDelete(context, selectedMap);
-                  },
-                  backgroundColor: Colors.redAccent,
+                                      selectedMap.remove(index);
+                                    } else {
+                                      selectedMap[index] = item.id;
+                                      print('Add Selected id: ' +
+                                          selectedMap[index].toString());
+                                    }
+                                  });
+                                }),
+                          ),
+                        );
+                      }),
                 ),
               ),
-            ),
-          ],
+              Visibility(
+                visible: selectedMap.isNotEmpty,
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: FloatingActionButton(
+                    child: Icon(Icons.delete),
+                    onPressed: () {
+                      confirmDelete(context, selectedMap);
+                      List<int> keys = [];
+
+                      selectedMap.keys.forEach((key) {
+                        print('Se añade la posicion $key al positions');
+                        keys.add(key);
+                      });
+                      deleteMultipleProducts(keys);
+                      selectedMap = new Map<int, String>();
+                    },
+                    backgroundColor: Colors.redAccent,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FridgeSpeedDial(),
-    );
+        floatingActionButton: FridgeSpeedDial() //(),
+        );
   }
 }

@@ -1,8 +1,10 @@
+import 'package:cartrecipe/screens/my_fridge_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cartrecipe/api/api_wrapper.dart';
 
 class AddProductForm extends StatelessWidget {
+  static String input;
   //variable para la validacion
   final _formKey = GlobalKey<FormState>();
   //variable para guardar el texto introducido
@@ -45,6 +47,7 @@ class AddProductForm extends StatelessWidget {
                     onPressed: () {
                       // Validate returns true if the form is valid, or false otherwise.
                       if (_formKey.currentState.validate()) {
+                        input = productText.text;
                         // If the form is valid, display a snackbar.
                         ApiWrapper().addProduct(productText.text);
                         // ****call a server or save the information in a database****
@@ -54,7 +57,15 @@ class AddProductForm extends StatelessWidget {
                                 Text('Processing Data:' + productText.text)));
 
                         //Devuelve a la vista ANTERIOR, no NUEVA ( con el product añadido )
-                        Navigator.of(context, rootNavigator: true).pop(context);
+                        //Navigator.pushNamed(context, MyFridgeScreen.routeNamed);
+
+                        Navigator.pop(context);
+
+                        //
+
+                        //return MyFridgeScreen();
+                        //Navigator.pop(context);
+                        //Navigator.pushNamed(context, MyFridgeScreen.routeNamed);
                       }
                     },
                     child: Text('Submit'),

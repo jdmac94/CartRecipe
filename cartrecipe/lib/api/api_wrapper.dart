@@ -1,3 +1,4 @@
+import 'package:cartrecipe/data/dummy_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
@@ -7,7 +8,7 @@ import 'package:cartrecipe/models/product.dart';
 class ApiWrapper {
   final String endpoint = "158.109.74.46:55005";
 
-  Future<List<Product>> getFridgeProducts() async {
+  Future getFridgeProducts() async {
     const String api = "api/v1/nevera/getNeveraList";
     final response = await http.get(Uri.http(endpoint, api));
     if (response.statusCode == 200) {
@@ -23,6 +24,7 @@ class ApiWrapper {
       return prods;
     } else {
       print('Petición de respuesta');
+      return DUMMY_PRODUCTS;
       //throw Exception('Failed to load product');
     }
   }
