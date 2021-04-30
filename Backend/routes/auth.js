@@ -4,16 +4,14 @@ const bcriptjs = require("bcryptjs");
 const { Usuario } = require("../models/usuario");
 const _ = require("lodash");
 const passport = require("passport");
-require('../passport-setup');
+require("../passport-setup");
 
-router.use(passport.initialize())
+router.use(passport.initialize());
 //router.use(passport.session())
 
-const authMiddle = require("../middlewares/auth");
-
-router.post("/login", authMiddle, async (req, res) => {
-  let user = await Usuario.findOne({ email: req.body.email });
-  if (!user) return res.status(400).send("Email o contraseña incorrectos");
+router.post("/login", async (req, res) => {
+  let user = await Usuario.findOne({ correo: req.body.email });
+  if (!user) return res.status(400).send("Email incorrectos");
   console.log(req.user.correo);
   const validPassword = await bcriptjs.compare(
     req.body.password,
@@ -39,21 +37,25 @@ router.post("/register", async (req, res) => {
   if (result) res.send(user.generateAuthToken());
 });
 
-router.get('/auth/google', passport.authenticate('google', { scope: [ 'profile' ] }
-));
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile"] })
+);
 
-router.get( '/auth/google/callback',
-    passport.authenticate( 'google', {
-        successRedirect: '/auth/google/success',
-        failureRedirect: '/auth/google/failure'
-}));
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/auth/google/success",
+    failureRedirect: "/auth/google/failure",
+  })
+);
 
 router.get("/auth/google/failure", async (req, res) => {
-  res.send("test google auth FAILED")
+  res.send("test google auth FAILED");
 });
 
 router.get("/auth/google/success", async (req, res) => {
-  res.send("test google auth SUCCEEDED")
+  res.send("test google auth SUCCEEDED");
 });
 
 module.exports = router;

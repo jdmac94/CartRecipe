@@ -1,102 +1,17 @@
 const express = require("express");
-const https = require("https");
 const router = express.Router();
-const fetch = require("node-fetch");
+
 const { Nevera } = require("../models/nevera");
 const { Product } = require("../models/product");
-let OFFurl = "https://world.openfoodfacts.org/api/v0/product/";
+const { getImageAPI } = require("../utils/imageAPI");
+
+const auth = require("../middlewares/auth");
+
 const barcodeRegEx = /^[0-9]{13}$/;
 
-async function getImgByAPI(code) {
-  // console.log("getImgByAPI");
-  let url = OFFurl + code + ".json";
-  // console.log(url);
-
-  var fotos = fetch(url)
-    .then(function (response) {
-      return response.json();
-    })
-    .catch(function (error) {
-      console.log("Hubo un problema con la petición Fetch:" + error.message);
-      return undefined;
-    });
-  // console.log("fotos");
-  //console.log(fotos);
-  return fotos;
-}
-
-async function checkImgFromAPI(code) {
-  // console.log("checkImgFromAPI");
-  var fotos = await getImgByAPI(code);
-
-  if (fotos)
-    if (fotos.product.selected_images)
-      if (fotos.product.selected_images.front)
-        if (fotos.product.selected_images.front.display) {
-          return [fotos.product.selected_images.front.display];
-        }
-
-  return [];
-}
-
-router.post("/deleteToNevera", async (req, res) => {
-  console.log(req.body);
-
-  console.log("DELETING NEVERA PROD: " + req.body);
-  console.log(req.body);
-  deleteArr = req.body.toDeleteArr;
-
-  let nevera = await Nevera.findOne();
-
-  let neveraContent = nevera.productos;
-
-  delIndex = neveraContent.indexOf(deleteArr);
-
-  neveraContent.splice(delIndex, 1);
-
-  nevera.productos = neveraContent;
-  nevera.save();
-
-});
-
-router.post("/getProd", async (req, res) => {
-  console.log("GETTING PROD: " + req.body.barcode);
-
-  var producto = await Product.findById(req.body.barcode);
-
-  if (!producto)
-    return res.status(404).send("El producto solicitado no existe");
-
-  producto.imgs = await checkImgFromAPI(req.body.barcode);
-
-  res.send(producto);
-});
-
-router.post("/getProdKeyWord", async (req, res) => {
-  console.log("GETTING PROD WITH KEYWORD: " + req.body._keywords);
-  /*TODO:
-        - hacer dinamico el limite de resultados y que desde la request se pueda cambiar
-        - tema de los tags de popularidad
-        - busqueda con "LIKE" (keywords parciales)
-    */
-  var productos = await Product.find({ _keywords: req.body._keywords }).limit(
-    10
-  );
-
-  if (!productos)
-    return res.status(404).send("No hay productos con la keyword solicitada");
-
-  for (producto of productos) {
-    producto.imgs = await checkImgFromAPI(producto._id);
-  }
-
-  res.send(productos);
-});
-
-router.get("/getNevera", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   console.log("GETTING NEVERA");
-  // let nevera = await Nevera.find( { usuario: req.body.user } )
-  let nevera = await Nevera.findOne();
+  let nevera = await Nevera.findOne({ usuario: req.user._id });
 
   if (!nevera)
     return res.status(404).send("No se encuentran los datos de la nevera");
@@ -114,19 +29,19 @@ router.get("/getNevera", async (req, res) => {
   );
 
   for (let element of listedProds) {
-    element.imgs = await checkImgFromAPI(element._id);
+    element.imgs = await getImageAPI(element._id);
   }
 
   res.send(listedProds);
 });
 
-router.get("/getNeveraList", async (req, res) => {
+router.get("/list", auth, async (req, res) => {
   //var date = Date.now();
   //var timeStr = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
   console.log("GETTING NEVERA LIST ");
   // let nevera = await Nevera.find( { usuario: req.body.user } )
-  let nevera = await Nevera.findOne();
+  let nevera = await Nevera.findOne({ usuario: req.user._id });
 
   if (!nevera)
     return res.status(404).send("No se encuentran los datos de la nevera");
@@ -151,7 +66,7 @@ router.get("/getNeveraList", async (req, res) => {
       .send("Formato del contenido de la nevera incorrecto");
 
   for (let element of listedProds) {
-    element.imgs = await checkImgFromAPI(element._id);
+    element.imgs = await getImageAPI(element._id);
   }
 
   res.send(listedProds);
@@ -162,7 +77,7 @@ router.get("/getNeveraList", async (req, res) => {
     "toDeleteArr": ["111111111111111"]
 }
  */
-router.delete("/deleteNevera", async (req, res) => {
+router.delete("/product", auth, async (req, res) => {
   console.log("DELETING NEVERA CONTENT");
   deleteArr = req.body.toDeleteArr;
   console.log(deleteArr);
@@ -178,7 +93,7 @@ router.delete("/deleteNevera", async (req, res) => {
     return res.status(400).send("Datos del body mal formateados");
 
   // let nevera = await Nevera.find( { usuario: req.body.user } )
-  let nevera = await Nevera.findOne();
+  let nevera = await Nevera.findOne({ usuario: req.user._id });
 
   if (!nevera)
     return res.status(404).send("No se encuentran los datos de la nevera");
@@ -197,9 +112,9 @@ router.delete("/deleteNevera", async (req, res) => {
   if (result) res.send(nevera.productos);
 });
 
-router.delete("/clearNevera", async (req, res) => {
+router.delete("/", auth, async (req, res) => {
   console.log("CLEARING NEVERA CONTENT");
-  let nevera = await Nevera.findOne();
+  let nevera = await Nevera.findOne({ usuario: req.user._id });
 
   if (!nevera)
     return res.status(404).send("No se encuentran los datos de la nevera");
@@ -218,10 +133,10 @@ router.delete("/clearNevera", async (req, res) => {
  }
 
  */
-router.put("/addToNevera", async (req, res) => {
+router.put("/product/:id", auth, async (req, res) => {
   console.log("ADDING NEVERA CONTENT");
   console.log(req.body);
-  let nevera = await Nevera.findOne();
+  let nevera = await Nevera.findOne({ usuario: req.user._id });
 
   if (!nevera)
     return res.status(404).send("No se encuentran los datos de la nevera");
@@ -252,7 +167,7 @@ router.put("/addToNevera", async (req, res) => {
 
 router.post("/apiImg", async (req, res) => {
   console.log("apiImg");
-  var pics = await checkImgFromAPI(req.body.barcode);
+  var pics = await getImageAPI(req.body.barcode);
   console.log(pics);
   res.send(pics);
 });

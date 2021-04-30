@@ -12,6 +12,7 @@ const error = require("./routes/error");
 
 const auth = require("./routes/auth");
 const nevera = require("./routes/nevera");
+const product = require("./routes/product");
 const receta = require("./routes/receta");
 
 const app = express();
@@ -29,6 +30,7 @@ if (!config.get("jwtPrivateKey")) {
 app.use("/", home);
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/nevera", nevera);
+app.use("/api/v1/product", product);
 app.use("/api/v1/receta", receta);
 app.use("*", error);
 
