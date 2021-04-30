@@ -43,16 +43,21 @@ router.get("/getAllRecetas", async (req, res) => {
 router.get("/addRecetaFIXED", async (req, res) => {
 
         let receta = new Receta();
+
+        var dict = {
+            "manzana verde": "1", 
+            "rodajas de papaya madura": "3",
+            "vaso de agua": "1.5",
+            "cucharadita de miel": "1"
+        };
+
         receta.usuario = "0";
         receta.titulo = "Jugo para el estreñimiento de manzana y papaya";
         receta.dificultad = 1;
         receta.tiempo = "5:00";
-        receta.ingredientes = [
-            "1 manzana verde",
-            "3 rodajas de papaya madura",
-            "½ vaso de agua",
-            "1 cucharadita de miel"
-        ];
+
+        receta.ingredientes = dict;
+
         receta.pasos = [
             "Trocea las frutas y agrégalas en el vaso de la licuadora junto al resto de los ingredientes.",
             "Mezcla hasta que no veas grumos."
@@ -61,9 +66,12 @@ router.get("/addRecetaFIXED", async (req, res) => {
             "Si lo prefieres, puedes agregar naranja a la receta, siguiendo estas indicaciones de nuestra receta de jugo de papaya, manzana y naranja.",
             "La manzana es una de esas frutas cuya piel beneficia la regulación del tránsito intestinal, de manera que lávala muy bien y prepara el jugo sin quitarla."
         ];
+
         receta.rating_num = 4;
-        const result = receta.save();    
+        receta.tags = ["fruta", "batido", "zumo", "vegano", "vegetariano"];
+        const result = receta.save();
         //return res.status(404).send("No hay recetas");
+
         
         res.send(receta);
 
@@ -72,17 +80,41 @@ router.get("/addRecetaFIXED", async (req, res) => {
 
 router.get("/addReceta", async (req, res) => {
 
-    receta.usuario = "0";
-    receta.titulo = res.body.titulo;
     let receta = new Receta();
+    
     receta.usuario = "0";
-    receta.titulo = res.body.titulo;
-    receta.dificultad = res.body.dificultad;
-    receta.tiempo = res.body.tiempo;
-    receta.ingredientes = res.body.ingredientes;
-    receta.pasos = res.body.pasos;
-    receta.consejos = res.body.consejos;
-    receta.rating_num = 4;
+
+    if (titulo)
+        receta.titulo = req.body.titulo;
+    else
+        return res.status(400).send("No se ha enviado un título válido");
+
+    if (req.body.dificultad)
+        receta.dificultad = req.body.dificultad;
+    else
+        return res.status(400).send("No se ha enviado un nivel de dificultad válido");
+
+    if (req.body.tiempo)
+        receta.tiempo = req.body.tiempo;
+    else
+        return res.status(400).send("No se ha insertado una duración válida");
+
+    if (req.body.ingredientes)
+        receta.ingredientes = req.body.ingredientes;
+    else
+        return res.status(400).send("La receta debe coneter ingredietes válidos");
+
+    if (req.body.pasos.length)
+        receta.pasos = req.body.pasos;
+    else
+        return res.status(400).send("La receta debe contener pasos a seguir");
+
+    if (req.body.consejos)
+        receta.consejos = req.body.consejos;
+    
+    
+
+    //receta.rating_num = 4; por defecto que sea undefined al no tener valoraciones
 
     const result = receta.save();    
     //if (result) res.send();
