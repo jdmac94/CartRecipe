@@ -1,7 +1,10 @@
 const express = require("express");
 const https = require("https");
 const router = express.Router();
+
 const { Receta } = require("../models/receta");
+const { Nevera } = require("../models/nevera");
+const auth = require("../middlewares/auth");
 
 
 router.get("/getAllRecetas", auth, async (req, res) => {
