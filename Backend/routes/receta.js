@@ -4,7 +4,7 @@ const router = express.Router();
 const { Receta } = require("../models/receta");
 
 
-router.get("/getAllRecetas", async (req, res) => {
+router.get("/getAllRecetas", auth, async (req, res) => {
 
     let recetaList = await Receta.find().limit(10);
 
@@ -40,7 +40,7 @@ router.get("/getAllRecetas", async (req, res) => {
 });
 
 
-router.get("/addRecetaFIXED", async (req, res) => {
+router.get("/addRecetaFIXED", auth, async (req, res) => {
 
         let receta = new Receta();
 
@@ -78,7 +78,7 @@ router.get("/addRecetaFIXED", async (req, res) => {
 });
 
 
-router.get("/addReceta", async (req, res) => {
+router.post("/addReceta", auth, async (req, res) => {
 
     let receta = new Receta();
     
@@ -124,9 +124,9 @@ router.get("/addReceta", async (req, res) => {
 });
 
 
-router.get("/getReceta", async (req, res) => {
+router.get("/getReceta", auth, async (req, res) => {
 
-    let receta = await Receta.findById(req.body._id)
+    let receta = await Receta.findById(req.params._id)
     if (!receta)
         return res.status(404).send("La receta solicitada no existe");
     res.send(receta)
