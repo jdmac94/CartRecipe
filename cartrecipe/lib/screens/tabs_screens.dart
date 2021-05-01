@@ -1,4 +1,6 @@
 import 'package:cartrecipe/screens/nevera_test.dart';
+import 'package:cartrecipe/screens/sign_in.dart';
+import 'package:cartrecipe/screens/welcome.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cartrecipe/screens/recipes_screen.dart';
@@ -6,6 +8,7 @@ import 'package:cartrecipe/screens/search_screen.dart';
 import 'package:cartrecipe/screens/scanner_screen.dart';
 import 'package:cartrecipe/screens/my_fridge_screen.dart';
 import 'package:cartrecipe/screens/profile_screen.dart';
+import 'log_in.dart';
 import 'nevera_test.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -27,8 +30,9 @@ class _TabsScreenState extends State<TabsScreen> {
         'title': 'Recetas',
       },
       {
-        //'page': SearchsScreen(),
-        'page': NeveraTest(),
+        'page': SearchsScreen(),
+        //'page': NeveraTest(),
+        //'page': SignIn(),
         'title': 'Búsqueda',
       },
       {
