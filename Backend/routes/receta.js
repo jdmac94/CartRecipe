@@ -141,7 +141,7 @@ router.post("/addReceta", auth, async (req, res) => {
 });
 
 
-router.get("/getReceta", auth, async (req, res) => {
+router.get("/getReceta/:id", auth, async (req, res) => {
 
     let receta = await Receta.findById(req.params.id)
     console.log("Buscando receta: " + req.params.id)
