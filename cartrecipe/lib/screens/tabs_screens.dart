@@ -1,5 +1,8 @@
 import 'package:cartrecipe/providers/product_list_provider.dart';
 import 'package:cartrecipe/screens/test_screen.dart';
+
+import 'package:cartrecipe/screens/sign_in.dart';
+import 'package:cartrecipe/screens/welcome.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cartrecipe/screens/recipes_screen.dart';
@@ -8,6 +11,9 @@ import 'package:cartrecipe/screens/scanner_screen.dart';
 import 'package:cartrecipe/screens/my_fridge_screen.dart';
 import 'package:cartrecipe/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
+import 'log_in.dart';
+
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class TabsScreen extends StatefulWidget {
   @override
@@ -28,6 +34,9 @@ class _TabsScreenState extends State<TabsScreen> {
       {
         //'page': SearchsScreen(),
         'page': TestScreen(),
+        //'page': SearchsScreen(),
+        //'page': NeveraTest(),
+        //'page': SignIn(),
         'title': 'Búsqueda',
       },
       {
