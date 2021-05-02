@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { Nevera } = require("../models/nevera");
 const { Product } = require("../models/product");
-const { getImageAPI } = require("../utils/imageAPI");
+const { checkImgFromAPI } = require("../utils/imageAPI");
 
 const auth = require("../middlewares/auth");
 
@@ -29,7 +29,7 @@ router.get("/", auth, async (req, res) => {
   );
 
   for (let element of listedProds) {
-    element.imgs = await getImageAPI(element._id);
+    element.imgs = await checkImgFromAPI(element._id);
   }
 
   res.send(listedProds);
@@ -66,7 +66,7 @@ router.get("/list", auth, async (req, res) => {
       .send("Formato del contenido de la nevera incorrecto");
 
   for (let element of listedProds) {
-    element.imgs = await getImageAPI(element._id);
+    element.imgs = await checkImgFromAPI(element._id);
   }
 
   res.send(listedProds);
@@ -141,23 +141,36 @@ router.put("/product/:id", auth, async (req, res) => {
   if (!nevera)
     return res.status(404).send("No se encuentran los datos de la nevera");
 
-  if (!barcodeRegEx.test(req.body.barcode))
+  if (!barcodeRegEx.test(req.params.id))
     return res.status(400).send("Datos del body mal formateados");
 
-  var prod = await Product.findById(req.body.barcode);
+  var prod = await Product.findById(req.params.id);
 
   if (!prod) return res.status(404).send("El producto a insertar no existe");
 
   let neveraContent = nevera.productos;
-  delIndex = neveraContent.indexOf(req.body.barcode);
+  delIndex = neveraContent.indexOf(req.params.id);
 
   if (delIndex == -1) {
     let prodArray = nevera.productos;
 
-    prodArray.push(req.body.barcode);
+    prodArray.push(req.params.id);
     nevera.productos = prodArray;
     const result = nevera.save();
-    if (result) res.send(nevera.productos);
+    if (result) {
+      
+      let listedProds = await Product.findOne(
+        { _id: req.params.id },
+        {
+          _id: 1, product_name: 1, allergens_from_user: 1, product_name_es: 1, imgs: 1,
+        }
+      )
+
+      listedProds.imgs = await checkImgFromAPI(listedProds._id);
+
+      res.send(listedProds);
+      
+    }
   } //else return res.status(400).send("El Producto ya exsite en la nevera");
 });
 
