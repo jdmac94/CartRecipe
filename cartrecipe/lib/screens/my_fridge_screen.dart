@@ -1,9 +1,5 @@
 import 'package:cartrecipe/providers/product_list_provider.dart';
-import 'package:cartrecipe/providers/test_provider.dart';
 import 'package:flutter/material.dart';
-
-import 'package:cartrecipe/api/api_wrapper.dart';
-
 import 'package:cartrecipe/models/product.dart';
 
 import 'package:cartrecipe/widgets/fridge_speedial.dart';
@@ -15,15 +11,9 @@ import 'dart:async';
 
 import 'package:provider/provider.dart';
 
-class MyFridgeScreen extends StatefulWidget {
+class MyFridgeScreen extends StatelessWidget {
   static const String routeNamed = '/fridge';
 
-  @override
-  _MyFridgeScreenState createState() => _MyFridgeScreenState();
-}
-
-//TODO! Mirar de conseguir el valor del tetxfield para añadirlo a la lista
-class _MyFridgeScreenState extends State<MyFridgeScreen> {
   //Primer camp sera el Index, segon el Codi de Barres
   Map selectedMap = new Map<int, String>();
   List<String> delete = [];
@@ -40,13 +30,6 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
     );
   }
 
-  moveToButton(BuildContext context) async {
-    productToAdd = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => FridgeSpeedDial()),
-    );
-  }
-
   Future<void> confirmDelete(
       BuildContext context, Map<int, String> selectedMap) {
     return showDialog<void>(
@@ -57,99 +40,13 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
     );
   }
 
-  //TODO!
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
-  void initState() {
-    listedProduct = Provider.of<ProductList>(context, listen: false);
-    //resfreshScreen();
-    super.initState();
-  }
-
-  void resfreshScreen() {
-    ApiWrapper().getFridgeProducts().then((products) {
-      if (mounted) {
-        setState(() {
-          listedProduct = products;
-        });
-      }
-
-      // Timer.periodic(Duration(seconds: 3), (timer) {
-      //   setState(() {
-      //     //List temporary;
-      //     ApiWrapper()
-      //         .getFridgeProducts()
-      //         .then((products) => listedProduct = products);
-      //   });
-      // });
-    });
-  }
-
-  void deleteProduct(List<String> product, int index) {
-    if (mounted)
-      setState(() {
-        listedProduct.removeAt(index);
-        ApiWrapper().deleteAndreh(product);
-        ApiWrapper()
-            .getFridgeProducts()
-            .then((products) => listedProduct = products);
-
-        //I assume you want to remove favorites as well otherwise the two indeces will go out of sync? Maybe?
-        //favourites.removeAt(index)
-      });
-  }
-
-  void deleteMultipleProducts(List<int> positions) {
-    if (mounted) {
-      setState(() {
-        positions.forEach((position) {
-          print('Se borra la posicion $position de los selected');
-          listedProduct.removeAt(position);
-        });
-
-        //ApiWrapper().deleteAndreh(product);
-        //I assume you want to remove favorites as well otherwise the two indeces will go out of sync? Maybe?
-        //favourites.removeAt(index)
-      });
-    }
-  }
-
-  Future refresh() async {
-    setState(() {
-      ApiWrapper()
-          .getFridgeProducts()
-          .then((products) => listedProduct = products);
-    });
-  }
-
   void undo() {}
-
-  Future refreshAfterAdd() async {
-    setState(() {
-      ApiWrapper()
-          .getFridgeProducts()
-          .then((products) => listedProduct = products);
-    });
-
-    return FridgeSpeedDial();
-  }
-
-  // FridgeSpeedDial addPlis() {
-  //   setState(() {
-  //     productToAdd = 'a';
-  //     return FridgeSpeedDial();
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      productToAdd = ModalRoute.of(context).settings.arguments as String;
-    });
+    //setState(() {
+    productToAdd = ModalRoute.of(context).settings.arguments as String;
+    //});
     //final productList = Provider.of<ProductList>(context);
     //final provider = Provider.of<TestProvider>(context, listen: false);
     //final data = provider.items;
@@ -160,8 +57,6 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
           child: Column(
             children: [
               Text('Productos en la nevera'),
-              // Consumer<ProductList>(
-              //   builder: (context, productList, child) =>
               Consumer<ProductList>(
                 builder: (context, provider, child) => Expanded(
                   child: provider.listaProductos == null
@@ -180,9 +75,6 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
                               background: Container(color: Colors.red),
                               key: UniqueKey(),
                               onDismissed: (direction) {
-                                //productList.update();
-                                //deleteProduct([item.id], index);
-                                //provider.loadProductsData();
                                 provider.deleteProduct(item.id, index);
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
@@ -210,18 +102,18 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
                                     // ),
                                     selected: selectedMap.containsKey(index),
                                     onLongPress: () {
-                                      setState(() {
-                                        if (selectedMap.containsKey(index)) {
-                                          print('Remove Selected id: ' +
-                                              selectedMap[index].toString());
+                                      //setState(() {
+                                      if (selectedMap.containsKey(index)) {
+                                        print('Remove Selected id: ' +
+                                            selectedMap[index].toString());
 
-                                          selectedMap.remove(index);
-                                        } else {
-                                          selectedMap[index] = item.id;
-                                          print('Add Selected id: ' +
-                                              selectedMap[index].toString());
-                                        }
-                                      });
+                                        selectedMap.remove(index);
+                                      } else {
+                                        selectedMap[index] = item.id;
+                                        print('Add Selected id: ' +
+                                            selectedMap[index].toString());
+                                      }
+                                      //});
                                     }),
                               ),
                             );
@@ -244,12 +136,10 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
                           print('Se añade la posicion $key al positions');
                           keys.add(key);
                         });
-                        //productList.update();
-                        //deleteMultipleProducts(keys);
-                        setState(() {
-                          provider.deleteMultipleProduct(keys);
-                          selectedMap = new Map<int, String>();
-                        });
+                        //setState(() {
+                        provider.deleteMultipleProduct(keys);
+                        selectedMap = new Map<int, String>();
+                        //});
                       },
                       backgroundColor: Colors.redAccent,
                     ),
