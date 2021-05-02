@@ -4,10 +4,11 @@ import 'dart:convert';
 import 'dart:async';
 
 import 'package:cartrecipe/models/product.dart';
+import 'package:cartrecipe/models/recipe.dart';
 
 class ApiWrapper {
-  //final String endpoint = "158.109.74.46:55005";
-  final String endpoint = "a1ac68965a1d.ngrok.io";
+  final String endpoint = "158.109.74.46:55005";
+  //final String endpoint = "a1ac68965a1d.ngrok.io";
 
   Future<List<Product>> getFridgeProducts() async {
     const String api = "api/v1/nevera/list";
@@ -120,5 +121,73 @@ class ApiWrapper {
     } else {
       throw Exception('Failed to empty fridge');
     }
+  }
+
+  Future<List<Recipe>> getRecipeList() async {
+    const String api = "api/v1/receta/getAllRecetas";
+    //Currently using  generated auth token
+    final auth =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhiZThlN2IyYjM3YTAwZjgwMTYyOTMiLCJhbGVyZ2lhcyI6W10sImRpZXRhIjpbXSwidGFncyI6W10sIm5pdmVsX2NvY2luYSI6bnVsbCwic2lzdGVtYV91bmlkYWRlcyI6InNpc3RfaW50IiwicmVjZXRhc19mYXZzIjpbXSwiaWF0IjoxNjE5NzgxODYzfQ.aSAmFeibWYrdDvNh9-kV1bCFtAiBMkp5MQJM4qi4zGk";
+
+    List<Recipe> recipeList = [];
+    //TODO: Recipe filtering - later
+    http.Response response =
+        await http.get(Uri.http(endpoint, api), headers: <String, String>{
+      'x-auth-token': auth,
+    });
+
+    if (response.statusCode == 200) {
+      print("Received correctly recipe list.");
+      print(response.body);
+      recipeList = (json.decode(response.body) as List)
+          .map((i) => Recipe.fromJson(i))
+          .toList();
+
+      //Iterable i = json.decode(response.body);
+      //recipeList = List<Recipe>.from(i.map((model) => Recipe.fromJson(model)));
+    } else {
+      print("Did not receive correctly recipe list");
+    }
+
+    if (recipeList.isEmpty) {
+      print('No he recibido nada');
+      var r = Recipe(
+        id: '0',
+        user: 'Patata2000',
+        recipeName: 'Patatas',
+        difficulty: 4,
+        ingredients: [
+          IngredienteReceta(nombre: 'Patatas', cantidad: 2),
+          IngredienteReceta(
+            nombre: 'Huevos',
+            cantidad: 6,
+          ),
+          IngredienteReceta(
+            nombre: 'Cebolla',
+            cantidad: 3,
+          ),
+          IngredienteReceta(
+            nombre: 'Sal',
+            cantidad: 1,
+          ),
+        ],
+        //ingredients: ['Patatas':2, 'Huevos':3, 'Cebolla':6, 'Sal':7],
+        time: '6:00',
+        image:
+            'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png',
+        steps: [
+          'Coger patata',
+          'Pelar patata',
+          'Cocinar patata',
+          'a',
+          'a',
+          'a'
+        ],
+        tips: ['No tirar la patata al suelo'],
+      );
+
+      recipeList = [r, r, r, r, r, r]; // Until we receive data
+    }
+    return recipeList;
   }
 }
