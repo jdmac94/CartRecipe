@@ -69,10 +69,10 @@ router.get("/addRecetaFIXED", auth, async (req, res) => {
         receta.usuario = "0";
         receta.titulo = "Jugo para el estreñimiento de manzana y papaya";
         receta.dificultad = 1;
+        receta.descripcion = "Esto es una introducción";
         receta.tiempo = "5:00";
-        receta.intro = "Esto es una introducción";
+        receta.imagenes = [ 'https://www.laespanolaaceites.com/wp-content/uploads/2019/06/pizza-con-chorizo-jamon-y-queso-1080x671.jpg' ];
         receta.ingredientes = dict;
-        receta.imgs = [ 'https://www.laespanolaaceites.com/wp-content/uploads/2019/06/pizza-con-chorizo-jamon-y-queso-1080x671.jpg' ];
 
         receta.pasos = [
             "Trocea las frutas y agrégalas en el vaso de la licuadora junto al resto de los ingredientes.",

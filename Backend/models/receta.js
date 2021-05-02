@@ -16,6 +16,9 @@ const recetaSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  descripcion: {
+    type: String,
+  },
   tiempo: {
     type: String,
     required: true,
@@ -38,17 +41,22 @@ const recetaSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
-  categorias: {
-    type: Array,
-    default: [],
-  },
   /*rating: {
     type: Array,
     default: [],
   }, */
   rating_num : {
     type: Number
-  }
+  },
+  tags : {
+    type: Array,
+    default: [],
+  },
+  allergenList : {
+    type: Array,
+    default: [],
+  },
+  
 });
 
 const Receta = mongoose.model("Receta", recetaSchema);
