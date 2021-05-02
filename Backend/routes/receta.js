@@ -47,19 +47,32 @@ router.get("/addRecetaFIXED", auth, async (req, res) => {
 
         let receta = new Receta();
 
-        var dict = {
-            "manzana verde": "1", 
-            "rodajas de papaya madura": "3",
-            "vaso de agua": "1.5",
-            "cucharadita de miel": "1"
-        };
+        // var dict = {
+        //     "manzana verde": "1", 
+        //     "rodajas de papaya madura": "3",
+        //     "vaso de agua": "1.5",
+        //     "cucharadita de miel": "1"
+        // };
+        
+        var dict = [
+            { "1": ["manzana verde", "1"] }, 
+            { "2": ["rodajas de papaya", "3"] },
+            { "3": ["vaso de agua", "1.5"] },
+            { "4": ["cucharadita de miel", "1"]}
+        ];
+
+        /*"ingredientes":[
+        { "nombre": "manzana verde", "cantidad: "1" }, 
+        { "nombre" : "rodajas de papaya", "cantidad" : "3"},
+        ... ] */
 
         receta.usuario = "0";
         receta.titulo = "Jugo para el estreñimiento de manzana y papaya";
         receta.dificultad = 1;
         receta.tiempo = "5:00";
-
+        receta.intro = "Esto es una introducción";
         receta.ingredientes = dict;
+        receta.imgs = [ 'https://www.laespanolaaceites.com/wp-content/uploads/2019/06/pizza-con-chorizo-jamon-y-queso-1080x671.jpg' ];
 
         receta.pasos = [
             "Trocea las frutas y agrégalas en el vaso de la licuadora junto al resto de los ingredientes.",
@@ -72,6 +85,7 @@ router.get("/addRecetaFIXED", auth, async (req, res) => {
 
         receta.rating_num = 4;
         receta.tags = ["fruta", "batido", "zumo", "vegano", "vegetariano"];
+        receta.allergenList = ["alergeno0","alergeno1","alergeno2","alergeno3","alergeno4","alergeno5"]
         const result = receta.save();
         //return res.status(404).send("No hay recetas");
 
