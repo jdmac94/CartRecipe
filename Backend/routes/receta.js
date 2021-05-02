@@ -143,7 +143,8 @@ router.post("/addReceta", auth, async (req, res) => {
 
 router.get("/getReceta", auth, async (req, res) => {
 
-    let receta = await Receta.findById(req.params._id)
+    let receta = await Receta.findById(req.params.id)
+    console.log("Buscando receta: " + req.params.id)
     if (!receta)
         return res.status(404).send("La receta solicitada no existe");
     res.send(receta)
