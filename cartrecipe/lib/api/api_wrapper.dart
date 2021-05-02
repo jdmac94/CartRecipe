@@ -6,13 +6,20 @@ import 'dart:async';
 import 'package:cartrecipe/models/product.dart';
 
 class ApiWrapper {
-  final String endpoint = "158.109.74.46:55005";
+  //final String endpoint = "158.109.74.46:55005";
+  final String endpoint = "a1ac68965a1d.ngrok.io";
 
-  Future getFridgeProducts() async {
-    const String api = "api/v1/nevera/getNeveraList";
-    final response = await http.get(Uri.http(endpoint, api));
+  Future<List<Product>> getFridgeProducts() async {
+    const String api = "api/v1/nevera/list";
+    final response = await http.get(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'x-auth-token':
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhiZThlN2IyYjM3YTAwZjgwMTYyOTMiLCJhbGVyZ2lhcyI6W10sImRpZXRhIjpbXSwidGFncyI6W10sIm5pdmVsX2NvY2luYSI6bnVsbCwic2lzdGVtYV91bmlkYWRlcyI6InNpc3RfaW50IiwicmVjZXRhc19mYXZzIjpbXSwiaWF0IjoxNjE5NzgxODYzfQ.aSAmFeibWYrdDvNh9-kV1bCFtAiBMkp5MQJM4qi4zGk'
+      },
+    );
     if (response.statusCode == 200) {
-      print('Recibida la respuesta de la petición');
+      print('StatusCode 200 - Todo OK');
 
       List<Product> prods = [];
 
@@ -29,8 +36,8 @@ class ApiWrapper {
     }
   }
 
-  void addProduct(String barcode) async {
-    var api = '/api/v1/nevera/addToNevera';
+  Future<Product> addProduct(String barcode) async {
+    var api = '/api/v1/nevera/product/$barcode';
 
     print('Codigo es $barcode');
     print('Barcode es string $barcode' is String);
@@ -39,33 +46,55 @@ class ApiWrapper {
     http.Response response = await http.put(
       Uri.http(endpoint, api),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        //'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token':
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhiZThlN2IyYjM3YTAwZjgwMTYyOTMiLCJhbGVyZ2lhcyI6W10sImRpZXRhIjpbXSwidGFncyI6W10sIm5pdmVsX2NvY2luYSI6bnVsbCwic2lzdGVtYV91bmlkYWRlcyI6InNpc3RfaW50IiwicmVjZXRhc19mYXZzIjpbXSwiaWF0IjoxNjE5NzgxODYzfQ.aSAmFeibWYrdDvNh9-kV1bCFtAiBMkp5MQJM4qi4zGk'
       },
-      body: jsonEncode(<String, String>{
-        'barcode': barcode,
-      }),
+      // body: jsonEncode(<String, String>{
+      //   'barcode': barcode,
+      // },
     );
 
-    print(jsonEncode(<String, String>{
-      'barcode': barcode,
-    }));
+    // print('Esto obtengo al añadir');
+    // print(json.decode(response.body));
+
+    // print(jsonEncode(<String, String>{
+    //   'barcode': barcode,
+    // }));
 
     print('Body: ${response.body.toString()}');
 
-    if (response.statusCode == 200)
-      print('Recibido bien');
-    else
+    if (response.statusCode == 200) {
+      print('Recibido bien al añadir');
+      print('Esto obtengo al añadir');
+      print(json.decode(response.body));
+
+      Map<String, dynamic> map = json.decode(response.body);
+
+      print("Imprimo MAP de añadir:  $map");
+
+      Product prod = Product.fromJson(map);
+
+      //Iterable l = json.decode(response.body);
+      //prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
+
+      print('Producto generado es: ${prod}');
+
+      return prod;
+    } else
       print('F');
   }
 
   //TODO! TRY CATCH TO GUAPO
   void deleteAndreh(List<String> barcode) async {
-    var api = 'api/v1/nevera/deleteNevera';
+    var api = 'api/v1/nevera/product';
 
     http.Response response = await http.delete(
       Uri.http(endpoint, api),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token':
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhiZThlN2IyYjM3YTAwZjgwMTYyOTMiLCJhbGVyZ2lhcyI6W10sImRpZXRhIjpbXSwidGFncyI6W10sIm5pdmVsX2NvY2luYSI6bnVsbCwic2lzdGVtYV91bmlkYWRlcyI6InNpc3RfaW50IiwicmVjZXRhc19mYXZzIjpbXSwiaWF0IjoxNjE5NzgxODYzfQ.aSAmFeibWYrdDvNh9-kV1bCFtAiBMkp5MQJM4qi4zGk',
       },
       body: jsonEncode(<String, List<String>>{
         'toDeleteArr': barcode,

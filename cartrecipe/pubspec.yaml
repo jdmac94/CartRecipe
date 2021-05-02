@@ -28,8 +28,7 @@ dependencies:
   flutter_speed_dial: ^3.0.5
   http: ^0.13.1
   json_annotation: ^4.0.1
-  
-  #json_serializable: ^4.1.1
+  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:

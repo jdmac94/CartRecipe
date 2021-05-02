@@ -1,27 +1,40 @@
+import 'package:cartrecipe/data/dummy_data.dart';
+import 'package:cartrecipe/models/product.dart';
+import 'package:cartrecipe/providers/product_list_provider.dart';
+import 'package:cartrecipe/providers/product_provider.dart';
+import 'package:cartrecipe/providers/test_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'screens/tabs_screens.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CartRecipe',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        accentColor: Colors.amberAccent,
+    return MultiProvider(
+      child: MaterialApp(
+        title: 'CartRecipe',
+        theme: ThemeData(
+          primarySwatch: Colors.deepPurple,
+          accentColor: Colors.amberAccent,
+        ),
+        initialRoute: '/',
+        routes: {
+          '/': (ctx) => TabsScreen(),
+        },
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (ctx) => TabsScreen(),
-      },
+      providers: [
+        FutureProvider<ProductList>(
+          initialData: ProductList(listaProductos: []),
+          create: (context) => ProductList().loadProductsData(),
+        ),
+        FutureProvider<ProductProvider>(
+          initialData: ProductProvider(),
+          create: (context) => ProductProvider().loadProviderData(),
+        )
+      ],
     );
   }
 }

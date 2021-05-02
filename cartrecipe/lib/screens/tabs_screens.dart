@@ -1,4 +1,5 @@
-import 'package:cartrecipe/screens/nevera_test.dart';
+import 'package:cartrecipe/providers/product_list_provider.dart';
+import 'package:cartrecipe/screens/test_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cartrecipe/screens/recipes_screen.dart';
@@ -6,9 +7,7 @@ import 'package:cartrecipe/screens/search_screen.dart';
 import 'package:cartrecipe/screens/scanner_screen.dart';
 import 'package:cartrecipe/screens/my_fridge_screen.dart';
 import 'package:cartrecipe/screens/profile_screen.dart';
-import 'nevera_test.dart';
-
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:provider/provider.dart';
 
 class TabsScreen extends StatefulWidget {
   @override
@@ -28,7 +27,7 @@ class _TabsScreenState extends State<TabsScreen> {
       },
       {
         //'page': SearchsScreen(),
-        'page': NeveraTest(),
+        'page': TestScreen(),
         'title': 'Búsqueda',
       },
       {
@@ -48,30 +47,9 @@ class _TabsScreenState extends State<TabsScreen> {
     super.initState();
   }
 
-  String _data = "";
-  String _productname = "";
-
-  _scan() async {
-    await FlutterBarcodeScanner.scanBarcode(
-            "#000000", "Cancelar", true, ScanMode.BARCODE)
-        .then((value) => setState(() => _data = value));
-  }
-
   void _selectPage(int index) {
     setState(() {
-      //var tempIndex = index;
-
       _selectedPageIndex = index;
-
-      // if (_selectedPageIndex == 2) {
-      //   print('Seleccionado el escaner');
-      //   _scan();
-      //   _selectedPageIndex = tempIndex;
-      // }
-
-      // if (_selectedPageIndex == 4) {
-      //   _selectedPageIndex = 3;
-      // }
     });
   }
 

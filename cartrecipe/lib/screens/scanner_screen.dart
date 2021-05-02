@@ -1,3 +1,5 @@
+import 'package:cartrecipe/models/product.dart';
+import 'package:cartrecipe/providers/product_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:cartrecipe/api/api_wrapper.dart';
 
 import 'dart:async';
+
+import 'package:provider/provider.dart';
 
 class ScannerScreen extends StatefulWidget {
   @override
@@ -14,12 +18,12 @@ class ScannerScreen extends StatefulWidget {
 class _ScannerScreenState extends State<ScannerScreen> {
   String _data = "";
 
-  _scan() async {
+  _scan(ProductList provider) async {
     await FlutterBarcodeScanner.scanBarcode(
             "#000000", "Cancelar", true, ScanMode.BARCODE)
         .then((value) => setState(() {
               _data = value;
-              ApiWrapper().addProduct(value);
+              provider.addProduct(_data);
             }));
   }
 
@@ -45,9 +49,16 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   //   return _data;
   // }
+  //
+  void updateProvider() async {
+    print('Dato escaneado $_data');
+    Product prod = await ApiWrapper().addProduct(_data);
+    print('He recibido en el scaner: $prod');
+  }
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ProductList>(context);
     //   return FutureBuilder<String>(
     //       future: _scan(),
     //       builder: (context, AsyncSnapshot<String> snapshot) {
@@ -64,7 +75,11 @@ class _ScannerScreenState extends State<ScannerScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-                onPressed: () => _scan(),
+                onPressed: () {
+                  _scan(provider);
+
+                  //updateProvider();
+                },
                 child: Text("Escanear código de barras")),
             Text(_data),
           ],

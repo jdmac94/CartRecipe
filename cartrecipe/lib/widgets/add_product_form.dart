@@ -1,7 +1,9 @@
+import 'package:cartrecipe/providers/product_list_provider.dart';
 import 'package:cartrecipe/screens/my_fridge_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cartrecipe/api/api_wrapper.dart';
+import 'package:provider/provider.dart';
 
 class AddProductForm extends StatelessWidget {
   static String input;
@@ -41,25 +43,33 @@ class AddProductForm extends StatelessWidget {
                     },*/
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Validate returns true if the form is valid, or false otherwise.
-                      //if (_formKey.currentState.validate()) {
-                      // If the form is valid, display a snackbar.
-                      ApiWrapper().addProduct(productText.text);
-                      // ****call a server or save the information in a database****
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content:
-                              //productText.text es el contenido del form
-                              Text('Processing Data:' + productText.text)));
+                Consumer<ProductList>(
+                  builder: (context, provider, child) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Validate returns true if the form is valid, or false otherwise.
+                        //if (_formKey.currentState.validate()) {
+                        // If the form is valid, display a snackbar.
 
-                      //Devuelve a la vista ANTERIOR, no NUEVA ( con el product añadido )
-                      Navigator.of(context, rootNavigator: true).pop(context);
-                      //}
-                    },
-                    child: Text('Submit'),
+                        //ApiWrapper().addProduct(productText.text);
+
+                        provider.addProduct(productText.text);
+                        // ****call a server or save the information in a database****
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                //productText.text es el contenido del form
+                                Text('Processing Data:' + productText.text)));
+
+                        //Devuelve a la vista ANTERIOR, no NUEVA ( con el product añadido )
+                        Navigator.pop(context, productText.text);
+                        // Navigator.of(context).pushNamed(
+                        //     MyFridgeScreen.routeNamed,
+                        //     arguments: productText.text);
+                        //}
+                      },
+                      child: Text('Submit'),
+                    ),
                   ),
                 ),
                 // ignore: deprecated_member_use

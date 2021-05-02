@@ -1,3 +1,5 @@
+import 'package:cartrecipe/providers/product_list_provider.dart';
+import 'package:cartrecipe/providers/test_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cartrecipe/api/api_wrapper.dart';
@@ -11,6 +13,8 @@ import 'package:flutter/rendering.dart';
 
 import 'dart:async';
 
+import 'package:provider/provider.dart';
+
 class MyFridgeScreen extends StatefulWidget {
   static const String routeNamed = '/fridge';
 
@@ -23,7 +27,7 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
   //Primer camp sera el Index, segon el Codi de Barres
   Map selectedMap = new Map<int, String>();
   List<String> delete = [];
-  List listedProduct;
+  var listedProduct;
   String productToAdd;
   Timer timer;
 
@@ -61,7 +65,8 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
 
   @override
   void initState() {
-    resfreshScreen();
+    listedProduct = Provider.of<ProductList>(context, listen: false);
+    //resfreshScreen();
     super.initState();
   }
 
@@ -133,97 +138,128 @@ class _MyFridgeScreenState extends State<MyFridgeScreen> {
     return FridgeSpeedDial();
   }
 
+  // FridgeSpeedDial addPlis() {
+  //   setState(() {
+  //     productToAdd = 'a';
+  //     return FridgeSpeedDial();
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      productToAdd = ModalRoute.of(context).settings.arguments as String;
+    });
+    //final productList = Provider.of<ProductList>(context);
+    //final provider = Provider.of<TestProvider>(context, listen: false);
+    //final data = provider.items;
+    print('Llego a la nevera');
     return Scaffold(
         body: Container(
           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             children: [
               Text('Productos en la nevera'),
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: refresh,
-                  child: new ListView.builder(
-                      key: UniqueKey(),
-                      itemCount:
-                          listedProduct == null ? 0 : listedProduct.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        //return ProductCard(snapshot, index);
-                        Product item = listedProduct[index];
-                        return Dismissible(
-                          background: Container(color: Colors.red),
+              // Consumer<ProductList>(
+              //   builder: (context, productList, child) =>
+              Consumer<ProductList>(
+                builder: (context, provider, child) => Expanded(
+                  child: provider.listaProductos == null
+                      ? Container(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ListView.builder(
                           key: UniqueKey(),
-                          onDismissed: (direction) {
-                            deleteProduct([item.id], index);
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("${item.name} eliminado"),
-                              action: SnackBarAction(
-                                  label: 'Deshacer',
-                                  onPressed: undo //!YA SE HARÁ,
-                                  ),
-                            ));
-                          },
-                          child: Card(
-                            child: ListTile(
-                                leading: (item.image == null)
-                                    ? FlutterLogo(size: 70)
-                                    : Image.network(
-                                        item.image,
-                                        width: 70,
-                                        height: 70,
+                          itemCount: provider.listaProductos.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            print(
+                                'Estoy en la nevera y tengo ${provider.listaProductos.length} productos ');
+                            //return ProductCard(snapshot, index);
+                            Product item = provider.listaProductos[index];
+                            return Dismissible(
+                              background: Container(color: Colors.red),
+                              key: UniqueKey(),
+                              onDismissed: (direction) {
+                                //productList.update();
+                                //deleteProduct([item.id], index);
+                                //provider.loadProductsData();
+                                provider.deleteProduct(item.id, index);
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text("${item.name} eliminado"),
+                                  action: SnackBarAction(
+                                      label: 'Deshacer',
+                                      onPressed: undo //!YA SE HARÁ,
                                       ),
-                                title: Text(item.name),
-                                onTap: () => dialogProduct(context, item),
-                                //!ESTO PARA TRATAR DE HACER SELECCION MULTIPLE
-                                // trailing: CheckboxListTile(
-                                //   controlAffinity: ListTileControlAffinity,
-                                // ),
-                                selected: selectedMap.containsKey(index),
-                                onLongPress: () {
-                                  setState(() {
-                                    if (selectedMap.containsKey(index)) {
-                                      print('Remove Selected id: ' +
-                                          selectedMap[index].toString());
+                                ));
+                              },
+                              child: Card(
+                                child: ListTile(
+                                    leading: (item.image == null)
+                                        ? FlutterLogo(size: 70)
+                                        : Image.network(
+                                            item.image,
+                                            width: 70,
+                                            height: 70,
+                                          ),
+                                    title: Text(item.name),
+                                    onTap: () => dialogProduct(context, item),
+                                    //!ESTO PARA TRATAR DE HACER SELECCION MULTIPLE
+                                    // trailing: CheckboxListTile(
+                                    //   controlAffinity: ListTileControlAffinity,
+                                    // ),
+                                    selected: selectedMap.containsKey(index),
+                                    onLongPress: () {
+                                      setState(() {
+                                        if (selectedMap.containsKey(index)) {
+                                          print('Remove Selected id: ' +
+                                              selectedMap[index].toString());
 
-                                      selectedMap.remove(index);
-                                    } else {
-                                      selectedMap[index] = item.id;
-                                      print('Add Selected id: ' +
-                                          selectedMap[index].toString());
-                                    }
-                                  });
-                                }),
-                          ),
-                        );
-                      }),
+                                          selectedMap.remove(index);
+                                        } else {
+                                          selectedMap[index] = item.id;
+                                          print('Add Selected id: ' +
+                                              selectedMap[index].toString());
+                                        }
+                                      });
+                                    }),
+                              ),
+                            );
+                          }),
                 ),
               ),
-              Visibility(
-                visible: selectedMap.isNotEmpty,
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: FloatingActionButton(
-                    child: Icon(Icons.delete),
-                    onPressed: () {
-                      confirmDelete(context, selectedMap);
-                      List<int> keys = [];
+              //),
+              Consumer<ProductList>(
+                builder: (context, provider, child) => Visibility(
+                  visible: selectedMap.isNotEmpty,
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: FloatingActionButton(
+                      child: Icon(Icons.delete),
+                      onPressed: () {
+                        confirmDelete(context, selectedMap);
+                        List<int> keys = [];
 
-                      selectedMap.keys.forEach((key) {
-                        print('Se añade la posicion $key al positions');
-                        keys.add(key);
-                      });
-                      deleteMultipleProducts(keys);
-                      selectedMap = new Map<int, String>();
-                    },
-                    backgroundColor: Colors.redAccent,
+                        selectedMap.keys.forEach((key) {
+                          print('Se añade la posicion $key al positions');
+                          keys.add(key);
+                        });
+                        //productList.update();
+                        //deleteMultipleProducts(keys);
+                        setState(() {
+                          provider.deleteMultipleProduct(keys);
+                          selectedMap = new Map<int, String>();
+                        });
+                      },
+                      backgroundColor: Colors.redAccent,
+                    ),
                   ),
                 ),
               ),
             ],
           ),
         ),
-        floatingActionButton: FridgeSpeedDial() //(),
+        floatingActionButton: FridgeSpeedDial() //addPlis() //(),
         );
   }
 }
