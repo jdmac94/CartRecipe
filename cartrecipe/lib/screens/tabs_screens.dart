@@ -1,3 +1,4 @@
+import 'package:cartrecipe/desperate/desperate_fridge.dart';
 import 'package:cartrecipe/providers/product_list_provider.dart';
 import 'package:cartrecipe/screens/test_screen.dart';
 
@@ -16,17 +17,32 @@ import 'log_in.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
+//TODO Posible mejora
+enum Pages {
+  Recetas,
+  Busqueda,
+  Escaner,
+  Nevera,
+  Perfil,
+}
+
 class TabsScreen extends StatefulWidget {
+  final int receivedPage;
+
+  TabsScreen(this.receivedPage);
+
   @override
   _TabsScreenState createState() => _TabsScreenState();
 }
 
 class _TabsScreenState extends State<TabsScreen> {
   List<Map<String, Object>> _pages;
-  int _selectedPageIndex = 0;
+  int _selectedPageIndex;
 
   @override
   void initState() {
+    _selectedPageIndex = widget.receivedPage;
+
     _pages = [
       {
         'page': RecipesScreen(),
@@ -35,8 +51,8 @@ class _TabsScreenState extends State<TabsScreen> {
       {
         //'page': SearchsScreen(),
         //'page': TestStreamScreen(),
-        'page': SearchsScreen(),
-        //'page': NeveraTest(),
+        //'page': SearchsScreen(),
+        'page': DesperateFridge(),
         //'page': Welcome(),
         'title': 'Búsqueda',
       },

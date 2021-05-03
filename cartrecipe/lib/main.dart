@@ -1,4 +1,5 @@
 import 'package:cartrecipe/data/dummy_data.dart';
+import 'package:cartrecipe/desperate/list_provider.dart';
 import 'package:cartrecipe/models/product.dart';
 import 'package:cartrecipe/providers/product_list_provider.dart';
 import 'package:cartrecipe/providers/product_provider.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          '/': (ctx) => TabsScreen(),
+          '/': (ctx) => TabsScreen(0),
         },
       ),
       providers: [
@@ -39,6 +40,8 @@ class MyApp extends StatelessWidget {
           initialData: [],
           create: (context) => DataProvider().fetchData(),
         ),
+        ChangeNotifierProvider<ListProvider>(
+            create: (context) => ListProvider()),
       ],
     );
   }

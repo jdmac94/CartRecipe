@@ -98,7 +98,7 @@ class ApiWrapper {
   }
 
   //TODO! TRY CATCH TO GUAPO
-  void deleteAndreh(List<String> barcode) async {
+  Future<void> deleteAndreh(List<String> barcode) async {
     var api = 'api/v1/nevera/product';
 
     http.Response response = await http.delete(
