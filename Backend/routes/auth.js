@@ -15,11 +15,12 @@ router.post("/login", async (req, res) => {
   let user = await Usuario.findOne({ correo: req.body.email });
   if (!user) return res.status(400).send("Email incorrectos");
   console.log(req.user.correo);
-  const validPassword = await bcriptjs.compare(
-    req.body.password,
-    user.password
-  );
-  if (!validPassword)
+  // const validPassword = await bcriptjs.compare(
+  //   req.body.password,
+  //   user.password
+  // );
+  
+  if (req.body.password != user.password)
     return res.status(400).send("Email o contraseña incorrectos");
 
   const token = user.generateAuthToken();
@@ -37,8 +38,8 @@ router.post("/register", async (req, res) => {
   user = new Usuario(
     _.pick(req.body, ["nombre", "apellido", "correo", "password"])
   );
-  const salt = await bcriptjs.genSalt(10);
-  user.password = await bcriptjs.hash(user.password, salt);
+  //const salt = await bcriptjs.genSalt(10);
+  //user.password = await bcriptjs.hash(user.password, salt);
   const result = await user.save();
   
   if (result) {
