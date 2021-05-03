@@ -34,10 +34,10 @@ class _TabsScreenState extends State<TabsScreen> {
       },
       {
         //'page': SearchsScreen(),
-        'page': TestStreamScreen(),
-        //'page': SearchsScreen(),
+        //'page': TestStreamScreen(),
+        'page': SearchsScreen(),
         //'page': NeveraTest(),
-        //'page': SignIn(),
+        //'page': Welcome(),
         'title': 'Búsqueda',
       },
       {

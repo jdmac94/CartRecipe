@@ -3,15 +3,37 @@ import 'package:flutter/material.dart';
 class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+        body: Container(
       child: Column(
         children: [
-          Text("Please log in"),
+          Text("Please sign in"),
+          Center(
+              child: Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.person),
+                    labelText: 'Nombre',
+                  ),
+                ),
+              ),
+              Expanded(
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.person),
+                    labelText: 'Apellido',
+                  ),
+                ),
+              ),
+            ],
+          )),
           Center(
             child: TextFormField(
               decoration: const InputDecoration(
-                icon: Icon(Icons.person),
-                labelText: 'User Name',
+                icon: Icon(Icons.email),
+                labelText: 'Email',
               ),
             ),
           ),
@@ -34,11 +56,11 @@ class SignIn extends StatelessWidget {
           Center(
             child: TextButton(
               child: Text("Sign in"),
-              onPressed: () {},
+              //onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => )),,
             ),
           )
         ],
       ),
-    );
+    ));
   }
 }
