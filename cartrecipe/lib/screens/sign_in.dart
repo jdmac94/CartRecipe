@@ -1,6 +1,12 @@
+import 'package:cartrecipe/api/api_wrapper.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatelessWidget {
+  final nombreText = TextEditingController();
+  final apellidoText = TextEditingController();
+  final emailText = TextEditingController();
+  final passwordText = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,6 +19,7 @@ class SignIn extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFormField(
+                  controller: nombreText,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.person),
                     labelText: 'Nombre',
@@ -21,6 +28,7 @@ class SignIn extends StatelessWidget {
               ),
               Expanded(
                 child: TextFormField(
+                  controller: apellidoText,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.person),
                     labelText: 'Apellido',
@@ -31,6 +39,7 @@ class SignIn extends StatelessWidget {
           )),
           Center(
             child: TextFormField(
+              controller: emailText,
               decoration: const InputDecoration(
                 icon: Icon(Icons.email),
                 labelText: 'Email',
@@ -39,6 +48,7 @@ class SignIn extends StatelessWidget {
           ),
           Center(
             child: TextFormField(
+              controller: passwordText,
               decoration: const InputDecoration(
                 icon: Icon(Icons.lock),
                 labelText: 'Password',
@@ -56,6 +66,8 @@ class SignIn extends StatelessWidget {
           Center(
             child: TextButton(
               child: Text("Sign in"),
+              onPressed: () => ApiWrapper().registrarUsuario(nombreText.text,
+                  apellidoText.text, emailText.text, passwordText.text),
               //onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => )),,
             ),
           )
