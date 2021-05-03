@@ -12,6 +12,8 @@ router.use(passport.initialize());
 //router.use(passport.session())
 
 router.post("/login", async (req, res) => {
+  console.log("LOGGIN IN")
+  console.log(req.body);
   let user = await Usuario.findOne({ correo: req.body.email });
   if (!user) return res.status(400).send("Email incorrectos");
   console.log(req.user.correo);
@@ -28,6 +30,9 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
+
+  console.log("REGISTER")
+  console.log(req.body);
 
   if (!emailRegEx.test(req.body.correo))
     return res.status(400).send("El correo introducido no tiene un formato válido.");
