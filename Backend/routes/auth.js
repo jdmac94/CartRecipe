@@ -16,7 +16,7 @@ router.post("/login", async (req, res) => {
   console.log(req.body);
   let user = await Usuario.findOne({ correo: req.body.correo });
   if (!user) return res.status(400).send("Email incorrectos");
-  console.log(req.user.correo);
+  console.log(user.correo);
   // const validPassword = await bcriptjs.compare(
   //   req.body.password,
   //   user.password
