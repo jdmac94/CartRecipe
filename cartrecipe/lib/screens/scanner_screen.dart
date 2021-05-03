@@ -11,6 +11,7 @@ import 'dart:async';
 import 'package:provider/provider.dart';
 
 class ScannerScreen extends StatefulWidget {
+  static const String routeNamed = '/scanner';
   @override
   _ScannerScreenState createState() => _ScannerScreenState();
 }

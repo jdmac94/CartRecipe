@@ -62,7 +62,11 @@ class AddProductForm extends StatelessWidget {
                                 Text('Processing Data:' + productText.text)));
 
                         //Devuelve a la vista ANTERIOR, no NUEVA ( con el product añadido )
-                        Navigator.pop(context, productText.text);
+                        //Navigator.pop(context);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyFridgeScreen()));
                         // Navigator.of(context).pushNamed(
                         //     MyFridgeScreen.routeNamed,
                         //     arguments: productText.text);

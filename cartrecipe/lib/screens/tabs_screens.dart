@@ -2,6 +2,7 @@ import 'package:cartrecipe/providers/product_list_provider.dart';
 import 'package:cartrecipe/screens/test_screen.dart';
 
 import 'package:cartrecipe/screens/sign_in.dart';
+import 'package:cartrecipe/screens/test_stream_screen.dart';
 import 'package:cartrecipe/screens/welcome.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,7 @@ class _TabsScreenState extends State<TabsScreen> {
       },
       {
         //'page': SearchsScreen(),
-        'page': TestScreen(),
+        'page': TestStreamScreen(),
         //'page': SearchsScreen(),
         //'page': NeveraTest(),
         //'page': SignIn(),

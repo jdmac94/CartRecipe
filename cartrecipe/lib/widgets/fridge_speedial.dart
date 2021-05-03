@@ -1,3 +1,4 @@
+import 'package:cartrecipe/screens/scanner_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:cartrecipe/widgets/add_product_form.dart';
@@ -21,6 +22,10 @@ class FridgeSpeedDial extends StatelessWidget {
       },
     );
   }
+
+  // Future<void> goToScanner(BuildContext context) {
+  //   return ScannerScreen();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +92,14 @@ class FridgeSpeedDial extends StatelessWidget {
           foregroundColor: Colors.white,
           label: 'Añadir mediante escaner',
           labelStyle: TextStyle(fontSize: 18),
-          onTap: () => print('Abrir scanner'),
+          onTap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            Navigator.of(context).pushNamed(ScannerScreen.routeNamed);
+            Navigator.of(context).pop();
+            Navigator.of(context).pushNamed(ScannerScreen.routeNamed);
+            //Navigator.of(context)PushNamed(ScannerScreen.routeNamed),
+          },
           onLongPress: () => print('SECOND CHILD LONG PRESS'),
         ),
         SpeedDialChild(
