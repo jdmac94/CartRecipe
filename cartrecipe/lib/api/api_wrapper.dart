@@ -1,5 +1,6 @@
 import 'package:cartrecipe/data/dummy_data.dart';
 import 'package:http/http.dart' as http;
+import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'dart:async';
 
@@ -46,6 +47,70 @@ class ApiWrapper {
       return DUMMY_PRODUCTS;
       //throw Exception('Failed to load product');
     }
+  }
+
+  Future<String> logInUsuario(String email, String password) async {
+    var api = '/api/v1/auth/login';
+    var bytes = utf8.encode(password);
+    var hashpassword = sha256.convert(bytes);
+
+    print('Email $email');
+    print('Password Hash $hashpassword');
+    print('Password  $password');
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'correo': email,
+        'password': hashpassword.toString(),
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("todo bien");
+      print(response.body.toString());
+      var token = response.body.toString();
+      print('token:$token');
+      return token;
+    } else
+      //print(json.decode(response.body));
+      print('F');
+  }
+
+  Future<String> registrarUsuario(
+      String nombre, String apellido, String email, String password) async {
+    var api = '/api/v1/auth/register';
+    var bytes = utf8.encode(password);
+    var hashpassword = sha256.convert(bytes);
+    print('Name + App $nombre$apellido');
+    print('Email $email');
+    print('Password Hash $hashpassword');
+    print('Password  $password');
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'nombre': nombre,
+        'apellido': apellido,
+        'correo': email,
+        'password': hashpassword.toString(),
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      //print(json.decode(response));
+      print("todo bien");
+      print(response.body.toString());
+      var token = response.body.toString();
+      print('token:$token');
+      return token;
+    } else
+      //print(json.decode(response.body));
+      print('F');
   }
 
   Future<Product> addProduct(String barcode) async {
