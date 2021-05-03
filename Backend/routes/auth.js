@@ -14,7 +14,7 @@ router.use(passport.initialize());
 router.post("/login", async (req, res) => {
   console.log("LOGGIN IN")
   console.log(req.body);
-  let user = await Usuario.findOne({ correo: req.body.email });
+  let user = await Usuario.findOne({ correo: req.body.correo });
   if (!user) return res.status(400).send("Email incorrectos");
   console.log(req.user.correo);
   // const validPassword = await bcriptjs.compare(
