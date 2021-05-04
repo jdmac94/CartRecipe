@@ -44,6 +44,7 @@ class LogIn extends StatelessWidget {
                                     if (value != null)
                                       {
                                         token = value,
+                                        Navigator.pop(context),
                                         Navigator.pushReplacement(
                                             context,
                                             new MaterialPageRoute(

@@ -373,4 +373,4 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
       ),
     );
   }
-}º
+}
