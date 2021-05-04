@@ -1,11 +1,14 @@
 import 'dart:ui';
 
 import 'package:cartrecipe/api/api_wrapper.dart';
+import 'package:cartrecipe/desperate/products_data_provider.dart';
 import 'package:cartrecipe/models/product.dart';
+import 'package:cartrecipe/providers/product_list_provider.dart';
 import 'package:cartrecipe/screens/tabs_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:cartrecipe/widgets/detail_view_product.dart';
+import 'package:provider/provider.dart';
 
 class LocalDesperateFridge extends StatefulWidget {
   LocalDesperateFridge({Key key}) : super(key: key);
@@ -20,8 +23,10 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
   TextEditingController _textFieldController = TextEditingController();
   //final _formKey = GlobalKey<FormState>();
   Map selectedProducts = new Map<int, String>();
-  List _data;
+  var _data;
   String doRefresh;
+  bool loaded = false;
+  var provider;
 
   Future<String> fetchData() async {
     var temp = await ApiWrapper().getFridgeProducts();
@@ -37,8 +42,23 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
 
   @override
   void initState() {
-    this.fetchData();
+    _data = [];
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _data = [];
+    super.dispose();
+  }
+
+  void fetchDataProvider() {
+    var provider = Provider.of<ProductsDataProvider>(context);
+    //provider.fetchServerData();
+    this.setState(() {
+      _data = provider.obtenerLista;
+      print('Number list length = ${_data.length}');
+    });
   }
 
   Future<void> dialogProduct(BuildContext context, Product product) {
@@ -217,17 +237,34 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      provider = Provider.of<ProductsDataProvider>(context);
+      provider.fetchServerData();
+      print(
+          'Estoy en el build y hago print del provider lis - ${provider.obtenerLista}');
+    });
+
+    // setState(() {
+    //   Future<List> temp = Provider.of<ProductsDataProvider>(context).getData();
+
+    //   //print('Datos obtenidos = $_data');
+    // });
+
     return Scaffold(
       body: Container(
         child: Center(
-          child: Column(
-            children: [
-              Padding(padding: EdgeInsets.only(top: 20)),
-              Text('Soy la nevera mejorada'),
-              Expanded(child: buildListView(_data)),
-              buildVisibility(),
-            ],
-          ),
+          child: provider.isFetching
+              ? CircularProgressIndicator()
+              : provider.getResponseList != null
+                  ? Column(
+                      children: [
+                        Padding(padding: EdgeInsets.only(top: 20)),
+                        Text('Soy la nevera mejorada'),
+                        Expanded(child: buildListView(_data)),
+                        buildVisibility(),
+                      ],
+                    )
+                  : Text('Ha habido algún error'),
         ),
       ),
       floatingActionButton: buildSpeedDial(),

@@ -1,5 +1,6 @@
 import 'package:cartrecipe/desperate/desperate_fridge.dart';
 import 'package:cartrecipe/desperate/local_desperate_fridge.dart';
+import 'package:cartrecipe/desperate/products_data_provider.dart';
 import 'package:cartrecipe/providers/product_list_provider.dart';
 import 'package:cartrecipe/screens/test_screen.dart';
 

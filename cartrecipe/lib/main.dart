@@ -1,10 +1,9 @@
-import 'package:cartrecipe/data/dummy_data.dart';
-import 'package:cartrecipe/desperate/list_provider.dart';
+import 'package:cartrecipe/desperate/products_data_provider.dart';
 import 'package:cartrecipe/models/product.dart';
 import 'package:cartrecipe/providers/product_list_provider.dart';
 import 'package:cartrecipe/providers/product_provider.dart';
 import 'package:cartrecipe/providers/stream_provider.dart';
-import 'package:cartrecipe/providers/test_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,8 +39,8 @@ class MyApp extends StatelessWidget {
           initialData: [],
           create: (context) => DataProvider().fetchData(),
         ),
-        ChangeNotifierProvider<ListProvider>(
-            create: (context) => ListProvider()),
+        ChangeNotifierProvider<ProductsDataProvider>(
+            create: (context) => ProductsDataProvider()),
       ],
     );
   }
