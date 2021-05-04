@@ -39,13 +39,10 @@ rl.on('line', function(line){
 
             if (matches) {
                 console.log(temp);
-                const x = fs.readFileSync('message.txt');
-                console.log(x);
             }
                 
 
         } else  {
-            fs.appendFileSync('message.txt', line);
             temp.push(line);
         }
     }
