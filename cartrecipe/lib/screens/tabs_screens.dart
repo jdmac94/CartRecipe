@@ -66,7 +66,8 @@ class _TabsScreenState extends State<TabsScreen> {
         'title': 'Mi nevera',
       },
       {
-        'page': ProfileScreen(),
+        'page': Welcome(),
+        //'page': ProfileScreen(),
         'title': 'Perfil',
       },
     ];

@@ -74,9 +74,11 @@ class ApiWrapper {
       var token = response.body.toString();
       print('token:$token');
       return token;
-    } else
+    } else {
       //print(json.decode(response.body));
       print('F');
+      return null;
+    }
   }
 
   Future<String> registrarUsuario(
@@ -108,9 +110,11 @@ class ApiWrapper {
       var token = response.body.toString();
       print('token:$token');
       return token;
-    } else
+    } else {
       //print(json.decode(response.body));
       print('F');
+      return null;
+    }
   }
 
   Future<Product> addProduct(String barcode) async {
