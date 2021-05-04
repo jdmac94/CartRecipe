@@ -171,7 +171,7 @@ router.put("/product/:id", auth, async (req, res) => {
       res.send(listedProds);
       
     }
-  } //else return res.status(400).send("El Producto ya exsite en la nevera");
+  } else return res.status(400).send("El Producto ya exsite en la nevera");// pendiente de probar
 });
 
 ////////////////////////////////////////////////////////////////
