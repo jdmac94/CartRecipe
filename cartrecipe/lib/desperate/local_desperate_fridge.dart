@@ -6,45 +6,69 @@ import 'package:cartrecipe/screens/tabs_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
-class DesperateFridge extends StatefulWidget {
-  DesperateFridge({Key key}) : super(key: key);
+class LocalDesperateFridge extends StatefulWidget {
+  LocalDesperateFridge({Key key}) : super(key: key);
 
   @override
-  _DesperateFridgeState createState() => _DesperateFridgeState();
+  _LocalDesperateFridgeState createState() => _LocalDesperateFridgeState();
 }
 
-class _DesperateFridgeState extends State<DesperateFridge> {
+class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
   int counter = 0;
   String valueText;
   TextEditingController _textFieldController = TextEditingController();
   //final _formKey = GlobalKey<FormState>();
   Map selectedProducts = new Map<int, String>();
-  var _data;
+  List _data;
+  String doRefresh;
+
+  Future<String> fetchData() async {
+    var temp = await ApiWrapper().getFridgeProducts();
+
+    this.setState(() {
+      _data = temp;
+    });
+
+    print('Tengo datos en nevera?  ${_data.length}');
+
+    return 'Succes!';
+  }
 
   @override
   void initState() {
-    //_data = fetchData();
+    this.fetchData();
     super.initState();
   }
 
-  Future<List<Product>> fetchData() async {
-    return ApiWrapper().getFridgeProducts();
-  }
-
   Future<void> deleteProduct(Product product) async {
-    ApiWrapper().deleteAndreh([product.id]);
-    showSnackBarMessage('${product.name} eliminado');
-  }
+    ApiWrapper().deleteAndreh([product.id]).then(
+        (value) => showSnackBarMessage('${product.name} eliminado'));
 
-  Future<void> addProduct(String barcode) async {
-    Product test = await ApiWrapper().addProduct(barcode);
-    print('El producto añadido es el siguiente: $test');
+    print('Borrado en local');
+    _data.removeWhere((element) => element.id == product.id);
+    //selectedProducts.removeWhere((key, value) => product.id == value);
+    selectedProducts = new Map<int, String>();
     _refresh();
   }
 
+  //TODO! No añade más de 1 a mano
+  Future<void> addProduct(String barcode) async {
+    Product test = await ApiWrapper().addProduct(barcode);
+    setState(() {
+      _data.add(test);
+      //doRefresh = 'now';
+    });
+    print('El producto añadido es el siguiente: $test');
+    //_refresh();
+  }
+
   void _refresh() {
-    Navigator.pushReplacement(context,
-        new MaterialPageRoute(builder: (context) => new TabsScreen(1)));
+    setState(() {
+      //_data.add(test);
+      doRefresh = 'now';
+    });
+    // Navigator.pushReplacement(context,
+    //     new MaterialPageRoute(builder: (context) => new TabsScreen(1)));
   }
 
   Future<void> _dialogMultipleDelete(BuildContext context) async {
@@ -80,10 +104,19 @@ class _DesperateFridgeState extends State<DesperateFridge> {
 
                   print('Selected values $test');
 
-                  ApiWrapper().deleteAndreh(test).then((value) => _refresh());
+                  ApiWrapper()
+                      .deleteAndreh(test)
+                      .then((value) => print('Se ha enviado el borrado'));
+
+                  print('Borrado en local');
+                  test.forEach((element) {
+                    _data.removeWhere((product) => product.id == element);
+                  });
+
+                  _refresh();
                   //Devuelve a la vista ANTERIOR, no NUEVA ( con el product eliminado)
 
-                  //Navigator.of(context, rootNavigator: true).pop(context);
+                  Navigator.of(context, rootNavigator: true).pop(context);
                 },
               ),
               TextButton(
@@ -108,7 +141,7 @@ class _DesperateFridgeState extends State<DesperateFridge> {
             title: Text('Inserta el código de barras a buscar'),
             content: SingleChildScrollView(
               child: Form(
-                key: _data,
+                //key: _data,
                 child: TextFormField(
                   keyboardType: TextInputType.number,
                   controller: _textFieldController,
@@ -181,35 +214,7 @@ class _DesperateFridgeState extends State<DesperateFridge> {
             children: [
               Padding(padding: EdgeInsets.only(top: 20)),
               Text('Soy la nevera mejorada'),
-              FutureBuilder<List<Product>>(
-                future: fetchData(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<Product>> snapshot) {
-                  // switch (snapshot.connectionState) {
-                  //   case ConnectionState.none:
-                  //     return Text('ConnectionState.none');
-                  //   case ConnectionState.waiting:
-                  //     return Text('ConnectionState.waiting');
-                  //   case ConnectionState.active:
-                  //     return Text('ConnectionState.active');
-                  //   case ConnectionState.done:
-                  //     Text('ConnectionState.done');
-                  // }
-
-                  if (snapshot.hasData) {
-                    List<Product> _data = snapshot.data;
-                    return Expanded(
-                      child: buildListView(_data),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-
-                  return CircularProgressIndicator(
-                    backgroundColor: Colors.deepPurple,
-                  );
-                },
-              ),
+              Expanded(child: buildListView(_data)),
               buildVisibility(),
             ],
           ),
@@ -227,16 +232,18 @@ class _DesperateFridgeState extends State<DesperateFridge> {
         child: FloatingActionButton(
           child: Icon(Icons.delete),
           onPressed: () {
-            _dialogMultipleDelete(context);
-            List<int> keys = [];
+            // List<int> keys = [];
 
-            selectedProducts.keys.forEach((key) {
-              print('Se añade la posicion $key al positions');
-              keys.add(key);
-            });
-            // setState(() {
-            //   selectedProducts = new Map<int, String>();
+            // selectedProducts.keys.forEach((key) {
+            //   print('Se añade la posicion $key al positions');
+            //   keys.add(key);
             // });
+
+            _dialogMultipleDelete(context).then((value) {
+              setState(() {
+                selectedProducts = new Map<int, String>();
+              });
+            });
           },
           backgroundColor: Colors.redAccent,
         ),
@@ -281,8 +288,9 @@ class _DesperateFridgeState extends State<DesperateFridge> {
   ListView buildListView(List<Product> data) {
     counter++;
     print('Counter = $counter');
+
     return ListView.builder(
-      itemCount: data.length,
+      itemCount: data == null ? 0 : data.length,
       itemBuilder: (context, index) {
         Product productItem = data[index];
         return Dismissible(
