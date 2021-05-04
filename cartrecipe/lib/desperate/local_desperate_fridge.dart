@@ -5,6 +5,7 @@ import 'package:cartrecipe/models/product.dart';
 import 'package:cartrecipe/screens/tabs_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:cartrecipe/widgets/detail_view_product.dart';
 
 class LocalDesperateFridge extends StatefulWidget {
   LocalDesperateFridge({Key key}) : super(key: key);
@@ -38,6 +39,15 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
   void initState() {
     this.fetchData();
     super.initState();
+  }
+
+  Future<void> dialogProduct(BuildContext context, Product product) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return DetailViewProduct(product);
+      },
+    );
   }
 
   Future<void> deleteProduct(Product product) async {
@@ -257,6 +267,15 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
       animatedIcon: AnimatedIcons.menu_close,
       backgroundColor: Colors.deepPurple,
       foregroundColor: Colors.white,
+      onOpen: () {
+        setState(() {
+          if (selectedProducts.isNotEmpty) {
+            print('Vaciado del map');
+            selectedProducts.clear();
+            print('${selectedProducts.length}');
+          }
+        });
+      },
       children: [
         SpeedDialChild(
             child: Icon(Icons.edit),
@@ -318,8 +337,26 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
                 height: 70,
               ),
         title: Text(productItem.name),
-        onTap: () {},
         selected: selectedProducts.containsKey(index),
+        onTap: () {
+          setState(() {
+            if (selectedProducts.isEmpty) {
+              dialogProduct(context, productItem);
+              print('Tap en ${productItem.name}');
+            } else {
+              if (selectedProducts.containsKey(index)) {
+                print(
+                    'Quitamos el producto ${selectedProducts[index]} del Map');
+                print('${selectedProducts.length}');
+                selectedProducts.remove(index);
+              } else {
+                selectedProducts[index] = productItem.id;
+                print('Añadimos ${selectedProducts[index]} al Map');
+                print('${selectedProducts.length}');
+              }
+            }
+          });
+        },
         onLongPress: () {
           setState(() {
             if (selectedProducts.containsKey(index)) {
@@ -336,4 +373,4 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
       ),
     );
   }
-}
+}º
