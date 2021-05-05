@@ -24,10 +24,54 @@ class _ScannerScreenState extends State<ScannerScreen> {
   _scan(ProductsDataProvider provider) async {
     await FlutterBarcodeScanner.scanBarcode(
             "#000000", "Cancelar", true, ScanMode.BARCODE)
-        .then((value) => setState(() {
-              _data = value;
-              provider.addProduct(_data);
-            }));
+        .then((value) {
+      setState(() {
+        Map<String, bool> map = _checkIsValidBarcode(value);
+
+        var _listMessage = map.keys.toList();
+        var _listValid = map.values.toList();
+
+        if (_listValid[0]) {
+          provider.addProduct(value);
+        }
+        _data = _listMessage[0];
+      });
+    });
+  }
+
+  Map<String, bool> _checkIsValidBarcode(String barcode) {
+    bool isValid = true;
+    String message;
+    Map<String, bool> result;
+
+    final String regexPattern = r'(^[0-9]*$)';
+    final regexExpression = RegExp(regexPattern);
+
+    if (regexExpression.hasMatch(barcode)) {
+      if (barcode.length < 13) {
+        isValid = false;
+        message = 'El código de barras tiene menos dígitos de lo esperado (13)';
+        result = {message: isValid};
+      } else if (barcode.length > 13) {
+        isValid = false;
+        message = 'El código de barras tiene más dígitos de lo esperado (13)';
+        result = {message: isValid};
+      } else {
+        isValid = true;
+        message = 'Se ha escaneado el siguiente código: $barcode';
+        result = {message: isValid};
+      }
+    } else if (barcode == '-1') {
+      isValid = false;
+      message = 'Se ha cancelado el escaneo';
+      result = {message: isValid};
+    } else {
+      isValid = false;
+      message = 'El valor dado no es numérico';
+      result = {message: isValid};
+    }
+
+    return result;
   }
 
   // Future<String> scanBarcodeNormal() async {

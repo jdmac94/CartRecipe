@@ -27,18 +27,18 @@ class MyApp extends StatelessWidget {
         },
       ),
       providers: [
-        FutureProvider<ProductList>(
-          initialData: ProductList(listaProductos: []),
-          create: (context) => ProductList().loadProductsData(),
-        ),
-        FutureProvider<ProductProvider>(
-          initialData: ProductProvider(),
-          create: (context) => ProductProvider().loadProviderData(),
-        ),
-        StreamProvider<List<Product>>(
-          initialData: [],
-          create: (context) => DataProvider().fetchData(),
-        ),
+        // FutureProvider<ProductList>(
+        //   initialData: ProductList(listaProductos: []),
+        //   create: (context) => ProductList().loadProductsData(),
+        // ),
+        // FutureProvider<ProductProvider>(
+        //   initialData: ProductProvider(),
+        //   create: (context) => ProductProvider().loadProviderData(),
+        // ),
+        // StreamProvider<List<Product>>(
+        //   initialData: [],
+        //   create: (context) => DataProvider().fetchData(),
+        // ),
         FutureProvider<ProductsDataProvider>(
             initialData: ProductsDataProvider(productList: []),
             create: (context) => ProductsDataProvider().providerWithData()),
