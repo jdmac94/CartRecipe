@@ -1,23 +1,11 @@
-import 'package:cartrecipe/desperate/desperate_fridge.dart';
-import 'package:cartrecipe/desperate/local_desperate_fridge.dart';
-import 'package:cartrecipe/desperate/products_data_provider.dart';
-import 'package:cartrecipe/providers/product_list_provider.dart';
-import 'package:cartrecipe/screens/test_screen.dart';
+import 'package:cartrecipe/screens/fridge_screen.dart';
 
-import 'package:cartrecipe/screens/sign_in.dart';
-import 'package:cartrecipe/screens/test_stream_screen.dart';
 import 'package:cartrecipe/screens/welcome.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cartrecipe/screens/recipes_screen.dart';
+import 'package:cartrecipe/screens/recipes/recipes_screen.dart';
 import 'package:cartrecipe/screens/search_screen.dart';
 import 'package:cartrecipe/screens/scanner_screen.dart';
-import 'package:cartrecipe/screens/my_fridge_screen.dart';
-import 'package:cartrecipe/screens/profile_screen.dart';
-import 'package:provider/provider.dart';
-import 'log_in.dart';
-
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 //TODO Posible mejora
 enum Pages {
@@ -51,10 +39,10 @@ class _TabsScreenState extends State<TabsScreen> {
         'title': 'Recetas',
       },
       {
-        //'page': SearchsScreen(),
+        'page': SearchsScreen(),
         //'page': TestStreamScreen(),
         //'page': SearchsScreen(),
-        'page': LocalDesperateFridge(),
+        //'page': LocalDesperateFridge(),
         //'page': Welcome(),
         'title': 'Búsqueda',
       },
@@ -63,7 +51,7 @@ class _TabsScreenState extends State<TabsScreen> {
         'title': 'Escáner',
       },
       {
-        'page': MyFridgeScreen(),
+        'page': FridgeScreen(),
         'title': 'Mi nevera',
       },
       {

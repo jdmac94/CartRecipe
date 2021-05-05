@@ -1,4 +1,4 @@
-import 'package:cartrecipe/screens/recipe_detail_screen.dart';
+import 'package:cartrecipe/screens/recipes/recipe_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cartrecipe/models/recipe.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';

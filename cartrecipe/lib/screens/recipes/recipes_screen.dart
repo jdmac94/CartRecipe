@@ -1,7 +1,7 @@
 import 'package:cartrecipe/api/api_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:cartrecipe/models/recipe.dart';
-import 'package:cartrecipe/widgets/recipecard.dart';
+import 'package:cartrecipe/widgets/recipes/recipe_card.dart';
 
 class RecipesScreen extends StatefulWidget {
   List<Recipe> recipeList;

@@ -190,15 +190,27 @@ class ApiWrapper {
       print('F');
   }
 
-  void clearNevera() async {
-    const String api = "api/v1/nevera/clearNevera";
+  Future<void> clearNevera() async {
+    const String api = "api/v1/nevera";
 
-    http.Response response = await http.delete(Uri.http(endpoint, api));
+    http.Response response = await http.delete(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'x-auth-token': authToken
+        //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhiZTh
+        //lN2IyYjM3YTAwZjgwMTYyOTMiLCJhbGVyZ2lhcyI6W10sImRpZXRhIjpb
+        //XSwidGFncyI6W10sIm5pdmVsX2NvY2luYSI6bnVsbCwic2lzdGVtYV91b
+        //mlkYWRlcyI6InNpc3RfaW50IiwicmVjZXRhc19mYXZzIjpbXSwiaWF0Ij
+        //oxNjE5NzgxODYzfQ.aSAmFeibWYrdDvNh9-kV1bCFtAiBMkp5MQJM4qi4zGk'
+      },
+    );
+
     print(response.statusCode);
     if (response.statusCode == 200) {
       print("Se ha vaciado la nevera");
       print(response.body.toString());
     } else {
+      print('Peta borrar todo ${response.statusCode}');
       throw Exception('Failed to empty fridge');
     }
   }

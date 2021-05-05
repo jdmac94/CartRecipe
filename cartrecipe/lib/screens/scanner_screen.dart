@@ -1,13 +1,10 @@
-import 'package:cartrecipe/desperate/products_data_provider.dart';
+import 'package:cartrecipe/providers/products_data_provider.dart';
 import 'package:cartrecipe/models/product.dart';
-import 'package:cartrecipe/providers/product_list_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:flutter/services.dart';
 
 import 'package:cartrecipe/api/api_wrapper.dart';
-
-import 'dart:async';
 
 import 'package:provider/provider.dart';
 
@@ -18,7 +15,7 @@ class ScannerScreen extends StatefulWidget {
 }
 
 class _ScannerScreenState extends State<ScannerScreen> {
-  String _data = "";
+  String _data = 'Pulsa el botón para empezar a escanear';
 
 //TODO! CONTROLAR BUG DE CANCELAR ESCANEO
   _scan(ProductsDataProvider provider) async {
@@ -40,20 +37,19 @@ class _ScannerScreenState extends State<ScannerScreen> {
   }
 
   Map<String, bool> _checkIsValidBarcode(String barcode) {
-    bool isValid = true;
+    bool isValid = false;
     String message;
     Map<String, bool> result;
 
     final String regexPattern = r'(^[0-9]*$)';
     final regexExpression = RegExp(regexPattern);
 
+    //TODO POSIBLE MEJORA CON SWITCH CASE
     if (regexExpression.hasMatch(barcode)) {
       if (barcode.length < 13) {
-        isValid = false;
         message = 'El código de barras tiene menos dígitos de lo esperado (13)';
         result = {message: isValid};
       } else if (barcode.length > 13) {
-        isValid = false;
         message = 'El código de barras tiene más dígitos de lo esperado (13)';
         result = {message: isValid};
       } else {
@@ -62,11 +58,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
         result = {message: isValid};
       }
     } else if (barcode == '-1') {
-      isValid = false;
       message = 'Se ha cancelado el escaneo';
       result = {message: isValid};
     } else {
-      isValid = false;
       message = 'El valor dado no es numérico';
       result = {message: isValid};
     }

@@ -1,5 +1,5 @@
-import 'package:cartrecipe/screens/log_in.dart';
-import 'package:cartrecipe/screens/sign_in.dart';
+import 'package:cartrecipe/screens/login/log_in.dart';
+import 'package:cartrecipe/screens/login/sign_in.dart';
 import 'package:flutter/material.dart';
 
 class Welcome extends StatelessWidget {

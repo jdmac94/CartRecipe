@@ -68,4 +68,12 @@ class ProductsDataProvider with ChangeNotifier {
     print('Borrado en local hecho');
     notifyListeners();
   }
+
+  Future<void> deleteAllProducts() async {
+    ApiWrapper().clearNevera().then((value) {
+      print('Todos los productos han sido borrados de la nevera');
+      productList = [];
+      notifyListeners();
+    });
+  }
 }
