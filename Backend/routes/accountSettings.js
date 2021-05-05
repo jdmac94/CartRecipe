@@ -6,7 +6,7 @@ const _ = require("lodash");
 
 const { Usuario } = require("../models/usuario");
 const { Nevera } = require("../models/nevera");
-const { sendMailPassword } = require("../utils/mailing");
+//const { sendMailPassword } = require("../utils/mailing");
 const auth = require("../middlewares/auth");
 
 require("../passport-setup");
@@ -161,11 +161,6 @@ router.get("/toggleInRecetario/:id", auth, async (req, res) => {
     res.send(recetario);
 });
 
-router.get("/", async (req, res) => {
-    console.log("wtf");
-    res.send("fuel");
-});
-
 router.post("/restorePassword", async (req, res) => {
 
     let mail = req.body.correo.toLowerCase();
@@ -174,8 +169,8 @@ router.post("/restorePassword", async (req, res) => {
     let user = await Usuario.findOne({ correo: mail });
 
 
-    if (!user || sendMailPassword(mail) == -1)
-        return res.status(500).send("Error al intentar reestablecer la contraseña");
+    // if (!user || sendMailPassword(mail) == -1)
+    //     return res.status(500).send("Error al intentar reestablecer la contraseña");
     
     res.send("Mail dde recuperación enviado correctamente");
   });
