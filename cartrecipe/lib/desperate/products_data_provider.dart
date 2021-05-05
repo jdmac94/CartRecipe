@@ -11,6 +11,8 @@ class ProductsDataProvider with ChangeNotifier {
 
   bool get isFetching => _isFetching;
 
+  List<Product> get getProviderData => productList;
+
   Future<void> fetchServerData() async {
     _isFetching = true;
     notifyListeners();
@@ -21,15 +23,10 @@ class ProductsDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<Product>> getData() async {
-    List<Product> temp = [];
-
-    temp = await ApiWrapper().getFridgeProducts();
-
-    return [...temp];
+  Future<void> updateProviderData() async {
+    fetchServerData();
+    notifyListeners();
   }
-
-  List<Product> get getResponseList => productList;
 
   Future<ProductsDataProvider> providerWithData() async {
     List<Product> temp = [];
@@ -41,21 +38,34 @@ class ProductsDataProvider with ChangeNotifier {
     return ProductsDataProvider(productList: temp);
   }
 
-  Future<List<Product>> getRefreshData() async {
-    return ApiWrapper().getFridgeProducts();
-  }
+  Future<void> addProduct(String barcode) async {
+    print('Llego a la petición de añadir desde proveedor');
+    Product prod = await ApiWrapper().addProduct(barcode);
+    //ApiWrapper().addProduct(barcode).then(
+    //  (value) => print('Se ha podido añadir el producto $value a la nevera'));
 
-  List<Product> get obtenerLista {
-    return [...productList];
-  }
-
-  void addItem(Product item) {
-    productList.add(item);
+    //notifyListeners();
+    print('He recibido en el scaner pero estoy en la lista: $prod');
+    //Product temp = prod;
+    print('$productList');
+    productList.add(prod);
     notifyListeners();
   }
 
-  void deleteItem(int index) {
-    productList.removeAt(index);
+  Future<void> deleteProduct(List<String> barcodes) async {
+    print('Llego a la petición de borrar desde proveedor');
+
+    ApiWrapper()
+        .deleteAndreh(barcodes)
+        .then((value) => print('Borrados los ${barcodes.length} códigos'));
+
+    print('Borrar en local');
+
+    barcodes.forEach((element) {
+      productList.removeWhere((product) => product.id == element);
+    });
+
+    print('Borrado en local hecho');
     notifyListeners();
   }
 }

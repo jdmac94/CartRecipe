@@ -78,8 +78,9 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
             Padding(padding: EdgeInsets.only(top: 20)),
             Text('Soy la nevera mejorada'),
             Consumer<ProductsDataProvider>(
-                builder: (context, proveedor, child) =>
-                    Expanded(child: buildListView(proveedor.obtenerLista))),
+                builder: (context, proveedor, child) => Expanded(
+                    child:
+                        buildListView(proveedor.getProviderData, proveedor))),
             buildVisibility(),
           ],
         )),
@@ -153,57 +154,61 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
     return showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            key: UniqueKey(),
-            title: Text('Eliminar productos'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text('Estas seguro de eliminar ' +
-                      selectedProducts.length.toString() +
-                      ' productos de la nevera?'),
-                ],
+          return Consumer<ProductsDataProvider>(
+            builder: (context, proveedor, child) => AlertDialog(
+              key: UniqueKey(),
+              title: Text('Eliminar productos'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text('Estas seguro de eliminar ' +
+                        selectedProducts.length.toString() +
+                        ' productos de la nevera?'),
+                  ],
+                ),
               ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Eliminar'),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Eliminando productos:' +
+                            selectedProducts.values.toString())));
+                    print('Multiselect $selectedProducts.values');
+
+                    List<String> test = [];
+
+                    selectedProducts.values.forEach((element) {
+                      test.add(element);
+                    });
+
+                    print('Selected values $test');
+
+                    proveedor.deleteProduct(test);
+
+                    // ApiWrapper()
+                    //     .deleteAndreh(test)
+                    //     .then((value) => print('Se ha enviado el borrado'));
+
+                    // print('Borrado en local');
+                    // test.forEach((element) {
+                    //   _data.removeWhere((product) => product.id == element);
+                    // });
+
+                    // _refresh();
+                    //Devuelve a la vista ANTERIOR, no NUEVA ( con el product eliminado)
+
+                    Navigator.of(context, rootNavigator: true).pop(context);
+                  },
+                ),
+                TextButton(
+                  child: Text('Cancelar'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
             ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('Eliminar'),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Eliminando productos:' +
-                          selectedProducts.values.toString())));
-                  print('Multiselect $selectedProducts.values');
-
-                  List<String> test = [];
-
-                  selectedProducts.values.forEach((element) {
-                    test.add(element);
-                  });
-
-                  print('Selected values $test');
-
-                  ApiWrapper()
-                      .deleteAndreh(test)
-                      .then((value) => print('Se ha enviado el borrado'));
-
-                  print('Borrado en local');
-                  test.forEach((element) {
-                    _data.removeWhere((product) => product.id == element);
-                  });
-
-                  _refresh();
-                  //Devuelve a la vista ANTERIOR, no NUEVA ( con el product eliminado)
-
-                  Navigator.of(context, rootNavigator: true).pop(context);
-                },
-              ),
-              TextButton(
-                child: Text('Cancelar'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
           );
         });
   }
@@ -215,60 +220,67 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
           // return BackdropFilter(
           //   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           //   child:
-          return AlertDialog(
-            title: Text('Inserta el código de barras a buscar'),
-            content: SingleChildScrollView(
-              child: Form(
-                //key: _data,
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: _textFieldController,
-                  //decoration: InputDecoration(hintText: 'Cifra de 13 dígitos'),
-                  // validator: (value) {
-                  //   print('Llego aquí');
-                  //   String patttern = r'(^[0-9]*$)';
-                  //   RegExp regExp = new RegExp(patttern);
-                  //   if (value == null || value.isEmpty) {
-                  //     return 'Por favor, introduzca texto';
-                  //   } else if (!regExp.hasMatch(value)) {
-                  //     return 'Sólo puede contener dígitos de 0 a 9';
-                  //   } else if (value.length < 13) {
-                  //     return 'Faltan dígitos para llegar a los 13 necesarios';
-                  //   } else if (value.length > 13) {
-                  //     return 'Se han escrito más de 13 dígitos';
-                  //   }
+          return Consumer<ProductsDataProvider>(
+            builder: (context, proveedor, child) => AlertDialog(
+              title: Text('Inserta el código de barras a buscar'),
+              content: SingleChildScrollView(
+                child: Form(
+                  //key: _data,
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: _textFieldController,
+                    //decoration: InputDecoration(hintText: 'Cifra de 13 dígitos'),
+                    // validator: (value) {
+                    //   print('Llego aquí');
+                    //   String patttern = r'(^[0-9]*$)';
+                    //   RegExp regExp = new RegExp(patttern);
+                    //   if (value == null || value.isEmpty) {
+                    //     return 'Por favor, introduzca texto';
+                    //   } else if (!regExp.hasMatch(value)) {
+                    //     return 'Sólo puede contener dígitos de 0 a 9';
+                    //   } else if (value.length < 13) {
+                    //     return 'Faltan dígitos para llegar a los 13 necesarios';
+                    //   } else if (value.length > 13) {
+                    //     return 'Se han escrito más de 13 dígitos';
+                    //   }
 
-                  //   return false;
-                  // },
+                    //   return false;
+                    // },
+                  ),
                 ),
               ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    _textFieldController.clear();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancelar'),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.deepPurple,
+                    onPrimary: Colors.white,
+                  ),
+                  onPressed: () {
+                    //if (_formKey.currentState.validate()) {
+                    print('Valor del input: ${_textFieldController.text}');
+                    proveedor.addProduct(_textFieldController.text);
+                    //addProduct(_textFieldController.text);
+                    showSnackBarMessage(
+                        'Se ha añadido el producto con el código ${_textFieldController.text}');
+                    _textFieldController.clear();
+                    Navigator.of(context).pop();
+                    Navigator.pushReplacement(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => new TabsScreen(1)));
+                    //}
+                  },
+                  child: Text('Añadir'),
+                ),
+              ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  _textFieldController.clear();
-                  Navigator.of(context).pop();
-                },
-                child: Text('Cancelar'),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.deepPurple,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  //if (_formKey.currentState.validate()) {
-                  print('Valor del input: ${_textFieldController.text}');
-                  addProduct(_textFieldController.text);
-                  showSnackBarMessage(
-                      'Se ha añadido el producto con el código ${_textFieldController.text}');
-                  _textFieldController.clear();
-                  Navigator.of(context).pop();
-                  //}
-                },
-                child: Text('Añadir'),
-              ),
-            ],
           );
           //);
         });
@@ -360,7 +372,7 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
     );
   }
 
-  ListView buildListView(List<Product> data) {
+  ListView buildListView(List<Product> data, ProductsDataProvider proveedor) {
     counter++;
     print('Counter = $counter');
 
@@ -375,7 +387,8 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
           ),
           onDismissed: (direction) {
             //provider.deleteProduct(product);
-            deleteProduct(productItem);
+            proveedor.deleteProduct([productItem.id]);
+            //deleteProduct(productItem);
           },
           child: buildCard(productItem, index),
         );

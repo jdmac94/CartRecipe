@@ -1,3 +1,4 @@
+import 'package:cartrecipe/desperate/products_data_provider.dart';
 import 'package:cartrecipe/models/product.dart';
 import 'package:cartrecipe/providers/product_list_provider.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,8 @@ class ScannerScreen extends StatefulWidget {
 class _ScannerScreenState extends State<ScannerScreen> {
   String _data = "";
 
-  _scan(ProductList provider) async {
+//TODO! CONTROLAR BUG DE CANCELAR ESCANEO
+  _scan(ProductsDataProvider provider) async {
     await FlutterBarcodeScanner.scanBarcode(
             "#000000", "Cancelar", true, ScanMode.BARCODE)
         .then((value) => setState(() {
@@ -59,7 +61,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<ProductList>(context);
+    final provider = Provider.of<ProductsDataProvider>(context);
     //   return FutureBuilder<String>(
     //       future: _scan(),
     //       builder: (context, AsyncSnapshot<String> snapshot) {
