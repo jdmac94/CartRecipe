@@ -28,38 +28,86 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
   bool loaded = false;
   var provider;
 
-  Future<String> fetchData() async {
-    var temp = await ApiWrapper().getFridgeProducts();
+  // //TODO NEVERA LOCAL SIN PROVIDER
+  // Future<String> fetchData() async {
+  //   var temp = await ApiWrapper().getFridgeProducts();
 
-    this.setState(() {
-      _data = temp;
-    });
+  //   this.setState(() {
+  //     _data = temp;
+  //   });
 
-    print('Tengo datos en nevera?  ${_data.length}');
+  //   print('Tengo datos en nevera?  ${_data.length}');
 
-    return 'Succes!';
-  }
+  //   return 'Succes!';
+  // }
+
+  // //TODO NEVERA LOCAL SIN PROVIDER
+  // @override
+  // void initState() {
+  //   fetchData();
+  //   super.initState();
+  // }
 
   @override
-  void initState() {
-    _data = [];
-    super.initState();
+  Widget build(BuildContext context) {
+    // setState(() {
+    //   _data = Provider.of<ProductsDataProvider>(context).getResponseList;
+    //   print('Inside data build con provider ${_data.length}');
+    // });
+    // setState(() {
+    //   provider = Provider.of<ProductsDataProvider>(context);
+    //   provider.fetchServerData;
+    //   print('');
+    //   //_data = Provider.of<ProductsDataProvider>(context).getList();
+    //   //provider.fetchServerData();
+    //   // print(
+    //   //     'Estoy en el build y hago print del provider lis - ${provider.obtenerLista}');
+    // });
+
+    // setState(() {
+    //   Future<List> temp = Provider.of<ProductsDataProvider>(context).getData();
+
+    //   //print('Datos obtenidos = $_data');
+    // });
+
+    return Scaffold(
+      body: Container(
+        child: Center(
+            child: Column(
+          children: [
+            Padding(padding: EdgeInsets.only(top: 20)),
+            Text('Soy la nevera mejorada'),
+            Consumer<ProductsDataProvider>(
+                builder: (context, proveedor, child) =>
+                    Expanded(child: buildListView(proveedor.obtenerLista))),
+            buildVisibility(),
+          ],
+        )),
+      ),
+      floatingActionButton: buildSpeedDial(),
+    );
   }
 
-  @override
-  void dispose() {
-    _data = [];
-    super.dispose();
-  }
+  // @override
+  // void initState() {
+  //   _data = [];
+  //   super.initState();
+  // }
 
-  void fetchDataProvider() {
-    var provider = Provider.of<ProductsDataProvider>(context);
-    //provider.fetchServerData();
-    this.setState(() {
-      _data = provider.obtenerLista;
-      print('Number list length = ${_data.length}');
-    });
-  }
+  // @override
+  // void dispose() {
+  //   _data = [];
+  //   super.dispose();
+  // }
+
+  // void fetchDataProvider() {
+  //   var provider = Provider.of<ProductsDataProvider>(context);
+  //   //provider.fetchServerData();
+  //   this.setState(() {
+  //     _data = provider.obtenerLista;
+  //     print('Number list length = ${_data.length}');
+  //   });
+  // }
 
   Future<void> dialogProduct(BuildContext context, Product product) {
     return showDialog<void>(
@@ -235,41 +283,12 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
         )));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    setState(() {
-      provider = Provider.of<ProductsDataProvider>(context);
-      provider.fetchServerData();
-      print(
-          'Estoy en el build y hago print del provider lis - ${provider.obtenerLista}');
-    });
+  // void _chargeData() {
+  //   setState(() {
+  //   _data = provider.getList();
 
-    // setState(() {
-    //   Future<List> temp = Provider.of<ProductsDataProvider>(context).getData();
-
-    //   //print('Datos obtenidos = $_data');
-    // });
-
-    return Scaffold(
-      body: Container(
-        child: Center(
-          child: provider.isFetching
-              ? CircularProgressIndicator()
-              : provider.getResponseList != null
-                  ? Column(
-                      children: [
-                        Padding(padding: EdgeInsets.only(top: 20)),
-                        Text('Soy la nevera mejorada'),
-                        Expanded(child: buildListView(_data)),
-                        buildVisibility(),
-                      ],
-                    )
-                  : Text('Ha habido algún error'),
-        ),
-      ),
-      floatingActionButton: buildSpeedDial(),
-    );
-  }
+  //   });
+  // }
 
   Visibility buildVisibility() {
     return Visibility(
@@ -355,6 +374,7 @@ class _LocalDesperateFridgeState extends State<LocalDesperateFridge> {
             color: Colors.red,
           ),
           onDismissed: (direction) {
+            //provider.deleteProduct(product);
             deleteProduct(productItem);
           },
           child: buildCard(productItem, index),

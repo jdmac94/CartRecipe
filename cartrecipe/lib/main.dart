@@ -39,8 +39,9 @@ class MyApp extends StatelessWidget {
           initialData: [],
           create: (context) => DataProvider().fetchData(),
         ),
-        ChangeNotifierProvider<ProductsDataProvider>(
-            create: (context) => ProductsDataProvider()),
+        FutureProvider<ProductsDataProvider>(
+            initialData: ProductsDataProvider(productList: []),
+            create: (context) => ProductsDataProvider().providerWithData()),
       ],
     );
   }

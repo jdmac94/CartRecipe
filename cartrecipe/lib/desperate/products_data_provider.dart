@@ -4,8 +4,10 @@ import 'package:cartrecipe/models/product.dart';
 import 'package:flutter/foundation.dart';
 
 class ProductsDataProvider with ChangeNotifier {
-  List<Product> _productList = [];
+  List<Product> productList = [];
   bool _isFetching = false;
+
+  ProductsDataProvider({this.productList});
 
   bool get isFetching => _isFetching;
 
@@ -13,7 +15,7 @@ class ProductsDataProvider with ChangeNotifier {
     _isFetching = true;
     notifyListeners();
     var response = await ApiWrapper().getFridgeProducts();
-    _productList = response;
+    productList = response;
 
     _isFetching = false;
     notifyListeners();
@@ -27,7 +29,7 @@ class ProductsDataProvider with ChangeNotifier {
     return [...temp];
   }
 
-  List<Product> get getResponseList => _productList;
+  List<Product> get getResponseList => productList;
 
   Future<ProductsDataProvider> providerWithData() async {
     List<Product> temp = [];
@@ -36,7 +38,7 @@ class ProductsDataProvider with ChangeNotifier {
     print('Soy el temp del provider en la clase DataProvider: $temp');
     print('Datos de productos cargados');
     //productList = temp;
-    return ProductsDataProvider();
+    return ProductsDataProvider(productList: temp);
   }
 
   Future<List<Product>> getRefreshData() async {
@@ -44,16 +46,16 @@ class ProductsDataProvider with ChangeNotifier {
   }
 
   List<Product> get obtenerLista {
-    return [..._productList];
+    return [...productList];
   }
 
   void addItem(Product item) {
-    _productList.add(item);
+    productList.add(item);
     notifyListeners();
   }
 
   void deleteItem(int index) {
-    _productList.removeAt(index);
+    productList.removeAt(index);
     notifyListeners();
   }
 }

@@ -8,40 +8,6 @@ class ProductList with ChangeNotifier {
 
   List<Product> listaProductos;
 
-  Future<void> doSomething() async {
-    await Future.delayed(Duration(seconds: 2));
-    Product prod1 = new Product(
-        id: '1',
-        name: 'Prod1',
-        image:
-            'https://upload.wikimedia.org/wikipedia/commons/c/c7/Tabby_cat_with_blue_eyes-3336579.jpg');
-    Product prod2 = new Product(
-        id: '2',
-        name: 'Prod2',
-        image:
-            'https://upload.wikimedia.org/wikipedia/commons/c/c7/Tabby_cat_with_blue_eyes-3336579.jpg');
-    listaProductos = [
-      prod1,
-      prod2,
-    ];
-    print('Uso de gatetes');
-  }
-
-  Future<ProductList> someAsyncFunctionToGetMyModel() async {
-    await Future.delayed(Duration(seconds: 3));
-    List<Product> temp = [];
-
-    Product prod3 = new Product(
-        id: '3',
-        name: 'Prod3',
-        image:
-            'https://upload.wikimedia.org/wikipedia/commons/c/c7/Tabby_cat_with_blue_eyes-3336579.jpg');
-
-    temp.add(prod3);
-
-    return ProductList(listaProductos: temp);
-  }
-
   Future<void> update() async {
     listaProductos = await ApiWrapper().getFridgeProducts();
     notifyListeners();
@@ -94,6 +60,40 @@ class ProductList with ChangeNotifier {
     print('Lista de cosas ya guardads: $listaProductos');
     return [...listaProductos];
   }
+
+  // Future<void> doSomething() async {
+  //   await Future.delayed(Duration(seconds: 2));
+  //   Product prod1 = new Product(
+  //       id: '1',
+  //       name: 'Prod1',
+  //       image:
+  //           'https://upload.wikimedia.org/wikipedia/commons/c/c7/Tabby_cat_with_blue_eyes-3336579.jpg');
+  //   Product prod2 = new Product(
+  //       id: '2',
+  //       name: 'Prod2',
+  //       image:
+  //           'https://upload.wikimedia.org/wikipedia/commons/c/c7/Tabby_cat_with_blue_eyes-3336579.jpg');
+  //   listaProductos = [
+  //     prod1,
+  //     prod2,
+  //   ];
+  //   print('Uso de gatetes');
+  // }
+
+  // Future<ProductList> someAsyncFunctionToGetMyModel() async {
+  //   await Future.delayed(Duration(seconds: 3));
+  //   List<Product> temp = [];
+
+  //   Product prod3 = new Product(
+  //       id: '3',
+  //       name: 'Prod3',
+  //       image:
+  //           'https://upload.wikimedia.org/wikipedia/commons/c/c7/Tabby_cat_with_blue_eyes-3336579.jpg');
+
+  //   temp.add(prod3);
+
+  //   return ProductList(listaProductos: temp);
+  // }
 
   // ------------------- ESTO FUNCA?--------------------
   // Future<List<Product>> loadProductsData() async {
