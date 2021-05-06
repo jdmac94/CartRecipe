@@ -95,6 +95,68 @@ router.get("/addRecetaFIXED", auth, async (req, res) => {
 });
 
 
+router.get("/addRecetaGalleta", auth, async (req, res) => {
+
+    let receta = new Receta();
+
+    // var dict = {
+    //     "manzana verde": "1", 
+    //     "rodajas de papaya madura": "3",
+    //     "vaso de agua": "1.5",
+    //     "cucharadita de miel": "1"
+    // };
+
+    // "Galletas de chocolate"
+    // "Galletas maría"
+    // "Panes"
+    // "Pan rallado de trigo"
+    // "Cereales y patatas"
+
+    // var dict = [
+    //     { "1": ["Galletas de chocolate", "1"] }, 
+    //     { "2": ["Galletas maría", "1"] }, 
+    //     { "3": ["Panes", "1"] }, 
+    //     { "4": ["Pan rallado de trigo", "1"] }, 
+    // ];
+
+
+    var dict = ["Galletas de chocolate", "Galletas maría", "Panes", "Pan rallado de trigo", "unknown"];
+    var qtty = [1,1,1,1];
+
+    /*"ingredientes":[
+    { "nombre": "manzana verde", "cantidad: "1" }, 
+    { "nombre" : "rodajas de papaya", "cantidad" : "3"},
+    ... ] */
+
+    receta.usuario = "0";
+    receta.titulo = "Comerse una galleta";
+    receta.dificultad = 1;
+    receta.descripcion = "veremos como se come una galleta";
+    receta.tiempo = "1:00";
+    receta.imagenes = [ 'https://st3.depositphotos.com/13184338/18422/i/1600/depositphotos_184221848-stock-photo-young-handsome-man-working-with.jpg' ];
+    receta.ingredientes = dict;
+    receta.ingre_Q = qtty;
+
+    receta.pasos = [
+        "abres el paquete",
+        "te la comes",
+        "fin, no tiene más."
+    ]
+    receta.consejos = [
+        "No respires ni tragues a la vez que se lia",
+    ];
+
+    receta.rating_num = 5;
+    receta.tags = ["fruta", "batido", "zumo", "vegano", "vegetariano"];
+    receta.allergenList = ["alergeno0","alergeno1","alergeno2","alergeno3","alergeno4","alergeno5"]
+    const result = receta.save();
+    //return res.status(404).send("No hay recetas");
+
+    
+    res.send(receta);
+
+});
+
 router.post("/addReceta", auth, async (req, res) => {
 
     let receta = new Receta();

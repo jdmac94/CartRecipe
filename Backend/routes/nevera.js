@@ -3,8 +3,10 @@ const router = express.Router();
 
 const { Nevera } = require("../models/nevera");
 const { Product } = require("../models/product");
-const { checkImgFromAPI } = require("../utils/imageAPI");
+const { Categoria } = require("../models/categoria");
+const { Receta } = require("../models/receta");
 
+const { checkImgFromAPI } = require("../utils/imageAPI");
 const auth = require("../middlewares/auth");
 
 const barcodeRegEx = /^[0-9]{13}$/;
@@ -135,7 +137,7 @@ router.delete("/", auth, async (req, res) => {
  */
 router.put("/product/:id", auth, async (req, res) => {
   console.log("ADDING NEVERA CONTENT");
-  console.log(req.body);
+  console.log(req.params);
   let nevera = await Nevera.findOne({ usuario: req.user._id });
 
   if (!nevera)
@@ -218,6 +220,110 @@ router.get("/getNeveraArray", async (req, res) => {
 
   res.send(nevera.productos);
 });
+
+
+router.get("/getNeveraCat", auth, async (req, res) => {
+
+
+  /////      EXTRAEMOS CATEGORÍAS DE LA NEVERA      /////
+  
+  let nevera = await Nevera.findOne({ usuario: req.user._id });
+
+  if (!nevera)
+    return res.status(404).send("No se encuentran los datos de la nevera");
+  
+  let neveraCategories = await Product.find(
+    { _id: { $in: nevera.productos } },
+    {
+      categories_hierarchy: 1,
+    }
+  );
+  
+  var catArr = [];
+
+  neveraCategories.forEach(function (item) {
+
+    item.categories_hierarchy.forEach(function (element) {
+      
+      catIndex = catArr.indexOf(element);
+  
+      if (catIndex == -1) catArr.push(element);
+  
+    });
+
+  });
+
+  console.log(catArr);
+  /////    COMPARAMOS CON LAS CATEGORIAS VALIDAS    /////
+  
+  if (!nevera)
+    return res.status(404).send("No se encuentran los datos de la nevera");
+
+  let filteredCategories = await Categoria.find({ en: { $in: catArr } },
+    {
+      es: 1,
+      _id: 0
+    }
+    );
+
+    var filteredArr = [];
+    
+    filteredCategories.forEach(function (item) {
+
+      filteredArr.push(item.es);
+        
+    });
+  /////      BUSCAMOS LAS RECETAS COMPATIBLES       /////
+  
+  console.log(filteredArr);
+
+  // var finalRecipes = await Receta.find({ ingredientes: { $all: filteredArr } },
+  // var finalRecipes = await Receta.find({ ingredientes: { $all: filteredArr } },
+  //   {
+  //     ingredientes: 1,
+  //   });
+
+
+  var finalRecipes = await Receta.aggregate([
+      { 
+        $project: {
+          inBOnly: { $setDifference: [ "$ingredientes", filteredArr ] },
+          _id: 0 
+        }  
+      }
+    ]);
+    //lo suyo sería poder filtrar el resultado de la proyección de manera que descarte aquellas recetas en que inBOnly mida más de 0
+    
+  console.log(finalRecipes);
+  res.send(finalRecipes);
+});
+
+
+router.get("/loadCategories", auth, async (req, res) => {
+
+  var fs = require('fs');
+
+  var input = fs.createReadStream('database_prototype.txt');
+
+  var rl  = require('readline').createInterface({
+      input: input,
+      terminal: false
+  });
+
+  rl.on('line', async function(line){
+      var line = line;//.toLowerCase();
+      var x = line.split(",");
+      let cat = new Categoria();
+      cat.es = x[0];
+      cat.en = x[1].toLowerCase();
+
+      const result = await cat.save();
+      
+      console.log(x[0] + " |||| " + x[1]);
+
+  });
+});
+
 
 // router.put("/testregex", async (req, res) => {
 

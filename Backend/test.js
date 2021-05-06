@@ -1,52 +1,23 @@
 var fs = require('fs');
+const { Categoria } = require("./models/categoria");
+require("./database");
 
-var input = fs.createReadStream('aaa.txt');
+var input = fs.createReadStream('database_prototype.txt');
 
 var rl  = require('readline').createInterface({
     input: input,
     terminal: false
 });
 
-var cats = "Напитки, Газированные напитки, Газированные безалкагольные напитки, en:Colas, Напитки с добавлением сахара"
+rl.on('line', async function(line){
+    var line = line;//.toLowerCase();
+    var x = line.split(",");
+    // let cat = new Categoria();
+    // cat.es = x[0];
+    // cat.en = x[1];
 
-var str = cats.split(",");
-console.log(str[0]);
-
-for (let element of str) {
-    element = element.trim();
-}
-var temp = [];
-var catching = false;
-
-rl.on('line', function(line){
-
-    if (line.includes("<")) {
-        catching = true;
-    }
-
+    // const result = await cat.save();
     
-    //revisa el array recogido
-    if (catching) {
-
-        if (line == "\n") {
-            matches = false;
-
-            for (let element of temp) {
-                if (element.includes("varias")) {
-                    matches = true;
-                }
-            }
-
-            if (matches) {
-                console.log(temp);
-            }
-                
-
-        } else  {
-            temp.push(line);
-        }
-    }
-
-
+    console.log(x[0] + " |||| " + x[1]);
 
 });

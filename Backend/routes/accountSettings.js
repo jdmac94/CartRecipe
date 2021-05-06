@@ -169,10 +169,10 @@ router.post("/restorePassword", async (req, res) => {
     let user = await Usuario.findOne({ correo: mail });
 
 
-    // if (!user || sendMailPassword(mail) == -1)
-    //     return res.status(500).send("Error al intentar reestablecer la contraseña");
+    if (!user || sendMailPassword(mail) == -1)
+        return res.status(500).send("Error al intentar reestablecer la contraseña");
     
-    res.send("Mail dde recuperación enviado correctamente");
+    res.send("Mail de recuperación enviado correctamente");
   });
 
 //podemos pedirle al user que meta su password para asegurarse (?)
@@ -182,7 +182,7 @@ router.get("/deleteAccount", auth, async (req, res) => {
     console.log("DELETING ACCOUNT: " + mail)
 
     let userDel = await Usuario.findOneAndDelete({ correo: mail });
-  
+    //TO-DO: eliminar la nevera de dicho usuario
     if (!userDel) return res.status(400).send("Error al intentar eliminar el usuario");
     
     res.send("Cuenta eliminada correctamente");
