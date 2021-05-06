@@ -1,4 +1,5 @@
 import 'package:cartrecipe/screens/fridge_screen.dart';
+import 'package:cartrecipe/screens/profile_screen.dart';
 
 import 'package:cartrecipe/screens/welcome.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,7 @@ class _TabsScreenState extends State<TabsScreen> {
         'title': 'Mi nevera',
       },
       {
-        'page': Welcome(),
+        'page': ProfileScreen(),
         //'page': ProfileScreen(),
         'title': 'Perfil',
       },
