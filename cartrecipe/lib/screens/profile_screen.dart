@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:cartrecipe/screens/preferences_screen.dart';
+import 'package:cartrecipe/screens/edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key}) : super(key: key);
@@ -25,7 +26,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: TextStyle(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        print('vas a editar perfil');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfileScreen()));
                       })
               ])),
             ),
@@ -60,6 +64,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ListTile(
               leading: Icon(Icons.book),
               title: Text('Información Legal'),
+            ),
+            ListTile(
+              leading: Icon(Icons.help),
+              title: Text('Sobre Nosotros'),
             ),
             ListTile(
               leading: Icon(Icons.exit_to_app),
