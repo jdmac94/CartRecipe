@@ -23,12 +23,7 @@ class ApiWrapper {
     final response = await http.get(
       Uri.http(endpoint, api),
       headers: <String, String>{
-        'x-auth-token': authToken
-        //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhiZTh
-        //lN2IyYjM3YTAwZjgwMTYyOTMiLCJhbGVyZ2lhcyI6W10sImRpZXRhIjpb
-        //XSwidGFncyI6W10sIm5pdmVsX2NvY2luYSI6bnVsbCwic2lzdGVtYV91b
-        //mlkYWRlcyI6InNpc3RfaW50IiwicmVjZXRhc19mYXZzIjpbXSwiaWF0Ij
-        //oxNjE5NzgxODYzfQ.aSAmFeibWYrdDvNh9-kV1bCFtAiBMkp5MQJM4qi4zGk'
+        'x-auth-token': authToken,
       },
     );
     if (response.statusCode == 200) {
@@ -38,8 +33,6 @@ class ApiWrapper {
 
       Iterable l = json.decode(response.body);
       prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
-
-      //print(prods);
 
       return prods;
     } else {
@@ -128,8 +121,7 @@ class ApiWrapper {
       Uri.http(endpoint, api),
       headers: <String, String>{
         //'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': authToken
-        //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhiZThlN2IyYjM3YTAwZjgwMTYyOTMiLCJhbGVyZ2lhcyI6W10sImRpZXRhIjpbXSwidGFncyI6W10sIm5pdmVsX2NvY2luYSI6bnVsbCwic2lzdGVtYV91bmlkYWRlcyI6InNpc3RfaW50IiwicmVjZXRhc19mYXZzIjpbXSwiaWF0IjoxNjE5NzgxODYzfQ.aSAmFeibWYrdDvNh9-kV1bCFtAiBMkp5MQJM4qi4zGk'
+        'x-auth-token': authToken,
       },
       // body: jsonEncode(<String, String>{
       //   'barcode': barcode,
@@ -174,8 +166,7 @@ class ApiWrapper {
       Uri.http(endpoint, api),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': authToken
-        //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhiZThlN2IyYjM3YTAwZjgwMTYyOTMiLCJhbGVyZ2lhcyI6W10sImRpZXRhIjpbXSwidGFncyI6W10sIm5pdmVsX2NvY2luYSI6bnVsbCwic2lzdGVtYV91bmlkYWRlcyI6InNpc3RfaW50IiwicmVjZXRhc19mYXZzIjpbXSwiaWF0IjoxNjE5NzgxODYzfQ.aSAmFeibWYrdDvNh9-kV1bCFtAiBMkp5MQJM4qi4zGk',
+        'x-auth-token': authToken,
       },
       body: jsonEncode(<String, List<String>>{
         'toDeleteArr': barcode,
@@ -196,12 +187,7 @@ class ApiWrapper {
     http.Response response = await http.delete(
       Uri.http(endpoint, api),
       headers: <String, String>{
-        'x-auth-token': authToken
-        //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhiZTh
-        //lN2IyYjM3YTAwZjgwMTYyOTMiLCJhbGVyZ2lhcyI6W10sImRpZXRhIjpb
-        //XSwidGFncyI6W10sIm5pdmVsX2NvY2luYSI6bnVsbCwic2lzdGVtYV91b
-        //mlkYWRlcyI6InNpc3RfaW50IiwicmVjZXRhc19mYXZzIjpbXSwiaWF0Ij
-        //oxNjE5NzgxODYzfQ.aSAmFeibWYrdDvNh9-kV1bCFtAiBMkp5MQJM4qi4zGk'
+        'x-auth-token': authToken,
       },
     );
 

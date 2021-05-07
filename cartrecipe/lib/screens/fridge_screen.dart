@@ -1,14 +1,16 @@
-//import 'dart:ui';
-
-import 'package:cartrecipe/providers/products_data_provider.dart';
-import 'package:cartrecipe/models/product.dart';
-import 'package:cartrecipe/widgets/fridge/fridge_speedial.dart';
 import 'package:flutter/material.dart';
+
 import 'package:cartrecipe/widgets/fridge/detail_view_product.dart';
+import 'package:cartrecipe/providers/products_data_provider.dart';
+import 'package:cartrecipe/widgets/fridge/fridge_speedial.dart';
+import 'package:cartrecipe/models/product.dart';
 import 'package:provider/provider.dart';
 
 class FridgeScreen extends StatefulWidget {
-  FridgeScreen({Key key}) : super(key: key);
+  static const routeName = '/fridge';
+  final bool refresh;
+
+  FridgeScreen({Key key, this.refresh}) : super(key: key);
 
   @override
   _FridgeScreenState createState() => _FridgeScreenState();
@@ -16,7 +18,7 @@ class FridgeScreen extends StatefulWidget {
 
 class _FridgeScreenState extends State<FridgeScreen> {
   int counter = 0;
-  String valueText;
+
   //TextEditingController _textFieldController = TextEditingController();
 
   Map selectedProducts = new Map<int, String>();
@@ -31,6 +33,20 @@ class _FridgeScreenState extends State<FridgeScreen> {
   }
 
   @override
+  void initState() {
+    if (widget.refresh == true) {
+      mockRefresh();
+    }
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    mockRefresh();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: UniqueKey(),
@@ -41,14 +57,18 @@ class _FridgeScreenState extends State<FridgeScreen> {
               Padding(padding: EdgeInsets.only(top: 20)),
               Text('Soy la nevera mejorada'),
               Consumer<ProductsDataProvider>(
-                  builder: (context, proveedor, child) => Expanded(
-                      child: proveedor.productList == null
-                          ? Container(
-                              child: CircularProgressIndicator(),
-                            )
-                          : proveedor.productList.isEmpty
-                              ? Text('No hay datos en la nevera')
-                              : buildListView(proveedor))),
+                builder: (context, proveedor, child) => Expanded(
+                    child: proveedor.isFetching
+                        ? Container(
+                            child: CircularProgressIndicator(),
+                          )
+                        : proveedor.productList.isEmpty
+                            ? Text('No hay datos en la nevera')
+                            : RefreshIndicator(
+                                onRefresh: mockRefresh,
+                                color: Colors.deepPurple,
+                                child: buildListView(proveedor))),
+              ),
               buildVisibility(selectedProducts),
             ],
           ),
@@ -68,7 +88,7 @@ class _FridgeScreenState extends State<FridgeScreen> {
               title: Text('Eliminar productos'),
               content: SingleChildScrollView(
                 child: ListBody(
-                  children: <Widget>[
+                  children: [
                     Text('Estas seguro de eliminar ' +
                         selectedProducts.length.toString() +
                         ' productos de la nevera?'),
@@ -93,6 +113,9 @@ class _FridgeScreenState extends State<FridgeScreen> {
                     print('Selected values $test');
 
                     proveedor.deleteProduct(test);
+                    setState(() {
+                      selectedProducts = new Map<int, String>();
+                    });
 
                     Navigator.of(context, rootNavigator: true).pop(context);
                   },
@@ -117,16 +140,16 @@ class _FridgeScreenState extends State<FridgeScreen> {
         child: FloatingActionButton(
           child: Icon(Icons.delete),
           onPressed: () {
-            _dialogMultipleDelete(context).then((value) {
-              setState(() {
-                selectedProducts = new Map<int, String>();
-              });
-            });
+            _dialogMultipleDelete(context);
           },
           backgroundColor: Colors.redAccent,
         ),
       ),
     );
+  }
+
+  Future<void> mockRefresh() async {
+    setState(() {});
   }
 
   ListView buildListView(ProductsDataProvider proveedor) {
@@ -136,6 +159,7 @@ class _FridgeScreenState extends State<FridgeScreen> {
     var _data = proveedor.productList;
 
     return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
       itemCount: _data == null ? 0 : _data.length,
       itemBuilder: (context, index) {
         Product productItem = _data[index];

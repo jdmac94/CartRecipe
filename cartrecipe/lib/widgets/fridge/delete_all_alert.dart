@@ -1,4 +1,6 @@
 import 'package:cartrecipe/providers/products_data_provider.dart';
+import 'package:cartrecipe/screens/fridge_screen.dart';
+import 'package:cartrecipe/screens/tabs_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:cartrecipe/api/api_wrapper.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +32,9 @@ class DeleteAllAlert extends StatelessWidget {
 
               //Devuelve a la vista ANTERIOR, no NUEVA ( con el product eliminado)
 
-              Navigator.of(context, rootNavigator: true).pop(context);
+              Navigator.popAndPushNamed(context, FridgeScreen.routeName);
+              // Navigator.pushReplacement(context,
+              //     MaterialPageRoute(builder: (context) => TabsScreen(3)));
             },
           ),
           TextButton(

@@ -29,11 +29,15 @@ class ProductsDataProvider with ChangeNotifier {
   }
 
   Future<ProductsDataProvider> providerWithData() async {
+    _isFetching = true;
+    notifyListeners();
     List<Product> temp = [];
     temp = await ApiWrapper().getFridgeProducts();
 
     print('Soy el temp del provider en la clase DataProvider: $temp');
     print('Datos de productos cargados');
+    _isFetching = false;
+    notifyListeners();
     //productList = temp;
     return ProductsDataProvider(productList: temp);
   }
@@ -55,10 +59,10 @@ class ProductsDataProvider with ChangeNotifier {
   Future<void> deleteProduct(List<String> barcodes) async {
     print('Llego a la petición de borrar desde proveedor');
 
-    ApiWrapper()
-        .deleteAndreh(barcodes)
-        .then((value) => print('Borrados los ${barcodes.length} códigos'));
-
+    ApiWrapper().deleteAndreh(barcodes).then((value) {
+      print('Borrados los ${barcodes.length} códigos');
+      notifyListeners();
+    });
     print('Borrar en local');
 
     barcodes.forEach((element) {
@@ -70,10 +74,9 @@ class ProductsDataProvider with ChangeNotifier {
   }
 
   Future<void> deleteAllProducts() async {
-    ApiWrapper().clearNevera().then((value) {
-      print('Todos los productos han sido borrados de la nevera');
-      productList = [];
-      notifyListeners();
-    });
+    await ApiWrapper().clearNevera();
+    print('Todos los productos han sido borrados de la nevera');
+    productList.clear();
+    notifyListeners();
   }
 }

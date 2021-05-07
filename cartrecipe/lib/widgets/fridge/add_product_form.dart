@@ -1,4 +1,5 @@
 import 'package:cartrecipe/providers/products_data_provider.dart';
+import 'package:cartrecipe/screens/fridge_screen.dart';
 import 'package:cartrecipe/screens/tabs_screens.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,6 @@ class AddProductForm extends StatelessWidget {
   //variable para guardar el texto introducido
   final _textFieldController = TextEditingController();
 
-  //TODO Mirar que te aparezca el teclado numérico
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductsDataProvider>(
@@ -72,11 +72,11 @@ class AddProductForm extends StatelessWidget {
               // showSnackBarMessage(
               //     'Se ha añadido el producto con el código ${_textFieldController.text}');
               _textFieldController.clear();
-              Navigator.of(context).pop();
-              Navigator.pushReplacement(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (context) => new TabsScreen(3)));
+              Navigator.of(context).popAndPushNamed(FridgeScreen.routeName);
+              // Navigator.pushReplacement(
+              //     context,
+              //     new MaterialPageRoute(
+              //         builder: (context) => new TabsScreen(3, true)));
               //}
             },
             child: Text('Añadir'),

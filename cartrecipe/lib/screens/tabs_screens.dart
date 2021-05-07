@@ -1,5 +1,6 @@
 import 'package:cartrecipe/screens/fridge_screen.dart';
 import 'package:cartrecipe/screens/profile_screen.dart';
+import 'package:cartrecipe/screens/tutorial/tutorial_screen.dart';
 
 import 'package:cartrecipe/screens/welcome.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,8 @@ class _TabsScreenState extends State<TabsScreen> {
         'title': 'Recetas',
       },
       {
-        'page': SearchsScreen(),
+        'page': TutorialScreen(),
+        //'page': SearchsScreen(),
         //'page': TestStreamScreen(),
         //'page': SearchsScreen(),
         //'page': LocalDesperateFridge(),
