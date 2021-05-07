@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:cartrecipe/screens/preferences_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key}) : super(key: key);
@@ -25,6 +26,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         print('vas a editar perfil');
+                      })
+              ])),
+            ),
+            ListTile(
+              leading: Icon(Icons.food_bank),
+              title: RichText(
+                  text: TextSpan(children: <TextSpan>[
+                TextSpan(
+                    text: 'Preferencias alimenticias',
+                    style: TextStyle(color: Colors.black),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PreferencesScreen()));
                       })
               ])),
             ),
