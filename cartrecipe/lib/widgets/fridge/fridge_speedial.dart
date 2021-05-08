@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cartrecipe/screens/tabs_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -16,6 +18,11 @@ class FridgeSpeedDial extends StatelessWidget {
         return AddProductForm();
       },
     );
+  }
+  
+  void refresh(BuildContext context) {
+    Navigator.pushReplacement(context,
+        new MaterialPageRoute(builder: (context) => new TabsScreen(3)));
   }
 
   Future<void> confirmDelete(BuildContext context) {
@@ -50,8 +57,11 @@ class FridgeSpeedDial extends StatelessWidget {
             backgroundColor: Colors.green,
             foregroundColor: Colors.white,
             label: 'Añadir manualmente',
-            onTap: () {
-              _dialogAdd(context);
+            onTap: () async {
+              await _dialogAdd(context);
+              Timer(Duration(seconds: 1), () {
+                refresh(context);
+              });
             }),
         SpeedDialChild(
             child: Icon(Icons.qr_code),
