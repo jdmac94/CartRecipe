@@ -22,6 +22,7 @@ router.get("/", auth, async (req, res) => {
   let listedProds = await Product.find(
     { _id: { $in: prodArray } },
     {
+      product_name_: 1,
       product_name_es: 1,
       nutriments: 1,
       ecoscore_grade: 1,
