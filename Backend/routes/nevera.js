@@ -22,22 +22,18 @@ router.get("/", auth, async (req, res) => {
   let listedProds = await Product.find(
     { _id: { $in: prodArray } },
     {
-      _keywords: 1,
-      allergens_from_user: 1,
       product_name_es: 1,
-      nutriscore_data: 1,
+      nutriments: 1,
       ecoscore_grade: 1,
-      nova_group: 1,
-      ecoscore_tags: 1,
+      nova_groups: 1,
       quantity: 1,
       nutriscore_grade: 1,
-		  nutriscore_score: 1,
-      ingredients: 1,
+      // ingredients: 1,
       ingredients_analysis_tags: 1,
-      allergens: 1,
       allergens_tags: 1,
       traces: 1,
-      traces_tags: 1
+      traces_tags: 1,
+      ingredients_text_es: 1,
     }
   );
 
