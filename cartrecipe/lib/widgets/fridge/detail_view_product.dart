@@ -7,6 +7,7 @@ class DetailViewProduct extends StatelessWidget {
 
   DetailViewProduct(this.product);
 
+//TODO! CONTROLAR TODOS LOS INGREDIENTES
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -14,11 +15,13 @@ class DetailViewProduct extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: Column(
           children: [
-            Image.network(
-              product.image,
-              width: 150,
-              height: 150,
-            ),
+            (product.image == null)
+                ? FlutterLogo(size: 70)
+                : Image.network(
+                    product.image,
+                    width: 150,
+                    height: 150,
+                  ),
             ListTile(
               title: Text(product.name),
               subtitle: Text(
@@ -29,10 +32,20 @@ class DetailViewProduct extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
+                'Lorem ipsum',
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
               ),
             ),
+            (product.nutriScore != null)
+                ? Container(
+                    child: Image.asset(
+                      'assets/images/products/nutriscore/${product.nutriScore}.png',
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.contain,
+                    ),
+                  )
+                : Text('No tiene nutriscore'),
             ButtonBar(
               alignment: MainAxisAlignment.start,
               children: [

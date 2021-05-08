@@ -34,7 +34,7 @@ class ProductsDataProvider with ChangeNotifier {
     List<Product> temp = [];
     temp = await ApiWrapper().getFridgeProducts();
 
-    print('Soy el temp del provider en la clase DataProvider: $temp');
+    //print('Soy el temp del provider en la clase DataProvider: $temp');
     print('Datos de productos cargados');
     _isFetching = false;
     notifyListeners();

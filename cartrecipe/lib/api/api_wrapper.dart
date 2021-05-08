@@ -19,7 +19,7 @@ class ApiWrapper {
   //final String endpoint = "a1ac68965a1d.ngrok.io";
 
   Future<List<Product>> getFridgeProducts() async {
-    const String api = "api/v1/nevera/list";
+    const String api = "api/v1/nevera";
     final response = await http.get(
       Uri.http(endpoint, api),
       headers: <String, String>{
@@ -34,10 +34,14 @@ class ApiWrapper {
       Iterable l = json.decode(response.body);
       prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
 
+      print('Esto lleva el primer producto Juanda: ');
+      print(prods.toString());
+
       return prods;
     } else {
       print('Petición de respuesta');
-      return DUMMY_PRODUCTS;
+      //TODO CONTROLAR DUMMY
+      //return DUMMY_PRODUCTS;
       //throw Exception('Failed to load product');
     }
   }
