@@ -19,7 +19,7 @@ class FridgeSpeedDial extends StatelessWidget {
       },
     );
   }
-  
+
   void refresh(BuildContext context) {
     Navigator.pushReplacement(context,
         new MaterialPageRoute(builder: (context) => new TabsScreen(3)));
@@ -42,15 +42,6 @@ class FridgeSpeedDial extends StatelessWidget {
       backgroundColor: Colors.deepPurple,
       foregroundColor: Colors.white,
       //TODO! Controlar borrado selected cuando se pulsa
-      //onOpen: () {
-      //   setState(() {
-      //     if (selectedProducts.isNotEmpty) {
-      //       print('Vaciado del map');
-      //       selectedProducts.clear();
-      //       print('${selectedProducts.length}');
-      //     }
-      //   });
-      // },
       children: [
         SpeedDialChild(
             child: Icon(Icons.edit),
@@ -73,12 +64,16 @@ class FridgeSpeedDial extends StatelessWidget {
                   new MaterialPageRoute(builder: (context) => TabsScreen(2)));
             }),
         SpeedDialChild(
-          child: Icon(Icons.delete_forever),
-          backgroundColor: Colors.redAccent,
-          foregroundColor: Colors.white,
-          label: 'Vaciar nevera',
-          onTap: () => confirmDelete(context),
-        )
+            child: Icon(Icons.delete_forever),
+            backgroundColor: Colors.redAccent,
+            foregroundColor: Colors.white,
+            label: 'Vaciar nevera',
+            onTap: () async {
+              await confirmDelete(context);
+              Timer(Duration(seconds: 1), () {
+                refresh(context);
+              });
+            })
       ],
     );
   }

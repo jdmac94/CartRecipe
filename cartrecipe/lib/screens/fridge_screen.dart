@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'dart:async';
 import 'package:cartrecipe/widgets/fridge/detail_view_product.dart';
 import 'package:cartrecipe/providers/products_data_provider.dart';
 import 'package:cartrecipe/widgets/fridge/fridge_speedial.dart';
@@ -9,7 +10,7 @@ import 'package:provider/provider.dart';
 class FridgeScreen extends StatefulWidget {
   static const routeName = '/fridge';
   final bool refresh;
-
+  final _FridgeScreenState state = new _FridgeScreenState();
   FridgeScreen({Key key, this.refresh}) : super(key: key);
 
   @override
@@ -169,16 +170,29 @@ class _FridgeScreenState extends State<FridgeScreen> {
             color: Colors.red,
           ),
           onDismissed: (direction) {
-            proveedor.deleteProduct([productItem.id]);
+            setState(() {
+              if (selectedProducts.containsKey(index)) {
+                print(
+                    'Quitamos el producto ${selectedProducts[index]} del Map');
+                print('${selectedProducts.length}');
+                selectedProducts.remove(index);
+              }
+              proveedor.deleteProduct([productItem.id]);
+            });
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                     'Se ha eliminado el producto ${productItem.name} de la nevera'),
                 action: SnackBarAction(
                   label: 'Deshacer',
-                  onPressed: () {},
+                  onPressed: () {
+                    proveedor.addProduct(productItem.id);
+                    Timer(Duration(seconds: 1), () {
+                      mockRefresh();
+                    });
+                  },
                 )));
           },
-          child: buildCard(productItem, index),
+          child: productItem != null ? buildCard(productItem, index) : null,
         );
       },
     );
