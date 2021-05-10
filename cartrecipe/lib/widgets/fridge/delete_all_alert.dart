@@ -31,8 +31,8 @@ class DeleteAllAlert extends StatelessWidget {
               provider.deleteAllProducts();
 
               //Devuelve a la vista ANTERIOR, no NUEVA ( con el product eliminado)
-
-              Navigator.popAndPushNamed(context, FridgeScreen.routeName);
+              Navigator.pop(context);
+              //Navigator.popAndPushNamed(context, FridgeScreen.routeName);
               // Navigator.pushReplacement(context,
               //     MaterialPageRoute(builder: (context) => TabsScreen(3)));
             },

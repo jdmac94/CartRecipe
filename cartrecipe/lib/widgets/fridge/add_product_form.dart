@@ -72,7 +72,8 @@ class AddProductForm extends StatelessWidget {
               // showSnackBarMessage(
               //     'Se ha añadido el producto con el código ${_textFieldController.text}');
               _textFieldController.clear();
-              Navigator.of(context).popAndPushNamed(FridgeScreen.routeName);
+              //Navigator.of(context).popAndPushNamed(FridgeScreen.routeName);
+              Navigator.pop(context);
               // Navigator.pushReplacement(
               //     context,
               //     new MaterialPageRoute(

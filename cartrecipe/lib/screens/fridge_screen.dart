@@ -171,14 +171,17 @@ class _FridgeScreenState extends State<FridgeScreen> {
           ),
           onDismissed: (direction) {
             setState(() {
-              if (selectedProducts.containsKey(index)) {
-                print(
-                    'Quitamos el producto ${selectedProducts[index]} del Map');
-                print('${selectedProducts.length}');
-                selectedProducts.remove(index);
-              }
-              proveedor.deleteProduct([productItem.id]);
+              // if (selectedProducts.containsKey(index)) {
+              //   print(
+              //       'Quitamos el producto ${selectedProducts[index]} del Map');
+              //   print('${selectedProducts.length}');
+
+              //   //selectedProducts.remove(index);
+              // }
+              selectedProducts.clear();
             });
+            proveedor.deleteProduct([productItem.id]);
+
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                     'Se ha eliminado el producto ${productItem.name} de la nevera'),
