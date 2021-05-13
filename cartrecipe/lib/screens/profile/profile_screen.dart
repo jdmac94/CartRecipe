@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:cartrecipe/screens/preferences_screen.dart';
-import 'package:cartrecipe/screens/edit_profile_screen.dart';
+import 'package:cartrecipe/screens/profile/preferences_screen.dart';
+import 'package:cartrecipe/screens/profile/edit_profile_screen.dart';
+import 'package:cartrecipe/screens/profile/contact_screen.dart';
+import 'package:cartrecipe/screens/profile/legal_screen.dart';
+import 'package:cartrecipe/screens/profile/about_us_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key}) : super(key: key);
@@ -59,15 +62,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             ListTile(
               leading: Icon(Icons.call),
-              title: Text('Contacto'),
+              title: RichText(
+                  text: TextSpan(children: <TextSpan>[
+                TextSpan(
+                    text: 'Contacto',
+                    style: TextStyle(color: Colors.black),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ContactScreen()));
+                      })
+              ])),
             ),
             ListTile(
               leading: Icon(Icons.book),
-              title: Text('Información Legal'),
+              title: RichText(
+                  text: TextSpan(children: <TextSpan>[
+                TextSpan(
+                    text: 'Informacion legal',
+                    style: TextStyle(color: Colors.black),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LegalScreen()));
+                      })
+              ])),
             ),
             ListTile(
               leading: Icon(Icons.help),
-              title: Text('Sobre Nosotros'),
+              title: RichText(
+                  text: TextSpan(children: <TextSpan>[
+                TextSpan(
+                    text: 'Sobre nosotros',
+                    style: TextStyle(color: Colors.black),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AboutUsScreen()));
+                      })
+              ])),
             ),
             ListTile(
               leading: Icon(Icons.exit_to_app),
