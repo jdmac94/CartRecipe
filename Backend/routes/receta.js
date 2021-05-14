@@ -7,6 +7,47 @@ const { Nevera } = require("../models/nevera");
 const auth = require("../middlewares/auth");
 
 
+async function fillReceta(body, receta) {
+    
+    if (body.titulo)
+        receta.titulo = body.titulo;
+    else
+        return res.status(400).send("No se ha enviado un título válido");
+
+    if (body.dificultad)
+        receta.dificultad = body.dificultad;
+    else
+        return res.status(400).send("No se ha enviado un nivel de dificultad válido");
+
+    if (body.tiempo)
+        receta.tiempo = body.tiempo;
+    else
+        return res.status(400).send("No se ha insertado una duración válida");
+
+    if (body.ingredientes)
+        receta.ingredientes = body.ingredientes;
+    else
+        return res.status(400).send("La receta debe coneter ingredietes válidos");
+
+    if (body.pasos.length)
+        receta.pasos = body.pasos;
+    else
+        return res.status(400).send("La receta debe contener pasos a seguir");
+
+    if (body.consejos)
+        receta.consejos = req.body.consejos;
+
+    if (body.tags)
+        receta.tags = body.tags;
+
+    //receta.allergenList = ["alergeno0","alergeno1","alergeno2","alergeno3","alergeno4","alergeno5"]
+    // antes de guardar la receta debe haber una función para extraer los alergenos de todos los ingredientes de la receta
+
+    //receta.rating_num = 4; por defecto que sea undefined al no tener valoraciones
+
+    return receta;
+  }
+
 router.get("/getAllRecetas", auth, async (req, res) => {
 
     let recetaList = await Receta.find().limit(10);
@@ -39,6 +80,52 @@ router.get("/getAllRecetas", auth, async (req, res) => {
     
     
     res.send(recetaList);    
+
+});
+
+
+router.get("/receta/:id", auth, async (req, res) => {
+
+    let receta = await Receta.findOne({ _id: req.params.id });
+
+    if (!receta)
+      return res.status(404).send("La receta solicitada no existe");
+    
+    res.send(receta);    
+
+});
+
+router.post("/modReceta/:id", auth, async (req, res) => {
+
+    let receta = await Receta.findOne({ _id: req.params.id });
+
+    if (!receta)
+      return res.status(404).send("La receta a modificar no existe");
+    
+    receta = fillReceta(req.body, receta);
+    const result = receta.save();
+
+    if (result)
+        res.send(receta);
+    
+    res.status(404).send("Fallo en el proceso de actualizar la receta");
+
+});
+
+router.delete("/:id", auth, async (req, res) => {
+
+    let receta = await Receta.findOne({ _id: req.params.id });
+
+    if (!receta)
+      return res.status(404).send("La receta a modificar no existe");
+    
+    
+    const result = receta.save();
+
+    if (result)
+        res.send(receta);
+    
+    res.status(404).send("Fallo en el proceso de eliminar la receta");
 
 });
 
@@ -150,8 +237,6 @@ router.get("/addRecetaGalleta", auth, async (req, res) => {
     receta.tags = ["fruta", "batido", "zumo", "vegano", "vegetariano"];
     receta.allergenList = ["alergeno0","alergeno1","alergeno2","alergeno3","alergeno4","alergeno5"]
     const result = receta.save();
-    //return res.status(404).send("No hay recetas");
-
     
     res.send(receta);
 
@@ -163,42 +248,15 @@ router.post("/addReceta", auth, async (req, res) => {
     
     receta.usuario = "0";
 
-    if (titulo)
-        receta.titulo = req.body.titulo;
-    else
-        return res.status(400).send("No se ha enviado un título válido");
+    // receta.usuario = req.user._id;
 
-    if (req.body.dificultad)
-        receta.dificultad = req.body.dificultad;
-    else
-        return res.status(400).send("No se ha enviado un nivel de dificultad válido");
+    receta = fillReceta(req.body, receta);
+    const result = receta.save();
 
-    if (req.body.tiempo)
-        receta.tiempo = req.body.tiempo;
-    else
-        return res.status(400).send("No se ha insertado una duración válida");
+    if (result)
+        res.send(receta);
 
-    if (req.body.ingredientes)
-        receta.ingredientes = req.body.ingredientes;
-    else
-        return res.status(400).send("La receta debe coneter ingredietes válidos");
-
-    if (req.body.pasos.length)
-        receta.pasos = req.body.pasos;
-    else
-        return res.status(400).send("La receta debe contener pasos a seguir");
-
-    if (req.body.consejos)
-        receta.consejos = req.body.consejos;
-    
-    
-
-    //receta.rating_num = 4; por defecto que sea undefined al no tener valoraciones
-
-    const result = receta.save();    
-    //if (result) res.send();
-
-    res.send(receta);
+    res.status(404).send("Fallo en el proceso de añadir receta");
 
 });
 

@@ -5,9 +5,11 @@ const bcriptjs = require("bcryptjs");
 const _ = require("lodash");
 
 const { Usuario } = require("../models/usuario");
-const { Nevera } = require("../models/nevera");
-//const { sendMailPassword } = require("../utils/mailing");
+const { DeleteLog } = require("../models/deleteLog");
+const { sendMailPassword } = require("../utils/mailing");
 const auth = require("../middlewares/auth");
+const path = require("path");
+var bodyParser = require('body-parser');
 
 require("../passport-setup");
 
@@ -30,8 +32,12 @@ router.post("/modAlergias", auth, async (req, res) => {
     console.log(req.body);
     let  = await Usuario.findOne({ correo: req.user.correo });
 
-    user.alergias = req.body.allergenArray;// lo hacemos de bools o directamente strings? lo ultimo requerirá revisar los campos
-    //si hay que revisar, es obtener de la bd los alergenos y comparar el array con cada elemento del allergenArray
+    if (typeof listedProds[Symbol.iterator] === "function") {
+        user.alergias = req.body.allergenArray;// lo hacemos de bools o directamente strings? lo ultimo requerirá revisar los campos
+        //si hay que revisar, es obtener de la bd los alergenos y comparar el array con cada elemento del allergenArray
+    }
+
+    
 
     const result = user.save();
     if(!result)
@@ -55,12 +61,19 @@ router.post("/modAlergias", auth, async (req, res) => {
 // "en:vegetarian"
 // "en:maybe-vegetarian"
 // "en:non-vegetarian"
+// [palm-oil, vegetarian, vegan]
 
 router.post("/modDieta", auth, async (req, res) => {
     console.log(req.body);
     let  = await Usuario.findOne({ correo: req.user.correo });
-
-    user.dieta = req.body.dietArray;// lo hacemos de bools o directamente strings? lo ultimo requerirá revisar los campos
+// [palm-oil, vegetarian, vegan], array de bools o bien los campos con el valor
+    user.dieta = req.body.dietArray;
+    // if (typeof req.body.palm_oil_free === "boolean")
+        // user.dieta.palm_oil_free = req.body.palm_oil_free;
+    // if (typeof req.body.is_vegano === "boolean")
+        // user.dieta.vegano = req.body.is_vegano;
+    // if (typeof req.body.is_vegetariano === "boolean")
+        // user.dieta.vegetariano = req.body.is_vegetariano;
 
     const result = user.save();
     if(!result)
@@ -109,32 +122,7 @@ router.get("/recetario", auth, async (req, res) => {
     res.send(recetario);
 });
 
-router.get("/toggleInRecetario/:id", auth, async (req, res) => {
-
-    let recetario = await Usuario.findOne({ correo: req.user.correo },
-        {
-            recetas_favs: 1,
-        });
-    
-    delIndex = recetario.recetas_favs.indexOf(req.params.id);
-  
-    if (delIndex == -1) {
-    
-        recetario.recetas_favs.push(req.params.id);
-        const result = recetario.save();
-
-        if (result)
-            return res.send("receta añadida a favoritos correctamente");
-        else
-            return res.status(400).send("Error al intentar añadir receta a favoritos");
-
-      }
-      else
-        recetario.recetas_favs.splice(delIndex, 1);
-
-    res.send(recetario);
-});
-
+//si existe lo borra, si no lo añade
 router.get("/toggleInRecetario/:id", auth, async (req, res) => {
 
     let recetario = await Usuario.findOne({ correo: req.user.correo },
@@ -163,16 +151,27 @@ router.get("/toggleInRecetario/:id", auth, async (req, res) => {
 
 router.post("/restorePassword", async (req, res) => {
 
-    let mail = req.body.correo.toLowerCase();
+    let mail = req.body.correo;
     console.log("RESTORING PWD FOR ACCOUNT: " + mail)
 
     let user = await Usuario.findOne({ correo: mail });
-
 
     if (!user || sendMailPassword(mail) == -1)
         return res.status(500).send("Error al intentar reestablecer la contraseña");
     
     res.send("Mail de recuperación enviado correctamente");
+    
+  });
+
+  router.get("/restoreForm", (_, res) => {
+    res.sendFile("restorePass.html", { root: path.join(__dirname, "../views") });
+  });
+
+  router.post("/restorePasswordReception", async (req, res) => {
+    console.log("RESTORING PWD RECEIVED");
+    console.log(req);
+    // res.send(req);
+    res.status(400).send("mal");
   });
 
 //podemos pedirle al user que meta su password para asegurarse (?)
@@ -187,5 +186,24 @@ router.get("/deleteAccount", auth, async (req, res) => {
     
     res.send("Cuenta eliminada correctamente");
   });
+
+  router.get("/deleteAccountMotive", async (req, res) => {
+
+    console.log("DELETING ACCOUNT MOTIVE")
+    
+    delLog = new DeleteLog()
+    delLog.motivo = req.body.motivo;
+
+    const result = delLog.save();
+
+    if (result)
+        res.send("OK");
+    
+    res.status(404).send("Fallo en el proceso de actualizar la receta");
+    
+    res.send("Cuenta eliminada correctamente");
+  });
+
+  
 
 module.exports = router;
