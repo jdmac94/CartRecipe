@@ -158,20 +158,22 @@ router.put("/product/:id", auth, async (req, res) => {
     nevera.productos = prodArray;
     const result = nevera.save();
     if (result) {
-      
       let listedProds = await Product.findOne(
         { _id: req.params.id },
         {
-          _id: 1, product_name: 1, allergens_from_user: 1, product_name_es: 1, imgs: 1,
+          _id: 1,
+          product_name: 1,
+          allergens_from_user: 1,
+          product_name_es: 1,
+          imgs: 1,
         }
-      )
+      );
 
       listedProds.imgs = await checkImgFromAPI(listedProds._id);
 
       res.send(listedProds);
-      
     }
-  } else return res.status(400).send("El Producto ya exsite en la nevera");// pendiente de probar
+  } else return res.status(400).send("El Producto ya exsite en la nevera"); // pendiente de probar
 });
 
 ////////////////////////////////////////////////////////////////

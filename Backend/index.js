@@ -15,6 +15,7 @@ const nevera = require("./routes/nevera");
 const product = require("./routes/product");
 const receta = require("./routes/receta");
 const ajustesCuenta = require("./routes/accountSettings");
+const productV2 = require("./routes/productV2");
 
 const app = express();
 app.use(express.static("public"));
@@ -34,6 +35,7 @@ app.use("/api/v1/nevera", nevera);
 app.use("/api/v1/product", product);
 app.use("/api/v1/receta", receta);
 app.use("/api/v1/accSettings", ajustesCuenta);
+app.use("/api/v2/product", productV2);
 app.use("*", error);
 
 const port = process.env.PORT || 9009;
