@@ -7,6 +7,38 @@ const { Nevera } = require("../models/nevera");
 const auth = require("../middlewares/auth");
 const { Product } = require("../models/product");
 
+async function fillReceta(body, receta) {
+  if (body.titulo) receta.titulo = body.titulo;
+  else return res.status(400).send("No se ha enviado un título válido");
+
+  if (body.dificultad) receta.dificultad = body.dificultad;
+  else
+    return res
+      .status(400)
+      .send("No se ha enviado un nivel de dificultad válido");
+
+  if (body.tiempo) receta.tiempo = body.tiempo;
+  else return res.status(400).send("No se ha insertado una duración válida");
+
+  if (body.ingredientes) receta.ingredientes = body.ingredientes;
+  else
+    return res.status(400).send("La receta debe coneter ingredietes válidos");
+
+  if (body.pasos.length) receta.pasos = body.pasos;
+  else return res.status(400).send("La receta debe contener pasos a seguir");
+
+  if (body.consejos) receta.consejos = req.body.consejos;
+
+  if (body.tags) receta.tags = body.tags;
+
+  //receta.allergenList = ["alergeno0","alergeno1","alergeno2","alergeno3","alergeno4","alergeno5"]
+  // antes de guardar la receta debe haber una función para extraer los alergenos de todos los ingredientes de la receta
+
+  //receta.rating_num = 4; por defecto que sea undefined al no tener valoraciones
+
+  return receta;
+}
+
 router.get("/getAllRecetas", auth, async (req, res) => {
   let recetaList = await Receta.find().limit(10);
 

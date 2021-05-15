@@ -3,8 +3,10 @@ const router = express.Router();
 
 const { Nevera } = require("../models/nevera");
 const { Product } = require("../models/product");
-const { checkImgFromAPI } = require("../utils/imageAPI");
+const { Categoria } = require("../models/categoria");
+const { Receta } = require("../models/receta");
 
+const { checkImgFromAPI } = require("../utils/imageAPI");
 const auth = require("../middlewares/auth");
 
 const barcodeRegEx = /^[0-9]{13}$/;
@@ -20,11 +22,19 @@ router.get("/", auth, async (req, res) => {
   let listedProds = await Product.find(
     { _id: { $in: prodArray } },
     {
-      _keywords: 1,
-      allergens_from_user: 1,
+      product_name: 1,
       product_name_es: 1,
-      nutriscore_data: 1,
-      nova_group: 1,
+      nutriments: 1,
+      ecoscore_grade: 1,
+      nova_groups: 1,
+      quantity: 1,
+      nutriscore_grade: 1,
+      // ingredients: 1,
+      ingredients_analysis_tags: 1,
+      allergens_tags: 1,
+      traces: 1,
+      traces_tags: 1,
+      ingredients_text_es: 1,
     }
   );
 
@@ -135,7 +145,7 @@ router.delete("/", auth, async (req, res) => {
  */
 router.put("/product/:id", auth, async (req, res) => {
   console.log("ADDING NEVERA CONTENT");
-  console.log(req.body);
+  console.log(req.params);
   let nevera = await Nevera.findOne({ usuario: req.user._id });
 
   if (!nevera)
@@ -173,7 +183,11 @@ router.put("/product/:id", auth, async (req, res) => {
 
       res.send(listedProds);
     }
+<<<<<<< HEAD
   } else return res.status(400).send("El Producto ya exsite en la nevera"); // pendiente de probar
+=======
+  } else return res.status(400).send("El Producto ya exsite en la nevera");
+>>>>>>> 2503524f0692acd7af189aee14c7cfd548083d11
 });
 
 ////////////////////////////////////////////////////////////////
@@ -220,6 +234,110 @@ router.get("/getNeveraArray", async (req, res) => {
 
   res.send(nevera.productos);
 });
+
+
+router.get("/getNeveraCat", auth, async (req, res) => {
+
+
+  /////      EXTRAEMOS CATEGORÍAS DE LA NEVERA      /////
+  
+  let nevera = await Nevera.findOne({ usuario: req.user._id });
+
+  if (!nevera)
+    return res.status(404).send("No se encuentran los datos de la nevera");
+  
+  let neveraCategories = await Product.find(
+    { _id: { $in: nevera.productos } },
+    {
+      categories_hierarchy: 1,
+    }
+  );
+  
+  var catArr = [];
+
+  neveraCategories.forEach(function (item) {
+
+    item.categories_hierarchy.forEach(function (element) {
+      
+      catIndex = catArr.indexOf(element);
+  
+      if (catIndex == -1) catArr.push(element);
+  
+    });
+
+  });
+
+  console.log(catArr);
+  /////    COMPARAMOS CON LAS CATEGORIAS VALIDAS    /////
+  
+  if (!nevera)
+    return res.status(404).send("No se encuentran los datos de la nevera");
+
+  let filteredCategories = await Categoria.find({ en: { $in: catArr } },
+    {
+      es: 1,
+      _id: 0
+    }
+    );
+
+    var filteredArr = [];
+    
+    filteredCategories.forEach(function (item) {
+
+      filteredArr.push(item.es);
+        
+    });
+  /////      BUSCAMOS LAS RECETAS COMPATIBLES       /////
+  
+  console.log(filteredArr);
+
+  // var finalRecipes = await Receta.find({ ingredientes: { $all: filteredArr } },
+  // var finalRecipes = await Receta.find({ ingredientes: { $all: filteredArr } },
+  //   {
+  //     ingredientes: 1,
+  //   });
+
+
+  var finalRecipes = await Receta.aggregate([
+      { 
+        $project: {
+          inBOnly: { $setDifference: [ "$ingredientes", filteredArr ] },
+          _id: 0 
+        }  
+      }
+    ]);
+    //lo suyo sería poder filtrar el resultado de la proyección de manera que descarte aquellas recetas en que inBOnly mida más de 0
+    
+  console.log(finalRecipes);
+  res.send(finalRecipes);
+});
+
+
+router.get("/loadCategories", auth, async (req, res) => {
+
+  var fs = require('fs');
+
+  var input = fs.createReadStream('database_prototype.txt');
+
+  var rl  = require('readline').createInterface({
+      input: input,
+      terminal: false
+  });
+
+  rl.on('line', async function(line){
+      var line = line;//.toLowerCase();
+      var x = line.split(",");
+      let cat = new Categoria();
+      cat.es = x[0];
+      cat.en = x[1].toLowerCase();
+
+      const result = await cat.save();
+      
+      console.log(x[0] + " |||| " + x[1]);
+
+  });
+});
+
 
 // router.put("/testregex", async (req, res) => {
 

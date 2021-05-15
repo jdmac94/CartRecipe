@@ -19,6 +19,10 @@ const productSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
+  categories_hierarchy: {
+    type: Array,
+    default: [],
+  },
   ingredients: {
     type: Array,
     default: [],

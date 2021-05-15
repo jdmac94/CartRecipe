@@ -15,10 +15,14 @@ var transporter = nodemailer.createTransport({
 async function sendMailPassword(destinationAddress) {
 
     var mailOptions = {
-        from: 'youremail@gmail.com',
         to: destinationAddress,
         subject: 'Sending Email using Node.js',
-        text: 'That was easy!'
+        text: 'That was easy!',
+        // html: `<h1>Welcome</h1>
+        //       <p>That was easy!</p>
+        //       <a href="http://158.109.74.46:55005/">
+        //         Haga click aquí para reestablecer contraseña
+        //       </a>`,
     };
 
     transporter.sendMail(mailOptions, function(error, info){
