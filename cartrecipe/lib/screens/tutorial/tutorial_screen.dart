@@ -1,3 +1,4 @@
+import 'package:cartrecipe/screens/tabs_screens.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
   PageController pageController = PageController(initialPage: 0);
   int pageChangedInt = 0;
   double pageChangedDouble = 0.0;
+  int end = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +56,31 @@ class _TutorialScreenState extends State<TutorialScreen> {
                 dotsCount: listPages.length,
                 position: pageChangedDouble,
               ),
+              Container(
+                child: buildButton(pageChangedInt),
+              )
             ],
           ),
         )
       ],
     ));
+  }
+
+  Widget buildButton(pageChangedInt) {
+    if (pageChangedInt == 3) {
+      return ElevatedButton(
+          child: Text('Cerrar'),
+          onPressed: () => Navigator.pushAndRemoveUntil(
+              context,
+              new MaterialPageRoute(
+                builder: (context) => new TabsScreen(0),
+              ),
+              (r) => false));
+    } else {
+      return ElevatedButton(
+        child: Text('Adelante'),
+        onPressed: () => pageChangedInt++,
+      );
+    }
   }
 }

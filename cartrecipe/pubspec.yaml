@@ -31,6 +31,7 @@ dependencies:
   provider: ^5.0.0
   flutter_rating_bar: ^4.0.0
   dots_indicator: ^2.0.0
+  shared_preferences: ^2.0.5
   
 dev_dependencies:
   flutter_test:
