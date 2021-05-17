@@ -1,12 +1,21 @@
+import 'dart:io';
+
 import 'package:cartrecipe/api/api_wrapper.dart';
 import 'package:cartrecipe/screens/scanner_screen.dart';
 import 'package:cartrecipe/screens/tabs_screens.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LogIn extends StatelessWidget {
   final emailText = TextEditingController();
   final passwordText = TextEditingController();
   String token = "";
+
+  Future<void> _setCache() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs?.setBool("isLoggedIn", true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +53,7 @@ class LogIn extends StatelessWidget {
                                     if (value != null)
                                       {
                                         token = value,
+                                        _setCache(),
                                         Navigator.pop(context),
                                         Navigator.pushReplacement(
                                             context,
