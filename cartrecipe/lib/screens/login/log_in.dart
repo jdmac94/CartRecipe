@@ -9,7 +9,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LogIn extends StatelessWidget {
   final emailText = TextEditingController();
   final passwordText = TextEditingController();
-  String token = "";
+
+  final _formKey = GlobalKey<FormState>();
+  bool flag404 = false;
+  bool flag460 = false;
 
   Future<void> _setCache(value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -21,54 +24,92 @@ class LogIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Align(
-        alignment: Alignment.center,
-        child: Container(
-          child: Column(
-            children: [
-              Text("Please log in"),
-              Center(
-                child: TextFormField(
-                  controller: emailText,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.email),
-                    labelText: 'Email',
+      body: Form(
+        key: _formKey,
+        child: Align(
+          alignment: Alignment.center,
+          child: Container(
+            child: Column(
+              children: [
+                Text("Please log in"),
+                Center(
+                  child: TextFormField(
+                    validator: (value) {
+                      final patternEmail = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                      final regExp = RegExp(patternEmail);
+
+                      if (value == null || value.isEmpty) {
+                        return 'Porfavor introduzca un email';
+                      } else if (flag404) {
+                        return 'Usuario no existe';
+                      } else if (!regExp.hasMatch(value)) {
+                        return 'Mail mal formateado';
+                      } else {
+                        return null;
+                      }
+                    },
+                    controller: emailText,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.email),
+                      labelText: 'Email',
+                    ),
                   ),
                 ),
-              ),
-              Center(
-                child: TextFormField(
-                  controller: passwordText,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.lock),
-                    labelText: 'Password',
+                Center(
+                  child: TextFormField(
+                    obscureText: true,
+                    controller: passwordText,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.lock),
+                      labelText: 'Password',
+                    ),
                   ),
                 ),
-              ),
-              Center(
-                child: TextButton(
-                    child: Text("Log in"),
-                    onPressed: () => {
-                          ApiWrapper()
-                              .logInUsuario(emailText.text, passwordText.text)
-                              .then((value) => {
-                                    if (value != null)
-                                      {
-                                        token = value,
-                                        _setCache(value),
-                                        ApiWrapper().setAuthToken(value),
-                                        Navigator.pushAndRemoveUntil(
-                                            context,
-                                            new MaterialPageRoute(
-                                              builder: (context) =>
-                                                  new TabsScreen(0),
-                                            ),
-                                            (r) => false)
-                                      }
-                                  })
-                        }),
-              )
-            ],
+                Center(
+                  child: TextButton(
+                      child: Text("Log in"),
+                      onPressed: () => {
+                            if (_formKey.currentState.validate())
+                              {
+                                ApiWrapper()
+                                    .logInUsuario(
+                                        emailText.text, passwordText.text)
+                                    .then((value) => {
+                                          print("estoy en el then $value"),
+                                          if (value != "Error")
+                                            {
+                                              if (value == "404")
+                                                {
+                                                  flag404 = true,
+                                                  print(
+                                                      'Error 404, Contraseña incorrecta'),
+                                                }
+                                              else if (value == "460")
+                                                {
+                                                  flag460 = true,
+                                                  print(
+                                                      'Error 460, Usuario no existe'),
+                                                }
+                                              else if (value != null)
+                                                {
+                                                  _setCache(value),
+                                                  ApiWrapper()
+                                                      .setAuthToken(value),
+                                                  Navigator.pushAndRemoveUntil(
+                                                      context,
+                                                      new MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            new TabsScreen(0),
+                                                      ),
+                                                      (r) => false)
+                                                }
+                                            }
+                                        })
+                              }
+                          }),
+                )
+              ],
+            ),
           ),
         ),
       ),

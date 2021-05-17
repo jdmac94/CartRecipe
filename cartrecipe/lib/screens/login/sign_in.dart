@@ -60,6 +60,7 @@ class SignIn extends StatelessWidget {
                   ),
                   Center(
                     child: TextFormField(
+                      obscureText: true,
                       controller: passwordText,
                       decoration: const InputDecoration(
                         icon: Icon(Icons.lock),
@@ -69,6 +70,7 @@ class SignIn extends StatelessWidget {
                   ),
                   Center(
                     child: TextFormField(
+                      obscureText: true,
                       decoration: const InputDecoration(
                         icon: Icon(Icons.lock),
                         labelText: 'Confirm password',
@@ -79,11 +81,6 @@ class SignIn extends StatelessWidget {
                       child: TextButton(
                           child: Text("Sign in"),
                           onPressed: () => {
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => TutorialScreen()),
-                                    (r) => false),
                                 ApiWrapper()
                                     .registrarUsuario(
                                         nombreText.text,
@@ -102,7 +99,15 @@ class SignIn extends StatelessWidget {
                                                         'Usuario registrado')),
                                               )
                                             }
-                                        }),
+                                        })
+                                    .then(
+                                      (value) => Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  TutorialScreen()),
+                                          (r) => false),
+                                    ),
                               }))
                 ],
               ),

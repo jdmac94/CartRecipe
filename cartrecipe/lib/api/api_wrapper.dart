@@ -100,10 +100,16 @@ class ApiWrapper {
       var token = response.body.toString();
       print('token:$token');
       return token;
+    } else if (response.statusCode == 404) {
+      print('Error 404 No existe Usuario');
+      return "404";
+    } else if (response.statusCode == 460) {
+      print('Error 460 Contraseña mal');
+      return "460";
     } else {
-      //print(json.decode(response.body));
-      print('F');
-      return null;
+      print(response.statusCode.toString());
+      print(response.body.toString());
+      return "Error";
     }
   }
 
