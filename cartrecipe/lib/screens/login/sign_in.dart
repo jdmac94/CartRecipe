@@ -1,4 +1,5 @@
 import 'package:cartrecipe/api/api_wrapper.dart';
+import 'package:cartrecipe/screens/tutorial/tutorial_screen.dart';
 import 'package:cartrecipe/screens/welcome.dart';
 import 'package:flutter/material.dart';
 
@@ -70,10 +71,11 @@ class SignIn extends StatelessWidget {
                       child: TextButton(
                           child: Text("Sign in"),
                           onPressed: () => {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Welcome())),
+                                        builder: (context) =>
+                                            TutorialScreen())),
                                 ApiWrapper()
                                     .registrarUsuario(
                                         nombreText.text,

@@ -1,4 +1,5 @@
 import 'package:cartrecipe/providers/products_data_provider.dart';
+import 'package:cartrecipe/screens/welcome.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          '/': (ctx) => TabsScreen(0),
+          '/': (ctx) => Welcome(), //TabsScreen(0),
         },
       ),
       providers: [

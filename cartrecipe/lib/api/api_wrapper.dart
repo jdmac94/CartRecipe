@@ -8,14 +8,15 @@ import 'package:cartrecipe/models/product.dart';
 import 'package:cartrecipe/models/recipe.dart';
 
 class ApiWrapper {
-  final String endpoint = "158.109.74.46:55005";
+  final String endpoint = '0281d6cd9d70.ngrok.io'; //"158.109.74.46:55005";
   final String authToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhlYzR' +
-          'jNTc5MWNjNDAwMmE5YzQwNzIiLCJjb3JyZW8iOiJhbmRyZXNAYml0dG8uY' +
-          '29tIiwibm9tYnJlIjoiYWFhYSIsImFsZXJnaWFzIjpbXSwiZGlldGEiOltd' +
-          'LCJ0YWdzIjpbXSwibml2ZWxfY29jaW5hIjpudWxsLCJzaXN0ZW1hX3VuaWRh' +
-          'ZGVzIjoic2lzdF9pbnQiLCJyZWNldGFzX2ZhdnMiOltdLCJpYXQiOjE2MTk5Nj' +
-          'kyMjF9.1QibofC5JV1krjcnWCc7rLYPFzfDLSukVPIetEvC0Aw';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEyNzdlN2E0NDM0ZjAwMmZlOWRjYmUiLCJjb3JyZW8iOiJhQGdtYWlsLmNvbSIsIm5vbWJyZSI6IlRFU1QiLCJhbGVyZ2lhcyI6W10sInRhZ3MiOltdLCJuaXZlbF9jb2NpbmEiOm51bGwsInNpc3RlbWFfdW5pZGFkZXMiOiJzaXN0X2ludCIsInJlY2V0YXNfZmF2cyI6W10sImlhdCI6MTYyMTI2MDI2M30.32O2L1ODNUf0szphfcOz_EshqTWhAOPS-CANjzxttbk';
+  // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhlYzR' +
+  //     'jNTc5MWNjNDAwMmE5YzQwNzIiLCJjb3JyZW8iOiJhbmRyZXNAYml0dG8uY' +
+  //     '29tIiwibm9tYnJlIjoiYWFhYSIsImFsZXJnaWFzIjpbXSwiZGlldGEiOltd' +
+  //     'LCJ0YWdzIjpbXSwibml2ZWxfY29jaW5hIjpudWxsLCJzaXN0ZW1hX3VuaWRh' +
+  //     'ZGVzIjoic2lzdF9pbnQiLCJyZWNldGFzX2ZhdnMiOltdLCJpYXQiOjE2MTk5Nj' +
+  //     'kyMjF9.1QibofC5JV1krjcnWCc7rLYPFzfDLSukVPIetEvC0Aw';
   //final String endpoint = "a1ac68965a1d.ngrok.io";
 
   Future<List<Product>> getFridgeProducts() async {
