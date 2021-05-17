@@ -29,14 +29,30 @@ const usuarioSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
-  dieta: {
-    type: Array,
-    default: [],
+  // trazas: {
+  //   type: Array,
+  //   default: [],
+  // },
+  palm_oil_free: {
+    type: Boolean,
+    default: false,
+  },
+  vegano: {
+    type: Boolean,
+    default: false,
+  },
+  vegetariano: {
+    type: Boolean,
+    default: false,
   },
   tags: {
     type: Array,
     default: [],
   },
+  // category_ban: {
+  //   type: Array,
+  //   default: [],
+  // },
   nivel_cocina: {
     type: Number,
     default: null,

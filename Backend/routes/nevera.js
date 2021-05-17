@@ -172,10 +172,21 @@ router.put("/product/:id", auth, async (req, res) => {
         { _id: req.params.id },
         {
           _id: 1,
-          product_name: 1,
           allergens_from_user: 1,
-          product_name_es: 1,
           imgs: 1,
+          product_name: 1,
+          product_name_es: 1,
+          nutriments: 1,
+          ecoscore_grade: 1,
+          nova_groups: 1,
+          quantity: 1,
+          nutriscore_grade: 1,
+          // ingredients: 1,
+          ingredients_analysis_tags: 1,
+          allergens_tags: 1,
+          traces: 1,
+          traces_tags: 1,
+          ingredients_text_es: 1,
         }
       );
 

@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Formulari de Registre</title>
-    <link rel="stylesheet" type="text/css" href="css/reg.css">
+    <script src="../public/scripts.js"></script>
 </head>
 <body>
 
-<h1>    iNTRODUCE TU CONTRASEÑA:</h1>
+<h1>INTRODUCE TU CONTRASEÑA:</h1>
 <div id="main_container">
-    <form action="http://localhost:55005/api/v1/accSettings/restorePasswordReception/" method="post">
-    <label for="team_name">Enter name: </label>
-    <input id="team_name" type="text" name="name_field" value="Default name for team.">
-    <input type="submit" value="OK">
-</form>
-    
-    
+    <form id="passform" method="get">
+        <div id="regPass">
+            <label for="RPassword">Contraseña:</label>
+            <br>
+            <input type="password" id="RPassword" name="RPassword" required="" pattern="[a-z0-9A-Z]+" title="Introdueiu un codi alfanumèric">
+        </div>
+        <div id="regPass">
+            <br>
+            <label for="CPassword">Repite la contraseña:</label>
+            <br>
+            <input type="password" id="CPassword" name="CPassword" required="" pattern="[a-z0-9A-Z]+" title="Introdueiu un codi alfanumèric">
+            
+            <p id="warning"></p>
+            
+        </div>
+        <input id="sub" type="button" value="Enviar">
+    </form>
 
 </div>
-
 </body>
 </html>

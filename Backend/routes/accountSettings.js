@@ -3,8 +3,10 @@ const router = express.Router();
 const passport = require("passport");
 const bcriptjs = require("bcryptjs");
 const _ = require("lodash");
+var crypto = require('crypto');
 
 const { Usuario } = require("../models/usuario");
+const { Nevera } = require("../models/nevera");
 const { DeleteLog } = require("../models/deleteLog");
 const { sendMailPassword } = require("../utils/mailing");
 const auth = require("../middlewares/auth");
@@ -24,6 +26,55 @@ router.use(passport.initialize());
     gustos en cuanto recetas
     alimentos "baneados"
 */
+
+///     MODIFICACIONES DE PREFERENCIAS    ///
+
+router.post("/fillPreferences", auth, async (req, res) => {
+
+    console.log(req.body);
+    let user = await Usuario.findOne({ correo: req.user.correo });
+
+    // definir dietas
+
+    if (typeof req.body.palm_oil_free === "boolean")
+        user.palm_oil_free = req.body.palm_oil_free;
+
+    if (typeof req.body.is_vegano === "boolean")
+        user.vegano = req.body.is_vegano;
+
+    if (typeof req.body.is_vegetariano === "boolean")
+        user.vegetariano = req.body.is_vegetariano;
+
+    // definir alergias
+    if (typeof req.body.allergenArray[Symbol.iterator] === "function") {
+        user.alergias = req.body.allergenArray;// lo hacemos de bools o directamente strings? lo ultimo requerirá revisar los campos
+        //si hay que revisar, es obtener de la bd los alergenos y comparar el array con cada elemento del allergenArray
+    }
+
+    // definir trazas
+    // if (typeof req.body.traceArray[Symbol.iterator] === "function") {
+    //     user.trazas = req.body.traceArray;
+    // }
+
+    // definir tags favs
+    if (typeof req.body.tagArray[Symbol.iterator] === "function") {
+        user.tags = req.body.tagArray;
+    }
+    
+    // definir alimentos no deseados
+    // if (typeof req.body.banArray[Symbol.iterator] === "function") {
+    //     user.trazas = req.body.banArray;
+    // }
+
+    // cocina level
+    if (req.body.level && typeof req.body.level === 'int')
+        user.nivel_cocina = req.body.level;
+
+    // sistema de unidades
+        // hablar el tema
+
+});
+
 // [en:gluten, en:oats, en:crustaceans, en:eggs, en:fish, en:peanuts,
 // en:soybeans, en:milk, en:nuts, en:celery, en:mustard, en:sesame seeds,
 // en:sulphur dioxide and sulphites, en:lupin, en:molluscs]
@@ -36,8 +87,6 @@ router.post("/modAlergias", auth, async (req, res) => {
         user.alergias = req.body.allergenArray;// lo hacemos de bools o directamente strings? lo ultimo requerirá revisar los campos
         //si hay que revisar, es obtener de la bd los alergenos y comparar el array con cada elemento del allergenArray
     }
-
-    
 
     const result = user.save();
     if(!result)
@@ -61,19 +110,17 @@ router.post("/modAlergias", auth, async (req, res) => {
 // "en:vegetarian"
 // "en:maybe-vegetarian"
 // "en:non-vegetarian"
-// [palm-oil, vegetarian, vegan]
 
 router.post("/modDieta", auth, async (req, res) => {
     console.log(req.body);
-    let  = await Usuario.findOne({ correo: req.user.correo });
-// [palm-oil, vegetarian, vegan], array de bools o bien los campos con el valor
-    user.dieta = req.body.dietArray;
-    // if (typeof req.body.palm_oil_free === "boolean")
-        // user.dieta.palm_oil_free = req.body.palm_oil_free;
-    // if (typeof req.body.is_vegano === "boolean")
-        // user.dieta.vegano = req.body.is_vegano;
-    // if (typeof req.body.is_vegetariano === "boolean")
-        // user.dieta.vegetariano = req.body.is_vegetariano;
+    let user = await Usuario.findOne({ correo: req.user.correo });
+
+    if (typeof req.body.palm_oil_free === "boolean")
+        user.palm_oil_free = req.body.palm_oil_free;
+    if (typeof req.body.is_vegano === "boolean")
+        user.vegano = req.body.is_vegano;
+    if (typeof req.body.is_vegetariano === "boolean")
+        user.vegetariano = req.body.is_vegetariano;
 
     const result = user.save();
     if(!result)
@@ -82,35 +129,23 @@ router.post("/modDieta", auth, async (req, res) => {
     res.send(result);
 });
 
-router.put("/modIdFields", auth, async (req, res) => {
 
+router.post("/modTrazas", auth, async (req, res) => {
+    console.log(req.body);
     let user = await Usuario.findOne({ correo: req.user.correo });
-    var mail = req.body.correo.toLowerCase();
 
-    if (emailRegEx.test(mail)) {
-        let userCheck = await Usuario.findOne({ correo: mail });
-        if (!userCheck) user.correo = mail;
-        else return res.status(400).send("El correo ya está asociado a otra cuenta.");
+    // definir trazas
+    if (typeof req.body.traceArray[Symbol.iterator] === "function") {
+        user.trazas = req.body.traceArray;
     }
 
-    if (req.body.password && typeof req.body.password === 'string')
-        user.password = req.body.password;
+    const result = user.save();
+    if(!result)
+        return res.status(400).send("Error al intentar actualizar los alérgenos");
 
-    if (req.body.nombre && typeof req.body.nombre === 'string')
-        user.nombre = req.body.nombre;
-        
-    if (req.body.apellido && typeof req.body.apellido === 'string')
-        user.apellido = req.body.apellido;
-
-    if (req.body.level && typeof req.body.level === 'int')
-        user.nivel_cocina = req.body.level;
-
+    res.send(result);
 });
 
-router.post("/fillPreferences", auth, async (req, res) => {
-    console.log(req.body);
-
-});
 
 router.get("/recetario", auth, async (req, res) => {
 
@@ -149,39 +184,93 @@ router.get("/toggleInRecetario/:id", auth, async (req, res) => {
     res.send(recetario);
 });
 
-router.post("/restorePassword", async (req, res) => {
+
+///     MODIFICACIONES DE CUENTA    ///
+
+router.put("/modIdFields", auth, async (req, res) => {
+
+    let user = await Usuario.findOne({ correo: req.user.correo });
+    var mail = req.body.correo.toLowerCase();
+
+    if (emailRegEx.test(mail)) {
+        let userCheck = await Usuario.findOne({ correo: mail });
+        if (!userCheck) user.correo = mail;
+        else return res.status(400).send("El correo ya está asociado a otra cuenta.");
+    }
+
+    if (req.body.password && typeof req.body.password === 'string')
+        user.password = req.body.password;
+
+    if (req.body.nombre && typeof req.body.nombre === 'string')
+        user.nombre = req.body.nombre;
+        
+    if (req.body.apellido && typeof req.body.apellido === 'string')
+        user.apellido = req.body.apellido;
+
+    if (req.body.level && typeof req.body.level === 'int')
+        user.nivel_cocina = req.body.level;
+
+});
+
+  router.get("/restoreForm/:id", (_, res) => {
+    res.sendFile("restorePass.html", { root: path.join(__dirname, "../views") });
+  });
+
+  router.get("/public/scripts.js", (_, res) => {
+    res.sendFile("scripts.js", { root: path.join(__dirname, "../public") });
+  });
+
+  router.post("/restorePassword", async (req, res) => {
 
     let mail = req.body.correo;
     console.log("RESTORING PWD FOR ACCOUNT: " + mail)
 
     let user = await Usuario.findOne({ correo: mail });
 
-    if (!user || sendMailPassword(mail) == -1)
+    if (!user || sendMailPassword(mail, user._id) == -1)
         return res.status(500).send("Error al intentar reestablecer la contraseña");
     
     res.send("Mail de recuperación enviado correctamente");
     
   });
 
-  router.get("/restoreForm", (_, res) => {
-    res.sendFile("restorePass.html", { root: path.join(__dirname, "../views") });
-  });
-
-  router.post("/restorePasswordReception", async (req, res) => {
+  router.post("/restorePasswordReception/:id", async (req, res) => {
     console.log("RESTORING PWD RECEIVED");
-    console.log(req);
-    // res.send(req);
-    res.status(400).send("mal");
+    console.log(req.body);
+
+    var user = await Product.findById(req.body.id);
+    if (!user) return res.status(400).send("ERROR al procesar la nueva contraseña");
+    console.log(user.correo);
+    
+    user.password = crypto.createHash('sha256').update(req.body.password).digest('hex');
+
+    const result = user.save();
+    if(!result)
+        return res.status(400).send("ERROR al guardar la nueva contraseña");
+
+    console.log(result);
+    res.send("OK");
   });
+  
 
 //podemos pedirle al user que meta su password para asegurarse (?)
+
+// PENDIENTE DE TESTEAR
 router.get("/deleteAccount", auth, async (req, res) => {
 
     let mail = req.user.correo.toLowerCase();
     console.log("DELETING ACCOUNT: " + mail)
 
-    let userDel = await Usuario.findOneAndDelete({ correo: mail });
-    //TO-DO: eliminar la nevera de dicho usuario
+    let userDel = await Usuario.findOne({ correo: mail },
+        {
+            _id: 1,
+        });
+
+    if (!userDel) return res.status(400).send("Error, no se encuentra el usuario");
+
+    let neveraDel = await Nevera.findOneAndDelete({ usuario: userDel._id });
+    userDel = await Nevera.findOneAndDelete({ correo: mail });
+
     if (!userDel) return res.status(400).send("Error al intentar eliminar el usuario");
     
     res.send("Cuenta eliminada correctamente");
@@ -189,9 +278,9 @@ router.get("/deleteAccount", auth, async (req, res) => {
 
   router.get("/deleteAccountMotive", async (req, res) => {
 
-    console.log("DELETING ACCOUNT MOTIVE")
+    console.log("DELETING ACCOUNT MOTIVE");
     
-    delLog = new DeleteLog()
+    delLog = new DeleteLog();
     delLog.motivo = req.body.motivo;
 
     const result = delLog.save();

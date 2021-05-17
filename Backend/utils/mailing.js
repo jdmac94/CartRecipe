@@ -12,17 +12,17 @@ var transporter = nodemailer.createTransport({
 });
 
 
-async function sendMailPassword(destinationAddress) {
+async function sendMailPassword(destinationAddress, userid) {
 
+  url = "http://localhost:55005/api/v1/accSettings/restoreForm/" + userid;
+  //http://localhost:55005/api/v1/accSettings/restorePasswordReception/?RPassword=asdasd&CPassword=adasdsa
+    //TO-DO: personalizar el mail añadiendo los datos del usaurio (nombre y apellidos)
     var mailOptions = {
         to: destinationAddress,
-        subject: 'Sending Email using Node.js',
-        text: 'That was easy!',
-        // html: `<h1>Welcome</h1>
-        //       <p>That was easy!</p>
-        //       <a href="http://158.109.74.46:55005/">
-        //         Haga click aquí para reestablecer contraseña
-        //       </a>`,
+        subject: 'Recuperación de contraseña de CartRecipe',
+        html: `<h1>Welcome</h1>
+          <p>That was easy!</p>
+          <a href="${url}">Haga click aquí para reestablecer contraseña</a>`,
     };
 
     transporter.sendMail(mailOptions, function(error, info){

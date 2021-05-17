@@ -19,11 +19,28 @@ async function getImgByAPI(code) {
   return fotos;
 }
 
+// async function checkImgFromAPI(code) {
+//   // console.log("checkImgFromAPI");
+//   var fotos = await getImgByAPI(code);
+
+//   return [fotos?.product?.selected_images?.front?.display] ?? [];
+// }
+
+
 async function checkImgFromAPI(code) {
   // console.log("checkImgFromAPI");
   var fotos = await getImgByAPI(code);
+  
+  if (fotos)
+      if (fotos.product.selected_images)
+          if (fotos.product.selected_images.front)
+              if (fotos.product.selected_images.front.display) {
+                  
+                  return [ fotos.product.selected_images.front.display ];
+              }
 
-  return [fotos?.product?.selected_images?.front?.display] ?? [];
+  return [];
 }
+
 
 module.exports = { checkImgFromAPI };
