@@ -11,9 +11,11 @@ class LogIn extends StatelessWidget {
   final passwordText = TextEditingController();
   String token = "";
 
-  Future<void> _setCache() async {
+  Future<void> _setCache(value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences token = await SharedPreferences.getInstance();
     prefs?.setBool("isLoggedIn", true);
+    token?.setString("token", value);
   }
 
   @override
@@ -53,13 +55,15 @@ class LogIn extends StatelessWidget {
                                     if (value != null)
                                       {
                                         token = value,
-                                        _setCache(),
-                                        Navigator.pop(context),
-                                        Navigator.pushReplacement(
+                                        _setCache(value),
+                                        ApiWrapper().setAuthToken(value),
+                                        Navigator.pushAndRemoveUntil(
                                             context,
                                             new MaterialPageRoute(
-                                                builder: (context) =>
-                                                    new TabsScreen(0)))
+                                              builder: (context) =>
+                                                  new TabsScreen(0),
+                                            ),
+                                            (r) => false)
                                       }
                                   })
                         }),

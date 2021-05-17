@@ -5,21 +5,21 @@ import 'package:flutter/foundation.dart';
 
 class ProductsDataProvider with ChangeNotifier {
   List<Product> productList = [];
-  bool _isFetching = false;
+  bool isFetching = false;
 
-  ProductsDataProvider({this.productList});
+  ProductsDataProvider({this.productList, this.isFetching});
 
-  bool get isFetching => _isFetching;
+  bool get isFetchingMethod => isFetching;
 
   List<Product> get getProviderData => productList;
 
   Future<void> fetchServerData() async {
-    _isFetching = true;
-    notifyListeners();
+    isFetching = true;
+    //notifyListeners();
     var response = await ApiWrapper().getFridgeProducts();
     productList = response;
 
-    _isFetching = false;
+    isFetching = false;
     notifyListeners();
   }
 
@@ -29,14 +29,14 @@ class ProductsDataProvider with ChangeNotifier {
   }
 
   Future<ProductsDataProvider> providerWithData() async {
-    _isFetching = true;
-    notifyListeners();
+    isFetching = true;
+    //notifyListeners();
     List<Product> temp = [];
     temp = await ApiWrapper().getFridgeProducts();
 
-    //print('Soy el temp del provider en la clase DataProvider: $temp');
+    print('Soy el temp del provider en la clase DataProvider: $temp');
     print('Datos de productos cargados');
-    _isFetching = false;
+    isFetching = false;
     notifyListeners();
     //productList = temp;
     return ProductsDataProvider(productList: temp);

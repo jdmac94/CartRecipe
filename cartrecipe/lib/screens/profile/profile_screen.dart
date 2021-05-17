@@ -5,6 +5,9 @@ import 'package:cartrecipe/screens/profile/edit_profile_screen.dart';
 import 'package:cartrecipe/screens/profile/contact_screen.dart';
 import 'package:cartrecipe/screens/profile/legal_screen.dart';
 import 'package:cartrecipe/screens/profile/about_us_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../welcome.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key}) : super(key: key);
@@ -111,6 +114,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text('Cerrar sesión'),
+              onTap: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                SharedPreferences token = await SharedPreferences.getInstance();
+
+                prefs?.setBool("isLoggedIn", false);
+                token?.setString("token", '');
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Welcome()),
+                    (r) => false);
+              },
             ),
             ListTile(
               leading: Icon(Icons.delete),

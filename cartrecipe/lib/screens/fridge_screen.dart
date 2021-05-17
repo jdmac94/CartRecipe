@@ -49,6 +49,11 @@ class _FridgeScreenState extends State<FridgeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //ESTO NO TIRA POR LO MISMO, se crea el data provider en null
+    ProductsDataProvider productList =
+        Provider.of<ProductsDataProvider>(context);
+    productList.fetchServerData();
+
     return Scaffold(
       key: UniqueKey(),
       body: Container(
@@ -59,7 +64,7 @@ class _FridgeScreenState extends State<FridgeScreen> {
               Text('Soy la nevera mejorada'),
               Consumer<ProductsDataProvider>(
                 builder: (context, proveedor, child) => Expanded(
-                    child: proveedor.isFetching
+                    child: proveedor.productList == null
                         ? Container(
                             child: CircularProgressIndicator(),
                           )

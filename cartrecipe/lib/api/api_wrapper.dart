@@ -1,4 +1,5 @@
 import 'package:cartrecipe/data/dummy_data.dart';
+import 'package:cartrecipe/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
@@ -6,11 +7,22 @@ import 'dart:async';
 
 import 'package:cartrecipe/models/product.dart';
 import 'package:cartrecipe/models/recipe.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiWrapper {
+  static ApiWrapper _instance;
+
+  ApiWrapper._internal() {
+    _instance = this;
+  }
+
+  factory ApiWrapper() => _instance ?? ApiWrapper._internal();
+
   final String endpoint = '0281d6cd9d70.ngrok.io'; //"158.109.74.46:55005";
-  final String authToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEyNzdlN2E0NDM0ZjAwMmZlOWRjYmUiLCJjb3JyZW8iOiJhQGdtYWlsLmNvbSIsIm5vbWJyZSI6IlRFU1QiLCJhbGVyZ2lhcyI6W10sInRhZ3MiOltdLCJuaXZlbF9jb2NpbmEiOm51bGwsInNpc3RlbWFfdW5pZGFkZXMiOiJzaXN0X2ludCIsInJlY2V0YXNfZmF2cyI6W10sImlhdCI6MTYyMTI2MDI2M30.32O2L1ODNUf0szphfcOz_EshqTWhAOPS-CANjzxttbk';
+  String authToken;
+
+  //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEyN2NjN2E0NDM0ZjAwMmZlOWRjYzAiLCJjb3JyZW8iOiJwZXBvQHBlcG8uZXMiLCJub21icmUiOiJQZXBlIiwiYWxlcmdpYXMiOltdLCJ0YWdzIjpbXSwibml2ZWxfY29jaW5hIjpudWxsLCJzaXN0ZW1hX3VuaWRhZGVzIjoic2lzdF9pbnQiLCJyZWNldGFzX2ZhdnMiOltdLCJpYXQiOjE2MjEyNjkyOTd9.2gG--BpwBRVhjcvtZeF32XK-Ikb7ghrydIetJXQLRqQ';
+  //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEyNzdlN2E0NDM0ZjAwMmZlOWRjYmUiLCJjb3JyZW8iOiJhQGdtYWlsLmNvbSIsIm5vbWJyZSI6IlRFU1QiLCJhbGVyZ2lhcyI6W10sInRhZ3MiOltdLCJuaXZlbF9jb2NpbmEiOm51bGwsInNpc3RlbWFfdW5pZGFkZXMiOiJzaXN0X2ludCIsInJlY2V0YXNfZmF2cyI6W10sImlhdCI6MTYyMTI2MDI2M30.32O2L1ODNUf0szphfcOz_EshqTWhAOPS-CANjzxttbk';
   // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhlYzR' +
   //     'jNTc5MWNjNDAwMmE5YzQwNzIiLCJjb3JyZW8iOiJhbmRyZXNAYml0dG8uY' +
   //     '29tIiwibm9tYnJlIjoiYWFhYSIsImFsZXJnaWFzIjpbXSwiZGlldGEiOltd' +
@@ -27,6 +39,13 @@ class ApiWrapper {
         'x-auth-token': authToken,
       },
     );
+
+    String temp = getAuthToken();
+
+    print('El token recuperdao con el get en la API es $temp');
+
+    print("Pido por nevera y miramos si el token está bien: $authToken");
+
     if (response.statusCode == 200) {
       print('StatusCode 200 - Todo OK');
 
@@ -40,11 +59,20 @@ class ApiWrapper {
 
       return prods;
     } else {
-      print('Petición de respuesta');
+      print('Petición de productos de nevera errónea');
       //TODO CONTROLAR DUMMY
       //return DUMMY_PRODUCTS;
       //throw Exception('Failed to load product');
     }
+  }
+
+  void setAuthToken(token) {
+    authToken = token;
+    print('Token creado el api wrapper:  $authToken');
+  }
+
+  String getAuthToken() {
+    return authToken;
   }
 
   Future<String> logInUsuario(String email, String password) async {
@@ -120,6 +148,8 @@ class ApiWrapper {
 
     print('Codigo es $barcode');
     print('Barcode es string $barcode' is String);
+
+    print("Token al añadir producto $authToken");
     //var uri = Uri.http(endpoint, api);
 
     http.Response response = await http.put(

@@ -2,12 +2,20 @@ import 'package:cartrecipe/api/api_wrapper.dart';
 import 'package:cartrecipe/screens/tutorial/tutorial_screen.dart';
 import 'package:cartrecipe/screens/welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignIn extends StatelessWidget {
   final nombreText = TextEditingController();
   final apellidoText = TextEditingController();
   final emailText = TextEditingController();
   final passwordText = TextEditingController();
+
+  Future<void> _setCache(value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences token = await SharedPreferences.getInstance();
+    prefs?.setBool("isLoggedIn", true);
+    token?.setString("token", value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +79,11 @@ class SignIn extends StatelessWidget {
                       child: TextButton(
                           child: Text("Sign in"),
                           onPressed: () => {
-                                Navigator.pushReplacement(
+                                Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            TutorialScreen())),
+                                        builder: (context) => TutorialScreen()),
+                                    (r) => false),
                                 ApiWrapper()
                                     .registrarUsuario(
                                         nombreText.text,
@@ -85,6 +93,8 @@ class SignIn extends StatelessWidget {
                                     .then((value) => {
                                           if (value != null)
                                             {
+                                              _setCache(value),
+                                              ApiWrapper().setAuthToken(value),
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                 SnackBar(
