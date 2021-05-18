@@ -210,6 +210,21 @@ class ApiWrapper {
       print('F');
   }
 
+  Future<String> deleteUser(String reason) async {
+    var api = "/api/v1/accSettings/$reason/";
+
+    http.Response response = await http.put(Uri.http(endpoint, api),
+        headers: <String, String>{
+          //'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': authToken,
+        },
+        body: jsonEncode(
+          <String, String>{
+            'reason': reason,
+          },
+        ));
+  }
+
   //TODO! TRY CATCH TO GUAPO
   Future<void> deleteAndreh(List<String> barcode) async {
     var api = 'api/v1/nevera/product';
