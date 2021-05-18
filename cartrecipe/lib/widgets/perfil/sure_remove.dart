@@ -1,3 +1,4 @@
+import 'package:cartrecipe/api/api_wrapper.dart';
 import 'package:cartrecipe/screens/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,8 +23,25 @@ class SureRemove extends StatelessWidget {
       actions: <Widget>[
         TextButton(
             child: Text('Si, estoy seguro'),
-            onPressed: () {
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              SharedPreferences token = await SharedPreferences.getInstance();
+
+              prefs?.setBool("isLoggedIn", false);
+              token?.setString("token", '');
+
               print("Reason$reason");
+
+              await ApiWrapper().deleteUser();
+              ApiWrapper().saveReason(reason);
+
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Welcome()),
+                  (r) => false);
+
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text('Cuenta eliminada')));
             }),
         TextButton(
           child: Text('No'),

@@ -210,19 +210,47 @@ class ApiWrapper {
       print('F');
   }
 
-  Future<String> deleteUser(String reason) async {
-    var api = "/api/v1/accSettings/$reason/";
+  Future<void> deleteUser() async {
+    var api = "/api/v1/accSettings/deleteAccount/";
 
-    http.Response response = await http.put(Uri.http(endpoint, api),
+    http.Response response = await http.delete(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print('Eliminado correctamente');
+      return "Eliminado";
+    } else if (response.statusCode == 400) {
+      print('Error 400 del Delete');
+      return "Error";
+    } else if (response.statusCode == 404) {
+      print('Error 404 del Delete');
+      return "Error";
+    }
+  }
+
+  Future<void> saveReason(String reason) async {
+    var api = "/api/v1/accSettings/deleteAccountMotive/";
+
+    http.Response response = await http.post(Uri.http(endpoint, api),
         headers: <String, String>{
-          //'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': authToken,
+          'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(
           <String, String>{
-            'reason': reason,
+            'motivo': reason,
           },
         ));
+    if (response.statusCode == 200) {
+      print('Guardado correctamente');
+      return "Guardado";
+    } else if (response.statusCode == 400) {
+      return "Error";
+    }
   }
 
   //TODO! TRY CATCH TO GUAPO

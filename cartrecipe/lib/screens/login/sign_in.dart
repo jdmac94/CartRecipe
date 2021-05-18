@@ -133,99 +133,95 @@ class _SignIn extends State<SignIn> {
     return Scaffold(
         body: Form(
             key: _formKey,
-            child: Align(
-                alignment: Alignment.center,
+            child: SingleChildScrollView(
                 child: Container(
-                  child: Column(
+              child: Column(
+                children: [
+                  Text("Please sign in"),
+                  Center(
+                      child: Row(
                     children: [
-                      Text("Please sign in"),
-                      Center(
-                          child: Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              onChanged: (value) => turnFlagsOff(),
-                              validator: (value) =>
-                                  _validateNombreyApellido(value),
-                              controller: nombreText,
-                              decoration: const InputDecoration(
-                                icon: Icon(Icons.person),
-                                labelText: 'Nombre',
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              onChanged: (value) => turnFlagsOff(),
-                              validator: (value) =>
-                                  _validateNombreyApellido(value),
-                              controller: apellidoText,
-                              decoration: const InputDecoration(
-                                icon: Icon(Icons.person),
-                                labelText: 'Apellido',
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
-                      Center(
+                      Expanded(
                         child: TextFormField(
                           onChanged: (value) => turnFlagsOff(),
-                          validator: (value) => _validateEmail(value),
-                          controller: emailText,
+                          validator: (value) => _validateNombreyApellido(value),
+                          controller: nombreText,
                           decoration: const InputDecoration(
-                            icon: Icon(Icons.email),
-                            labelText: 'Email',
+                            icon: Icon(Icons.person),
+                            labelText: 'Nombre',
                           ),
                         ),
                       ),
-                      Center(
+                      Expanded(
                         child: TextFormField(
                           onChanged: (value) => turnFlagsOff(),
-                          validator: (value) => _validatePassword(value),
-                          obscureText: true,
-                          controller: passwordText,
+                          validator: (value) => _validateNombreyApellido(value),
+                          controller: apellidoText,
                           decoration: const InputDecoration(
-                            icon: Icon(Icons.lock),
-                            labelText: 'Password',
+                            icon: Icon(Icons.person),
+                            labelText: 'Apellido',
                           ),
                         ),
                       ),
-                      Center(
-                        child: TextFormField(
-                          onChanged: (value) => turnFlagsOff(),
-                          validator: (value) {
-                            if (value != passwordText.text) {
-                              return 'Contraseñas no coiciden';
-                            }
-                            return null;
-                          },
-                          controller: passwordText2,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.lock),
-                            labelText: 'Confirm password',
-                          ),
-                        ),
-                      ),
-                      Center(
-                          child: TextButton(
-                              child: Text("Sign in"),
-                              onPressed: () => {
-                                    if (_formKey.currentState.validate())
-                                      {
-                                        ApiWrapper()
-                                            .registrarUsuario(
-                                                nombreText.text,
-                                                apellidoText.text,
-                                                emailText.text,
-                                                passwordText.text)
-                                            .then(
-                                                (value) => _validateForm(value))
-                                      },
-                                  }))
                     ],
+                  )),
+                  Center(
+                    child: TextFormField(
+                      onChanged: (value) => turnFlagsOff(),
+                      validator: (value) => _validateEmail(value),
+                      controller: emailText,
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.email),
+                        labelText: 'Email',
+                      ),
+                    ),
                   ),
-                ))));
+                  Center(
+                    child: TextFormField(
+                      onChanged: (value) => turnFlagsOff(),
+                      validator: (value) => _validatePassword(value),
+                      obscureText: true,
+                      controller: passwordText,
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.lock),
+                        labelText: 'Password',
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: TextFormField(
+                      onChanged: (value) => turnFlagsOff(),
+                      validator: (value) {
+                        if (value != passwordText.text) {
+                          return 'Contraseñas no coiciden';
+                        }
+                        return null;
+                      },
+                      controller: passwordText2,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.lock),
+                        labelText: 'Confirm password',
+                      ),
+                    ),
+                  ),
+                  Center(
+                      child: TextButton(
+                          child: Text("Sign in"),
+                          onPressed: () => {
+                                if (_formKey.currentState.validate())
+                                  {
+                                    ApiWrapper()
+                                        .registrarUsuario(
+                                            nombreText.text,
+                                            apellidoText.text,
+                                            emailText.text,
+                                            passwordText.text)
+                                        .then((value) => _validateForm(value))
+                                  },
+                              }))
+                ],
+              ),
+            ))));
   }
 }
