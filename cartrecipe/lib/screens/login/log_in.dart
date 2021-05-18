@@ -102,50 +102,61 @@ class _LogIn extends State<LogIn> {
     return Scaffold(
       body: Form(
         key: _formKey,
-        child: Align(
-          alignment: Alignment.center,
+        child: SingleChildScrollView(
           child: Container(
-            child: Column(
-              children: [
-                Text("Please log in"),
-                Center(
-                  child: TextFormField(
-                    onChanged: (value) => turnFlagsOff(),
-                    validator: (value) => _validateUser(value),
-                    controller: emailText,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.email),
-                      labelText: 'Email',
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                children: [
+                  SizedBox(height: 30),
+                  Text("Please log in"),
+                  SizedBox(height: 10),
+                  new Image.asset(
+                    'assets/images/logo/logocart.png',
+                    width: 100,
+                    height: 100,
+                  ),
+                  Center(
+                    child: TextFormField(
+                      onChanged: (value) => turnFlagsOff(),
+                      validator: (value) => _validateUser(value),
+                      controller: emailText,
+                      decoration: const InputDecoration(
+                        focusColor: Colors.deepPurple,
+                        icon: Icon(Icons.email),
+                        labelText: 'Email',
+                      ),
                     ),
                   ),
-                ),
-                Center(
-                  child: TextFormField(
-                    onChanged: (value) => turnFlagsOff(),
-                    validator: (value) => _validatePassword(value),
-                    obscureText: true,
-                    controller: passwordText,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.lock),
-                      labelText: 'Password',
+                  Center(
+                    child: TextFormField(
+                      onChanged: (value) => turnFlagsOff(),
+                      validator: (value) => _validatePassword(value),
+                      obscureText: true,
+                      controller: passwordText,
+                      decoration: const InputDecoration(
+                        focusColor: Colors.deepPurple,
+                        icon: Icon(Icons.lock),
+                        labelText: 'Password',
+                      ),
                     ),
                   ),
-                ),
-                Center(
-                  child: TextButton(
-                      child: Text("Log in"),
-                      onPressed: () => {
-                            setState(() {
-                              if (_formKey.currentState.validate()) {
-                                ApiWrapper()
-                                    .logInUsuario(
-                                        emailText.text, passwordText.text)
-                                    .then((value) => {_validateForm(value)});
-                              }
-                            })
-                          }),
-                )
-              ],
+                  Center(
+                    child: TextButton(
+                        child: Text("Log in"),
+                        onPressed: () => {
+                              setState(() {
+                                if (_formKey.currentState.validate()) {
+                                  ApiWrapper()
+                                      .logInUsuario(
+                                          emailText.text, passwordText.text)
+                                      .then((value) => {_validateForm(value)});
+                                }
+                              })
+                            }),
+                  )
+                ],
+              ),
             ),
           ),
         ),
