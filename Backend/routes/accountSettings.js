@@ -256,27 +256,25 @@ router.put("/modIdFields", auth, async (req, res) => {
 //podemos pedirle al user que meta su password para asegurarse (?)
 
 // PENDIENTE DE TESTEAR
-router.get("/deleteAccount", auth, async (req, res) => {
+router.delete("/deleteAccount", auth, async (req, res) => {
 
     let mail = req.user.correo.toLowerCase();
-    console.log("DELETING ACCOUNT: " + mail)
+    console.log("DELETING ACCOUNT: " + mail);
 
-    let userDel = await Usuario.findOne({ correo: mail },
-        {
-            _id: 1,
-        });
-
-    if (!userDel) return res.status(400).send("Error, no se encuentra el usuario");
-
-    let neveraDel = await Nevera.findOneAndDelete({ usuario: userDel._id });
-    userDel = await Nevera.findOneAndDelete({ correo: mail });
-
+    userDel = await Usuario.findOneAndDelete({ correo: mail });
+    console.log(userDel);
+    
     if (!userDel) return res.status(400).send("Error al intentar eliminar el usuario");
+
+    let neveraDel = await Nevera.findOneAndDelete({ usuario: req.user._id });
+    console.log(neveraDel);
+
+    if (!neveraDel) return res.status(404).send("Error al eliminar nevera");
     
     res.send("Cuenta eliminada correctamente");
   });
 
-  router.get("/deleteAccountMotive", async (req, res) => {
+  router.post("/deleteAccountMotive", async (req, res) => {
 
     console.log("DELETING ACCOUNT MOTIVE");
     
@@ -288,7 +286,7 @@ router.get("/deleteAccount", auth, async (req, res) => {
     if (result)
         res.send("OK");
     
-    res.status(404).send("Fallo en el proceso de actualizar la receta");
+    res.status(400).send("Fallo en el proceso de actualizar la receta");
     
     res.send("Cuenta eliminada correctamente");
   });

@@ -3,18 +3,49 @@ const router = express.Router();
 
 const { ProductV2 } = require("../models/product_v2");
 const { Receta } = require("../models/receta");
+const auth = require("../middlewares/auth");
 
-
-router.get("/", async (req, res) => {
+router.get("/recetas/:search", async (req, res) => {
 
     console.log("regex test");
+    var replace = ".*" + req.params.search.trim() + ".*";
+    var re = new RegExp(replace, "i");
 
-    var replace = "regex\\d";
-    var re = new RegExp(replace,"g");
+    var fetchResult = await Receta.find({ titulo: re }).limit(10);
+    
+    if (!fetchResult)
+      return res.status(404).send("No ha resultados coincidentes");
 
-    console.log(re);
-    console.log("mystring1".replace(re, "newstring"));
-});
+    res.send(fetchResult);
+  });
+
+  router.get("/recetas/tags/:search", async (req, res) => {
+
+    console.log("regex test");
+    var replace = ".*" + req.params.search.trim() + ".*";
+    var re = new RegExp(replace, "i");
+
+    var fetchResult = await Receta.find({ tags: [re] }).limit(10);
+    
+    if (!fetchResult)
+      return res.status(404).send("No ha resultados coincidentes");
+
+    res.send(fetchResult);
+  });
+
+  router.get("/products/:search", async (req, res) => {
+
+    console.log("regex test");
+    var replace = ".*" + req.params.search.trim() + ".*";
+    var re = new RegExp(replace, "i");
+
+    var fetchResult = await Product.find({ name: re }).limit(10);
+    
+    if (!fetchResult)
+      return res.status(404).send("No ha resultados coincidentes");
+
+    res.send(fetchResult);
+  });
 
 
 // router.get("/products/:search", auth, async (req, res) => {
@@ -89,3 +120,5 @@ router.get("/", async (req, res) => {
   
 //     res.send(listedProds);
 //   });
+
+module.exports = router;

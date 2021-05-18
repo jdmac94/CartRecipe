@@ -16,11 +16,11 @@ router.post("/login", async (req, res) => {
   console.log("LOGGIN IN");
   console.log(req.body);
   let user = await Usuario.findOne({ correo: req.body.correo });
-  if (!user) return res.status(400).send("Email incorrectos");
+  if (!user) return res.status(404).send("El usuario con el mail " + req.body.correo +  " no existe");
   console.log(user.correo);
   
   if (req.body.password != user.password)
-    return res.status(400).send("Email o contraseña incorrectos");
+    return res.status(460).send("Email o contraseña incorrectos");
 
   const token = user.generateAuthToken();
   res.send(token);
@@ -34,11 +34,11 @@ router.post("/register", async (req, res) => {
   var mail = req.body.correo.toLowerCase();
 
   if (!emailRegEx.test(mail))
-    return res.status(400).send("El correo introducido no tiene un formato válido.");
+    return res.status(462).send("El correo introducido no tiene un formato válido.");
 
   let user = await Usuario.findOne({ correo: mail });
   if (user)
-    return res.status(400).send("El usuario ya se encuentra registrado.");
+    return res.status(461).send("El usuario ya se encuentra registrado.");
   user = new Usuario(
     _.pick(req.body, ["nombre", "apellido", "correo", "password"])
   );

@@ -16,7 +16,7 @@ const product = require("./routes/product");
 const receta = require("./routes/receta");
 const ajustesCuenta = require("./routes/accountSettings");
 const productV2 = require("./routes/productV2");
-const searcher = require("./routes/search");
+const buscador = require("./routes/search");
 
 const app = express();
 app.use(express.static("public"));
@@ -39,7 +39,7 @@ app.use("/api/v1/product", product);
 app.use("/api/v1/receta", receta);
 app.use("/api/v1/accSettings", ajustesCuenta);
 app.use("/api/v2/product", productV2);
-// app.use("/api/v2/search", searcher);
+app.use("/api/v2/search", buscador);
 app.use("*", error);
 
 const port = process.env.PORT || 9009;
