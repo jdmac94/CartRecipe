@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       child: MaterialApp(
         title: 'CartRecipe',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
           accentColor: Colors.amberAccent,
