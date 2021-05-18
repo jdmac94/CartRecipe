@@ -18,7 +18,7 @@ class ApiWrapper {
 
   factory ApiWrapper() => _instance ?? ApiWrapper._internal();
 
-  final String endpoint = '9616b67d4dbf.ngrok.io'; //"158.109.74.46:55005";
+  final String endpoint = "9616b67d4dbf.ngrok.io"; //"158.109.74.46:55005";
   String authToken;
 
   //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEyN2NjN2E0NDM0ZjAwMmZlOWRjYzAiLCJjb3JyZW8iOiJwZXBvQHBlcG8uZXMiLCJub21icmUiOiJQZXBlIiwiYWxlcmdpYXMiOltdLCJ0YWdzIjpbXSwibml2ZWxfY29jaW5hIjpudWxsLCJzaXN0ZW1hX3VuaWRhZGVzIjoic2lzdF9pbnQiLCJyZWNldGFzX2ZhdnMiOltdLCJpYXQiOjE2MjEyNjkyOTd9.2gG--BpwBRVhjcvtZeF32XK-Ikb7ghrydIetJXQLRqQ';
@@ -269,10 +269,13 @@ class ApiWrapper {
     if (response.statusCode == 200) {
       print("Received correctly recipe list.");
       print(response.body);
+      /*
       recipeList = (json.decode(response.body) as List)
           .map((i) => Recipe.fromJson(i))
           .toList();
-
+*/
+      recipeList = List<Recipe>.from(
+          json.decode(response.body).map((x) => Recipe.fromJson(x)));
       //Iterable i = json.decode(response.body);
       //recipeList = List<Recipe>.from(i.map((model) => Recipe.fromJson(model)));
     } else {
@@ -281,7 +284,7 @@ class ApiWrapper {
 
     if (recipeList.isEmpty) {
       print('No he recibido nada');
-      var r = Recipe(
+      /*var r = Recipe(
         id: '0',
         user: 'Patata2000',
         recipeName: 'Patatas',
@@ -317,6 +320,7 @@ class ApiWrapper {
       );
 
       recipeList = [r, r, r, r, r, r]; // Until we receive data
+      */
     }
     return recipeList;
   }

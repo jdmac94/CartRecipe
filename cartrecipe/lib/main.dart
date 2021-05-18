@@ -11,6 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   SharedPreferences token = await SharedPreferences.getInstance();
+  prefs.setBool("isLoggedIn", true); // Forzar login, se puede eliminar
   //prefs?.setBool("isLoggedIn", false);
   var status = prefs.getBool('isLoggedIn') ?? false;
 

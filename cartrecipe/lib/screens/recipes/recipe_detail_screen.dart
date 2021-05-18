@@ -47,19 +47,23 @@ class _RecipeDetailState extends State<RecipeDetail> {
             //4. Steps
             //5. Tips
             Image.network(
-              widget.recipe.image,
+              widget.recipe.imagenes[0], // TODO
               height: 200, // watch out
               fit: BoxFit.cover,
             ),
             _buildIntroductionDetails(),
-            widget.recipe.ingredients.isEmpty
+            Divider(height: 10, thickness: 3, indent: 20, endIndent: 20),
+            widget.recipe.ingredientes.isEmpty
                 ? Text('No se han encontrado ingredientes!')
-                : _buildIngredientList(),
+                : _buildIngredientList2(),
+            Divider(height: 10, thickness: 3, indent: 20, endIndent: 20),
             //_buildPortionAmount(), // Revisar excepcion
-            widget.recipe.steps.isEmpty
+            widget.recipe.pasos.isEmpty
                 ? Text('No hay pasos para esta receta!')
                 : _buildRecipeSteps(),
-            widget.recipe.tips.isEmpty ? Text('') : _buildRecipeTips(),
+            Divider(height: 10, thickness: 3, indent: 20, endIndent: 20),
+            widget.recipe.consejos.isEmpty ? Text('') : _buildRecipeTips(),
+            Divider(height: 10, thickness: 3, indent: 20, endIndent: 20),
           ],
         ),
       ),
@@ -78,7 +82,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
             children: <Widget>[
               Flexible(
                 child: Text(
-                  widget.recipe.recipeName,
+                  widget.recipe.titulo,
                   style: TextStyle(
                     fontSize: 15,
                   ),
@@ -89,7 +93,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                     Icons.timer,
                   ),
                   label: Text(
-                    widget.recipe.time,
+                    widget.recipe.tiempo,
                   ))
             ],
           ),
@@ -105,16 +109,16 @@ class _RecipeDetailState extends State<RecipeDetail> {
                     ),
                   ),
                   RatingBarIndicator(
-                    rating: this.widget.recipe.difficulty.toDouble(),
+                    rating: this.widget.recipe.dificultad.toDouble(),
                     itemCount: 5,
                     itemSize: 20,
                     itemBuilder: (context, index) {
-                      if (this.widget.recipe.difficulty <= 2) {
+                      if (this.widget.recipe.dificultad <= 2) {
                         return Icon(
                           Icons.local_fire_department,
                           color: Colors.green[600],
                         );
-                      } else if (this.widget.recipe.difficulty <= 4) {
+                      } else if (this.widget.recipe.dificultad <= 4) {
                         return Icon(
                           Icons.local_fire_department,
                           color: Colors.orange[600],
@@ -131,13 +135,16 @@ class _RecipeDetailState extends State<RecipeDetail> {
                     children: [
                       Text('Creado por:'),
                       Text(
-                        this.widget.recipe.user,
+                        this.widget.recipe.usuario,
                         style: TextStyle(decoration: TextDecoration.underline),
                       ),
                     ],
                   ),
                 ],
-              )
+              ),
+              Column(
+                children: _getRecipeAllergyIcons(this.widget.recipe),
+              ),
             ],
           ),
         ],
@@ -145,6 +152,47 @@ class _RecipeDetailState extends State<RecipeDetail> {
     );
   }
 
+  Widget _buildIngredientList2() {
+    //Iterate through the different maps.
+    List<Widget> ingredientList = [];
+    for (var i = 0; i < widget.recipe.ingredientes.length; i++) {
+      // Get map value.
+      Map<String, List<String>> currentMap = widget.recipe.ingredientes[i];
+      String indexKey = currentMap.keys.first;
+      // currentMap[indexKey][0] is the name
+      // currentMap[indexKey][1] is the value
+      ingredientList.add(new Row(children: <Widget>[
+        Icon(Icons.fiber_manual_record, size: 9),
+        Expanded(
+            child: Text(
+          currentMap[indexKey][0] +
+              " - " +
+              currentMap[indexKey][1] +
+              currentMap[indexKey][2],
+        ))
+      ]));
+    }
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Center(
+            child: Text("Ingredients"),
+          ),
+          Center(
+            child: ListView(
+              padding: EdgeInsets.all(10),
+              physics: NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              children: ingredientList,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+/*
   Widget _buildIngredientList() {
     return ListView.builder(
       physics: NeverScrollableScrollPhysics(),
@@ -164,29 +212,32 @@ class _RecipeDetailState extends State<RecipeDetail> {
           ),
         );
       },
-      itemCount: widget.recipe.ingredients.length,
+      itemCount: widget.recipe.ingredientes.length,
     );
   }
-
+*/
   Widget _buildRecipeSteps() {
-    return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      itemCount: widget.recipe.steps.length,
-      itemBuilder: (context, index) => Container(
-        child: ListTile(
-          leading: CircleAvatar(
-            child: Text('${(index + 1)}'),
-          ),
-          title: Text(widget.recipe.steps[index]),
+    return Column(
+      children: <Widget>[
+        Center(
+          child: Text("Pasos"),
         ),
-        decoration: BoxDecoration(
-            border: Border.all(
-          width: 1.0,
-          color: Colors.black,
-        )),
-      ),
+        ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: widget.recipe.pasos.length,
+          itemBuilder: (context, index) => Container(
+            child: ListTile(
+              leading: CircleAvatar(
+                child: Text('${(index + 1)}'),
+                radius: 15,
+              ),
+              title: Text(widget.recipe.pasos[index]),
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -195,12 +246,13 @@ class _RecipeDetailState extends State<RecipeDetail> {
       physics: NeverScrollableScrollPhysics(),
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
-      itemCount: widget.recipe.tips.length,
+      itemCount: widget.recipe.consejos.length,
       itemBuilder: (context, index) => ListTile(
           leading: CircleAvatar(
             child: Text('*'),
+            radius: 15,
           ),
-          title: Text(widget.recipe.tips[index])),
+          title: Text(widget.recipe.consejos[index])),
     );
   }
 
@@ -237,5 +289,17 @@ class _RecipeDetailState extends State<RecipeDetail> {
         ],
       ),
     );
+  }
+
+  List<Widget> _getRecipeAllergyIcons(Recipe r) {
+    return <Widget>[
+      Image.asset(
+        //TODO: get list of products and return n values, currently returning one
+        //      allergy
+        "assets/images/allergies/egg.png",
+        height: 50,
+        width: 50,
+      )
+    ];
   }
 }
