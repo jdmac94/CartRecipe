@@ -6,29 +6,38 @@ class Welcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Align(
-            alignment: Alignment.bottomCenter,
+        body: Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            "Welcome to CartRecipe!",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          new Image.asset(
+            'assets/images/logo/logocart.png',
+            width: 200,
+            height: 200,
+          ),
+          Center(
             child: Container(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                children: [
-                  Text("Welcome to CartRecipe"),
-                  Center(
-                    child: TextButton(
-                      child: Text("Sign In"),
-                      onPressed: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignIn())),
-                    ),
-                  ),
-                  Center(
-                    child: TextButton(
-                      child: Text("Log in"),
-                      onPressed: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LogIn())),
-                    ),
-                  ),
-                ],
+              child: ElevatedButton(
+                child: Text("Sign In"),
+                onPressed: () => Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => SignIn())),
               ),
-            )));
+            ),
+          ),
+          Center(
+            child: OutlinedButton(
+              child: Text("Log in"),
+              onPressed: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => LogIn())),
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 }

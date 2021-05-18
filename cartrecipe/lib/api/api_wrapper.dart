@@ -136,16 +136,27 @@ class ApiWrapper {
     );
 
     if (response.statusCode == 200) {
-      //print(json.decode(response));
-      print("todo bien");
+      print("usuario registrado");
       print(response.body.toString());
       var token = response.body.toString();
       print('token:$token');
       return token;
+    } else if (response.statusCode == 461) {
+      print('Error 461 email ya existe');
+      return "461";
+    } else if (response.statusCode == 462) {
+      print('Error 462 email mal formateado');
+      return "462";
+    } else if (response.statusCode == 463) {
+      print('Error 463 password mal formateado');
+      return "463";
+    } else if (response.statusCode == 464) {
+      print('Error 464 enombre y apellido mal formateado');
+      return "464";
     } else {
-      //print(json.decode(response.body));
-      print('F');
-      return null;
+      print(response.statusCode.toString());
+      print(response.body.toString());
+      return "Error";
     }
   }
 

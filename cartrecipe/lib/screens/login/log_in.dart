@@ -18,8 +18,8 @@ class _LogIn extends State<LogIn> {
 
   final _formKey = GlobalKey<FormState>();
 
-  bool flag404 = false;
-  bool flag460 = false;
+  bool flag404 = false; //email no existe
+  bool flag460 = false; //password mal
 
   Future<void> _setCache(value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
