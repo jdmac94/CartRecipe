@@ -17,7 +17,7 @@ class DeleteAllAlert extends StatelessWidget {
           child: ListBody(
             children: <Widget>[
               Text(
-                  'Estas seguro de eliminar todos los productos de la nevera?'),
+                  '¿Estás seguro de querer eliminar todos los productos de la nevera?'),
             ],
           ),
         ),

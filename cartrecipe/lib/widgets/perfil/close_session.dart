@@ -11,7 +11,7 @@ class CloseSession extends StatelessWidget {
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text('Estas seguro de cerrar sesión ?'),
+            Text('¿Estás seguro de querer cerrar sesión ?'),
           ],
         ),
       ),

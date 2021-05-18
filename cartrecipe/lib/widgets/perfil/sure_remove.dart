@@ -13,7 +13,7 @@ class SureRemove extends StatelessWidget {
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text('Estas seguro de eliminar?'),
+            Text('¿Estás seguro de querer eliminar la cuenta?'),
             // ignore: missing_required_param
             SizedBox(height: 100),
           ],
@@ -21,7 +21,7 @@ class SureRemove extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
-            child: Text('Si, estoy seguro'),
+            child: Text('Sí, estoy seguro'),
             onPressed: () {
               print("Reason$reason");
             }),

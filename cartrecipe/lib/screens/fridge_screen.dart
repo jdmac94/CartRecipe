@@ -61,15 +61,24 @@ class _FridgeScreenState extends State<FridgeScreen> {
           child: Column(
             children: [
               Padding(padding: EdgeInsets.only(top: 20)),
-              Text('Soy la nevera mejorada'),
+              //Text('Soy la nevera mejorada'),
               Consumer<ProductsDataProvider>(
                 builder: (context, proveedor, child) => Expanded(
-                    child: proveedor.productList == null
+                    //TODO! Comprobar CircularProgressIndicator
+                    child: proveedor.isFetching == null
                         ? Container(
-                            child: CircularProgressIndicator(),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.deepPurple,
+                                valueColor: new AlwaysStoppedAnimation<Color>(
+                                    Colors.pink),
+                              ),
+                            ),
                           )
                         : proveedor.productList.isEmpty
-                            ? Text('No hay datos en la nevera')
+                            ? Center(
+                                child: Text('No hay datos en la nevera'),
+                              )
                             : RefreshIndicator(
                                 onRefresh: mockRefresh,
                                 color: Colors.deepPurple,
@@ -95,7 +104,7 @@ class _FridgeScreenState extends State<FridgeScreen> {
               content: SingleChildScrollView(
                 child: ListBody(
                   children: [
-                    Text('Estas seguro de eliminar ' +
+                    Text('¿Estás seguro de querer eliminar ' +
                         selectedProducts.length.toString() +
                         ' productos de la nevera?'),
                   ],

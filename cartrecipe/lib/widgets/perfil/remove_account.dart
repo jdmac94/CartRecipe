@@ -30,7 +30,7 @@ class _RemoveAccount extends State<RemoveAccount> {
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text('Por que razon quieres eliminar la cuenta?'),
+            Text('¿Por qué razón quieres eliminar la cuenta?'),
             // ignore: missing_required_param
             SizedBox(height: 10),
             SizedBox(

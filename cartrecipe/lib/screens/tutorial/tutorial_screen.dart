@@ -43,25 +43,37 @@ class _TutorialScreenState extends State<TutorialScreen> {
                 );
               }),
         ),
-        Center(
-          child: Column(
-            children: [
-              Text(
-                listPages[pageChangedInt].title,
-              ),
-              Text(
-                listPages[pageChangedInt].subtitle,
-              ),
-              new DotsIndicator(
-                dotsCount: listPages.length,
-                position: pageChangedDouble,
-              ),
-              Container(
-                child: buildButton(pageChangedInt),
-              )
-            ],
+        Padding(
+          padding: const EdgeInsets.only(bottom: 50, left: 20, right: 20),
+          child: Text(
+            listPages[pageChangedInt].title,
+            style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
           ),
-        )
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 60, left: 20, right: 20),
+          child: Text(
+            listPages[pageChangedInt].subtitle,
+            style: TextStyle(
+              fontSize: 20,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: DotsIndicator(
+            dotsCount: listPages.length,
+            position: pageChangedDouble,
+          ),
+        ),
+        Container(
+          child: buildButton(pageChangedInt),
+        ),
       ],
     ));
   }
@@ -77,10 +89,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
               ),
               (r) => false));
     } else {
-      return ElevatedButton(
-        child: Text('Adelante'),
-        onPressed: () => pageChangedInt++,
-      );
+      return ElevatedButton(child: Text('Siguiente'), onPressed: () {});
     }
   }
 }

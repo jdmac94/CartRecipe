@@ -20,7 +20,7 @@ class VisibilityMultipleDelete extends StatelessWidget {
               content: SingleChildScrollView(
                 child: ListBody(
                   children: <Widget>[
-                    Text('Estas seguro de eliminar ' +
+                    Text('¿Estás seguro de querer eliminar ' +
                         selectedProducts.length.toString() +
                         ' productos de la nevera?'),
                   ],
