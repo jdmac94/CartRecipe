@@ -136,16 +136,27 @@ class ApiWrapper {
     );
 
     if (response.statusCode == 200) {
-      //print(json.decode(response));
-      print("todo bien");
+      print("usuario registrado");
       print(response.body.toString());
       var token = response.body.toString();
       print('token:$token');
       return token;
+    } else if (response.statusCode == 461) {
+      print('Error 461 email ya existe');
+      return "461";
+    } else if (response.statusCode == 462) {
+      print('Error 462 email mal formateado');
+      return "462";
+    } else if (response.statusCode == 463) {
+      print('Error 463 password mal formateado');
+      return "463";
+    } else if (response.statusCode == 464) {
+      print('Error 464 enombre y apellido mal formateado');
+      return "464";
     } else {
-      //print(json.decode(response.body));
-      print('F');
-      return null;
+      print(response.statusCode.toString());
+      print(response.body.toString());
+      return "Error";
     }
   }
 
@@ -197,6 +208,21 @@ class ApiWrapper {
       return prod;
     } else
       print('F');
+  }
+
+  Future<String> deleteUser(String reason) async {
+    var api = "/api/v1/accSettings/$reason/";
+
+    http.Response response = await http.put(Uri.http(endpoint, api),
+        headers: <String, String>{
+          //'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': authToken,
+        },
+        body: jsonEncode(
+          <String, String>{
+            'reason': reason,
+          },
+        ));
   }
 
   //TODO! TRY CATCH TO GUAPO
@@ -258,10 +284,13 @@ class ApiWrapper {
     if (response.statusCode == 200) {
       print("Received correctly recipe list.");
       print(response.body);
+      /*
       recipeList = (json.decode(response.body) as List)
           .map((i) => Recipe.fromJson(i))
           .toList();
-
+*/
+      recipeList = List<Recipe>.from(
+          json.decode(response.body).map((x) => Recipe.fromJson(x)));
       //Iterable i = json.decode(response.body);
       //recipeList = List<Recipe>.from(i.map((model) => Recipe.fromJson(model)));
     } else {
@@ -270,7 +299,7 @@ class ApiWrapper {
 
     if (recipeList.isEmpty) {
       print('No he recibido nada');
-      var r = Recipe(
+      /*var r = Recipe(
         id: '0',
         user: 'Patata2000',
         recipeName: 'Patatas',
@@ -306,6 +335,7 @@ class ApiWrapper {
       );
 
       recipeList = [r, r, r, r, r, r]; // Until we receive data
+      */
     }
     return recipeList;
   }

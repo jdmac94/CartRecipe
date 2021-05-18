@@ -39,11 +39,13 @@ class RecipeCard extends StatelessWidget {
                             Icon(
                               Icons.account_box_sharp,
                             ),
-                            Text(this.recipe.user),
+                            Text(
+                              this.recipe.usuario,
+                            )
                           ],
                         ),
                         Chip(
-                            label: Text(this.recipe.time),
+                            label: Text(this.recipe.tiempo),
                             avatar: Icon(
                               Icons.timer,
                             )),
@@ -69,7 +71,7 @@ class RecipeCard extends StatelessWidget {
                                 topRight: Radius.circular(15),
                               ),
                               child: Image.network(
-                                recipe.image,
+                                recipe.imagenes[0],
                                 height: 200,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
@@ -84,7 +86,7 @@ class RecipeCard extends StatelessWidget {
                                   padding: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 20),
                                   child: Text(
-                                    this.recipe.recipeName,
+                                    this.recipe.titulo,
                                     style: TextStyle(
                                         fontSize: 20, color: Colors.white),
                                     softWrap: true,
@@ -102,16 +104,16 @@ class RecipeCard extends StatelessWidget {
                       //Difficulty, share and favorite (non functional)
 
                       RatingBarIndicator(
-                        rating: this.recipe.difficulty.toDouble(),
+                        rating: this.recipe.dificultad.toDouble(),
                         itemCount: 5,
                         itemSize: 20,
                         itemBuilder: (context, index) {
-                          if (this.recipe.difficulty <= 2) {
+                          if (this.recipe.dificultad <= 2) {
                             return Icon(
                               Icons.local_fire_department,
                               color: Colors.green[600],
                             );
-                          } else if (this.recipe.difficulty <= 4) {
+                          } else if (this.recipe.dificultad <= 4) {
                             return Icon(
                               Icons.local_fire_department,
                               color: Colors.orange[600],
