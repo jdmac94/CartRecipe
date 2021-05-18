@@ -59,7 +59,7 @@ class ApiWrapper {
 
       return prods;
     } else {
-      print('Petición de productos de nevera errónea');
+      print('La petición de los productos la nevera ha sido rechazada');
       //TODO CONTROLAR DUMMY
       //return DUMMY_PRODUCTS;
       //throw Exception('Failed to load product');
@@ -312,10 +312,13 @@ class ApiWrapper {
     if (response.statusCode == 200) {
       print("Received correctly recipe list.");
       print(response.body);
+      /*
       recipeList = (json.decode(response.body) as List)
           .map((i) => Recipe.fromJson(i))
           .toList();
-
+*/
+      recipeList = List<Recipe>.from(
+          json.decode(response.body).map((x) => Recipe.fromJson(x)));
       //Iterable i = json.decode(response.body);
       //recipeList = List<Recipe>.from(i.map((model) => Recipe.fromJson(model)));
     } else {
@@ -324,7 +327,7 @@ class ApiWrapper {
 
     if (recipeList.isEmpty) {
       print('No he recibido nada');
-      var r = Recipe(
+      /*var r = Recipe(
         id: '0',
         user: 'Patata2000',
         recipeName: 'Patatas',
@@ -360,6 +363,7 @@ class ApiWrapper {
       );
 
       recipeList = [r, r, r, r, r, r]; // Until we receive data
+      */
     }
     return recipeList;
   }

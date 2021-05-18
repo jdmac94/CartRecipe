@@ -11,6 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   SharedPreferences token = await SharedPreferences.getInstance();
+  prefs.setBool("isLoggedIn", true); // Forzar login, se puede eliminar
   //prefs?.setBool("isLoggedIn", false);
   var status = prefs.getBool('isLoggedIn') ?? false;
 
@@ -21,14 +22,14 @@ void main() async {
   }
 
   print(status);
-  runApp(MyApp(status, tokenString));
+  runApp(MyApp(status));
 } /*=> runApp(MyApp());*/
 
 class MyApp extends StatelessWidget {
-  MyApp(this.status, this.tokenString);
+  MyApp(this.status);
 
   final status;
-  final tokenString;
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
           accentColor: Colors.amberAccent,
+          highlightColor: Colors.deepPurple,
         ),
         initialRoute: '/',
         routes: {
