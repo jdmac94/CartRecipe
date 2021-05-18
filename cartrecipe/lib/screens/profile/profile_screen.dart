@@ -1,5 +1,6 @@
 import 'package:cartrecipe/widgets/fridge/delete_alert.dart';
 import 'package:cartrecipe/widgets/perfil/close_session.dart';
+import 'package:cartrecipe/widgets/perfil/remove_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:cartrecipe/screens/profile/preferences_screen.dart';
@@ -122,6 +123,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ListTile(
               leading: Icon(Icons.delete),
               title: Text('Eliminar cuenta'),
+              onTap: () {
+                dialogRemoveAccount(context);
+              },
             ),
           ]).toList(),
         ),
@@ -134,6 +138,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return CloseSession();
+      },
+    );
+  }
+
+  Future<void> dialogRemoveAccount(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return RemoveAccount();
       },
     );
   }
