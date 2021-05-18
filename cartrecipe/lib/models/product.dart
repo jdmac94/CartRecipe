@@ -36,7 +36,11 @@ class Product {
     var _listAllergens = [];
     var _listTraces = [];
     var _listIngredientsAnalysis = [];
+
     String _name;
+    String _ecosScore;
+    String _nutriScore;
+    String _novaScore;
 
     if (json['product_name_es'] != null) {
       _name = json['product_name_es'];
@@ -49,8 +53,13 @@ class Product {
     }
 
     if (json['allergens_tags'] != null) {
-      _listAllergens = json['allergens_tags'].toList();
+      List<dynamic> tempAllergens = json['allergens_tags'].toList();
+
+      for (var i = 0; i < tempAllergens.length; i++) {
+        _listAllergens.add(tempAllergens[i].replaceAll('en:', ''));
+      }
     }
+
     if (json['ingredients_analysis_tags'] != null) {
       _listIngredientsAnalysis = json['ingredients_analysis_tags'].toList();
     }
@@ -58,6 +67,25 @@ class Product {
     if (json['traces_tags'] != null) {
       _listTraces = json['traces_tags'].toList();
     }
+
+    if (json['ecoscore_grade'] == 'unknown' || json['ecoscore_grade'] == null) {
+      _ecosScore = 'null';
+    } else {
+      _ecosScore = json['ecoscore_grade'];
+    }
+
+    if (json['nutriscore_grade'] == null) {
+      _nutriScore = 'null';
+    } else {
+      _nutriScore = json['nutriscore_grade'];
+    }
+
+    if (json['nova_groups'] == null) {
+      _novaScore = 'null';
+    } else {
+      _novaScore = json['nova_groups'];
+    }
+
     Map<String, dynamic> _listNutriments = json['nutriments'];
 
     return Product(
@@ -65,9 +93,9 @@ class Product {
       name: _name,
       image: _image[0],
       allergens: _listAllergens,
-      nutriScore: json['nutriscore_grade'],
-      ecoScore: json['ecoscore_grade'],
-      novaScore: json['nova_groups'],
+      nutriScore: _nutriScore,
+      ecoScore: _ecosScore,
+      novaScore: _novaScore,
       quantity: json['quantity'],
       ingredients: json['ingredients_text_es'], //ingredients_text_es
       ingredientsAnalysis: _listIngredientsAnalysis,

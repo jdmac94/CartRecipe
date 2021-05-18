@@ -6,66 +6,167 @@ class DetailViewProduct extends StatelessWidget {
   final Product product;
 
   DetailViewProduct(this.product);
+  final double _scoresImagesSize = 70;
+  final double _allergensImagesSize = 50;
+
+  //final ScrollController _scrollController = ScrollController();
 
 //TODO! CONTROLAR TODOS LOS INGREDIENTES
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: Card(
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          children: [
-            (product.image == null)
-                ? FlutterLogo(size: 70)
-                : Image.network(
-                    product.image,
-                    width: 150,
-                    height: 150,
-                  ),
-            ListTile(
-              title: Text(product.name),
-              subtitle: Text(
-                'Código de barras: ${product.id}',
-                style: TextStyle(color: Colors.black.withOpacity(0.6)),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Lorem ipsum',
-                style: TextStyle(color: Colors.black.withOpacity(0.6)),
-              ),
-            ),
-            (product.nutriScore != null)
-                ? Container(
-                    child: Image.asset(
-                      'assets/images/products/nutriscore/${product.nutriScore}.png',
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.contain,
-                    ),
-                  )
-                : Text('No tiene nutriscore'),
-            ButtonBar(
-              alignment: MainAxisAlignment.start,
+      content: Scrollbar(
+        isAlwaysShown: true,
+        //controller: _scrollController,
+        child: SingleChildScrollView(
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            child: Column(
               children: [
-                TextButton(
-                  onPressed: () {
-                    // Perform some action
-                  },
-                  child: const Text('ACTION 1'),
+                (product.image == null)
+                    ? FlutterLogo(size: 70)
+                    : Image.network(
+                        product.image,
+                        width: 150,
+                        height: 150,
+                        fit: BoxFit.contain,
+                      ),
+                ListTile(
+                  title: Text(product.name),
+                  subtitle: Text(
+                    'Código de barras: ${product.id}',
+                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                  ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    // Perform some action
-                  },
-                  child: const Text('ACTION 2'),
+                showIngredients(product),
+                showScores(product),
+                showAllergens(product),
+                ButtonBar(
+                  alignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cerrar'),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  Container showIngredients(product) {
+    return Container(
+      child: Column(
+        children: [
+          Text(
+            'Ingredientes',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: product.ingredients != null
+                ? Text(
+                    product.ingredients,
+                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                    textAlign: TextAlign.justify,
+                  )
+                : Text('No tenemos ingredientes de este producto'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container showScores(product) {
+    return Container(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Calidad nutricional y ecológica',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: Image.asset(
+                  'assets/images/products/nutriscore/${product.nutriScore}.png',
+                  width: _scoresImagesSize,
+                  height: _scoresImagesSize,
+                  fit: BoxFit.contain,
+                ),
+              ),
+              Container(
+                child: Image.asset(
+                  'assets/images/products/novascore/${product.novaScore}.png',
+                  width: _scoresImagesSize,
+                  height: _scoresImagesSize,
+                  fit: BoxFit.contain,
+                ),
+              ),
+              Container(
+                child: Image.asset(
+                  'assets/images/products/ecoscore/${product.ecoScore}.png',
+                  width: _scoresImagesSize,
+                  height: _scoresImagesSize,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container showAllergens(Product product) {
+    if (product.allergens.isEmpty) {
+      return Container(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Alérgenos',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Text('No tiene alérgenos'),
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Alérgenos',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: product.allergens
+                  .map((allergen) => Image.asset(
+                        'assets/images/products/allergens/$allergen.png',
+                        width: _allergensImagesSize,
+                        height: _allergensImagesSize,
+                        fit: BoxFit.contain,
+                      ))
+                  .toList(),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
