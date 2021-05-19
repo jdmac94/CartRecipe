@@ -3,7 +3,7 @@ import 'package:cartrecipe/widgets/perfil/close_session.dart';
 import 'package:cartrecipe/widgets/perfil/remove_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:cartrecipe/screens/profile/preferences_screen.dart';
+import 'package:cartrecipe/screens/profile/edit_preferences_screen.dart';
 import 'package:cartrecipe/screens/profile/edit_profile_screen.dart';
 import 'package:cartrecipe/screens/profile/contact_screen.dart';
 import 'package:cartrecipe/screens/profile/legal_screen.dart';
