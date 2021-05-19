@@ -20,62 +20,87 @@ class _TutorialScreenState extends State<TutorialScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        Expanded(
-          child: PageView.builder(
-              pageSnapping: true,
-              controller: pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  pageChangedInt = index;
-                  pageChangedDouble = index.toDouble();
-                });
-              },
-              itemCount: listPages.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(listPages[index].imagePath),
+      body: PageView.builder(
+          pageSnapping: true,
+          controller: pageController,
+          onPageChanged: (index) {
+            setState(() {
+              pageChangedInt = index;
+              pageChangedDouble = index.toDouble();
+            });
+          },
+          itemCount: listPages.length,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: new Image.asset(listPages[pageChangedInt].imagePath,
                         scale: 3),
                   ),
-                );
-              }),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 50, left: 20, right: 20),
-          child: Text(
-            listPages[pageChangedInt].title,
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 60, left: 20, right: 20),
-          child: Text(
-            listPages[pageChangedInt].subtitle,
-            style: TextStyle(
-              fontSize: 20,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: DotsIndicator(
-            dotsCount: listPages.length,
-            position: pageChangedDouble,
-          ),
-        ),
-        Container(
-          child: buildButton(pageChangedInt),
-        ),
-      ],
-    ));
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Text(
+                      listPages[pageChangedInt].title,
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 40),
+                    child: Text(
+                      listPages[pageChangedInt].subtitle,
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                Align(
+                    //Este es para alinear bien todos losPageview
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Visibility(
+                          visible: pageChangedInt == 3,
+                          child: SizedBox(
+                            height: 22,
+                            //child: Text("hola"),
+                          )),
+                    )),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 0, bottom: 13),
+                    child: DotsIndicator(
+                      dotsCount: listPages.length,
+                      position: pageChangedDouble,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      child: buildButton(pageChangedInt),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }),
+    );
   }
 
   Widget buildButton(pageChangedInt) {
@@ -92,14 +117,5 @@ class _TutorialScreenState extends State<TutorialScreen> {
                   builder: (context) => new TabsScreen(0),
                 ),
                 (r) => false)));
-
-    //  else {
-    //   return Visibility(
-    //   visible: pageChangedInt<3,
-    //   child:ElevatedButton(
-    //     child: Text('Adelante'),
-    //     onPressed: () => pageChangedInt++,
-    //   ));
-    // }
   }
 }
