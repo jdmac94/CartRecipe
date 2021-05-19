@@ -66,6 +66,9 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                     child: Column(
                   children: radiobutton(pageChangedInt),
                 )),
+                Container(
+                  child: Expanded(child: gridView(pageChangedInt)),
+                ),
                 Align(
                     //Este es para alinear bien todos losPageview
                     alignment: Alignment.bottomCenter,
@@ -159,7 +162,103 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
         ),
       ];
     } else {
-      return null;
+      return <Widget>[Container()];
+    }
+  }
+
+  Widget gridView(pageChangedInt) {
+    if (pageChangedInt == 2) {
+      return GridView.count(
+        primary: false,
+        padding: const EdgeInsets.all(20),
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        crossAxisCount: 3,
+        children: <Widget>[
+          Container(
+              padding: const EdgeInsets.all(8),
+              child: new Image.asset(
+                  'assets/images/products/allergens/alcohol.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child: new Image.asset(
+                  'assets/images/products/allergens/celery.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child:
+                  new Image.asset('assets/images/products/allergens/corn.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child: new Image.asset(
+                  'assets/images/products/allergens/crustaceans.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child:
+                  new Image.asset('assets/images/products/allergens/eggs.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child:
+                  new Image.asset('assets/images/products/allergens/fish.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child: new Image.asset(
+                  'assets/images/products/allergens/gluten.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child:
+                  new Image.asset('assets/images/products/allergens/gmo.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child:
+                  new Image.asset('assets/images/products/allergens/meat.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child:
+                  new Image.asset('assets/images/products/allergens/milk.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child: new Image.asset(
+                  'assets/images/products/allergens/molluscs.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child: new Image.asset(
+                  'assets/images/products/allergens/mustard.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child:
+                  new Image.asset('assets/images/products/allergens/nuts.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child: new Image.asset(
+                  'assets/images/products/allergens/peanuts.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child:
+                  new Image.asset('assets/images/products/allergens/pork.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child: new Image.asset(
+                  'assets/images/products/allergens/soybeans.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child: new Image.asset(
+                  'assets/images/products/allergens/sugar.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child: new Image.asset(
+                  'assets/images/products/allergens/sulphites.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child: new Image.asset(
+                  'assets/images/products/allergens/trans_fat.png')),
+          Container(
+              padding: const EdgeInsets.all(8),
+              child: new Image.asset(
+                  'assets/images/products/allergens/vegan.png')),
+        ],
+      );
+    } else {
+      return Container();
     }
   }
 
