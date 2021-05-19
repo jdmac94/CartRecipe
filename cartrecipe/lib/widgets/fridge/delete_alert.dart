@@ -14,7 +14,7 @@ class DeleteAlert extends StatelessWidget {
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text('Estas seguro de eliminar ' +
+            Text('¿Estás seguro de querer eliminar ' +
                 selectedMap.length.toString() +
                 ' productos de la nevera?'),
           ],

@@ -58,14 +58,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ])),
             ),
             ListTile(
-              leading: Icon(Icons.tune),
-              title: Text('Unidades de medida'),
-            ),
-            ListTile(
-              leading: Icon(Icons.translate),
-              title: Text('Idioma'),
-            ),
-            ListTile(
               leading: Icon(Icons.call),
               title: RichText(
                   text: TextSpan(children: <TextSpan>[

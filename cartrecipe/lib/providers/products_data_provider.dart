@@ -15,7 +15,7 @@ class ProductsDataProvider with ChangeNotifier {
 
   Future<void> fetchServerData() async {
     isFetching = true;
-    //notifyListeners();
+    notifyListeners();
     var response = await ApiWrapper().getFridgeProducts();
     productList = response;
 
@@ -30,7 +30,7 @@ class ProductsDataProvider with ChangeNotifier {
 
   Future<ProductsDataProvider> providerWithData() async {
     isFetching = true;
-    //notifyListeners();
+    notifyListeners();
     List<Product> temp = [];
     temp = await ApiWrapper().getFridgeProducts();
 
@@ -48,7 +48,7 @@ class ProductsDataProvider with ChangeNotifier {
     //ApiWrapper().addProduct(barcode).then(
     //  (value) => print('Se ha podido añadir el producto $value a la nevera'));
 
-    //notifyListeners();
+    notifyListeners();
     print('He recibido en el scaner pero estoy en la lista: $prod');
     //Product temp = prod;
     print('$productList');

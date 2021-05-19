@@ -118,8 +118,8 @@ class _SignIn extends State<SignIn> {
       } else if (value != null) {
         _setCache(value);
         ApiWrapper().setAuthToken(value);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Usuario registrado')));
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(SnackBar(content: Text('Usuario registrado')));
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => TutorialScreen()),
