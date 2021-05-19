@@ -67,20 +67,27 @@ class _TutorialScreenState extends State<TutorialScreen> {
   }
 
   Widget buildButton(pageChangedInt) {
-    if (pageChangedInt == 3) {
-      return ElevatedButton(
-          child: Text('Cerrar'),
-          onPressed: () => Navigator.pushAndRemoveUntil(
-              context,
-              new MaterialPageRoute(
-                builder: (context) => new TabsScreen(0),
-              ),
-              (r) => false));
-    } else {
-      return ElevatedButton(
-        child: Text('Adelante'),
-        onPressed: () => pageChangedInt++,
-      );
-    }
+    return Visibility(
+        visible: pageChangedInt == 3,
+        maintainState: true,
+        maintainAnimation: true,
+        maintainSize: true,
+        child: ElevatedButton(
+            child: Text('Cerrar'),
+            onPressed: () => Navigator.pushAndRemoveUntil(
+                context,
+                new MaterialPageRoute(
+                  builder: (context) => new TabsScreen(0),
+                ),
+                (r) => false)));
+
+    //  else {
+    //   return Visibility(
+    //   visible: pageChangedInt<3,
+    //   child:ElevatedButton(
+    //     child: Text('Adelante'),
+    //     onPressed: () => pageChangedInt++,
+    //   ));
+    // }
   }
 }

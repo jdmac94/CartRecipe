@@ -41,8 +41,8 @@ class _TabsScreenState extends State<TabsScreen> {
         'title': 'Recetas',
       },
       {
-        //'page': TutorialScreen(),
-        'page': SearchsScreen(),
+        'page': TutorialScreen(),
+        //'page': SearchsScreen(),
         //'page': TestStreamScreen(),
         //'page': SearchsScreen(),
         //'page': LocalDesperateFridge(),
