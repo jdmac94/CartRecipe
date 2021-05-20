@@ -19,6 +19,29 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   int pageChangedInt = 0;
   double pageChangedDouble = 0.0;
   int end = 4;
+  List<List<dynamic>> allergens = [
+    [false, "alcohol"],
+    [false, "celery"],
+    [false, "corn"],
+    [false, "crustaceans"],
+    [false, "eggs"],
+    [false, "fish"],
+    [false, "gluten"],
+    [false, "gmo"],
+    [false, "meat"],
+    [false, "milk"],
+    [false, "molluscs"],
+    [false, "mustard"],
+    [false, "nuts"],
+    [false, "peanuts"],
+    [false, "pork"],
+    [false, "soybeans"],
+    [false, "sugar"],
+    [false, "sulphites"],
+    [false, "trans_fat"],
+    [false, "vegan"],
+  ];
+  Color _color = Colors.grey;
   Intereses _intereses = Intereses.descubrir;
   Alergenos _alergenos = Alergenos.si;
 
@@ -174,92 +197,63 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
         crossAxisCount: 3,
-        children: <Widget>[
-          Container(
-              padding: const EdgeInsets.all(8),
-              child: new Image.asset(
-                  'assets/images/products/allergens/alcohol.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child: new Image.asset(
-                  'assets/images/products/allergens/celery.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child:
-                  new Image.asset('assets/images/products/allergens/corn.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child: new Image.asset(
-                  'assets/images/products/allergens/crustaceans.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child:
-                  new Image.asset('assets/images/products/allergens/eggs.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child:
-                  new Image.asset('assets/images/products/allergens/fish.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child: new Image.asset(
-                  'assets/images/products/allergens/gluten.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child:
-                  new Image.asset('assets/images/products/allergens/gmo.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child:
-                  new Image.asset('assets/images/products/allergens/meat.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child:
-                  new Image.asset('assets/images/products/allergens/milk.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child: new Image.asset(
-                  'assets/images/products/allergens/molluscs.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child: new Image.asset(
-                  'assets/images/products/allergens/mustard.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child:
-                  new Image.asset('assets/images/products/allergens/nuts.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child: new Image.asset(
-                  'assets/images/products/allergens/peanuts.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child:
-                  new Image.asset('assets/images/products/allergens/pork.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child: new Image.asset(
-                  'assets/images/products/allergens/soybeans.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child: new Image.asset(
-                  'assets/images/products/allergens/sugar.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child: new Image.asset(
-                  'assets/images/products/allergens/sulphites.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child: new Image.asset(
-                  'assets/images/products/allergens/trans_fat.png')),
-          Container(
-              padding: const EdgeInsets.all(8),
-              child: new Image.asset(
-                  'assets/images/products/allergens/vegan.png')),
+        children: [
+          for (int i = 0; i < allergens.length; i++) allergenButton(i)
+
+          /* GestureDetector(
+            onTap: () {
+              if (_color == Colors.grey)
+                _color = Colors.blueAccent;
+              else
+                _color = Colors.grey;
+              setState(() {});
+            },
+            child: Container(
+                padding: const EdgeInsets.all(8),
+                color: _color,
+                child: new Image.asset(
+                    'assets/images/products/allergens/alcohol.png')),
+          ),
+          GestureDetector(
+            onTap: () {
+              if (_color == Colors.grey)
+                _color = Colors.blueAccent;
+              else
+                _color = Colors.grey;
+              setState(() {});
+            },
+            child: Container(
+                padding: const EdgeInsets.all(8),
+                color: _color,
+                child: new Image.asset(
+                    'assets/images/products/allergens/celery.png')),
+          ),*/
         ],
       );
     } else {
       return Container();
     }
+  }
+
+  Widget allergenButton(int allergenNumber) {
+    String imagePath = allergens[allergenNumber][1];
+    return GestureDetector(
+      onTap: () {
+        if (allergens[allergenNumber][0]) {
+          allergens[allergenNumber][0] = false;
+          _color = Colors.blueAccent;
+        } else {
+          allergens[allergenNumber][0] = true;
+          _color = Colors.grey;
+        }
+        setState(() {});
+      },
+      child: Container(
+          padding: const EdgeInsets.all(8),
+          color: _color,
+          child: new Image.asset(
+              'assets/images/products/allergens/$imagePath.png')),
+    );
   }
 
   Widget buildButton(pageChangedInt) {
