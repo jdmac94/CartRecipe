@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+mongoose.set('debug', true);
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -9,7 +10,7 @@ const productSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
-});
+}, { collection: 'customProducts' });
 
 const ProductV2 = mongoose.model("ProductV2", productSchema);
 

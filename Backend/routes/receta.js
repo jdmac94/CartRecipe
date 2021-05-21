@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { Receta } = require("../models/receta");
 const { Nevera } = require("../models/nevera");
-const { Product } = require("../models/product");
+const { ProductV2 } = require("../models/product_v2");
 const auth = require("../middlewares/auth");
 
 async function fillReceta(body, receta) {
@@ -38,6 +38,37 @@ async function fillReceta(body, receta) {
 
   return receta;
 }
+
+router.get("/getAllergens", auth, async (req, res) => {
+// async function fetchAllergens(ingredients) {
+
+  //formatear lista de ingredientes a array simple
+  // var dict = [
+  //   { 1: ["Aceite de Oliva Virgen Extra", "1"] },
+  //   { 2: ["zanahoria", "3"] },
+  // ];
+
+  var test = "Nuez natural";
+  const allergens = await ProductV2.find({ name : test });
+  
+  // const allergens = await ProductV2.aggregate([
+  //   { $match: { name: test } },
+  //   {
+  //     $group:
+  //       {
+  //         _id: "a",
+  //         allerg: { $push: "$products.allergens_tags" },
+  //       }
+  //   },
+  //   { $project: { name: 1, allerg: 1} }
+  // ]).exec();
+  var a = allergens.productos[0].allergens_from_user;
+
+  console.log(a);
+
+  res.send(a);
+// }
+});
 
 router.get("/getAllRecetas", auth, async (req, res) => {
   let recetaList = await Receta.find().limit(10);
