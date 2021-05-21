@@ -41,7 +41,6 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     [false, "trans_fat"],
     [false, "vegan"],
   ];
-  Color _color = Colors.grey;
   Intereses _intereses = Intereses.descubrir;
   Alergenos _alergenos = Alergenos.si;
 
@@ -236,41 +235,46 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   }
 
   Widget allergenButton(int allergenNumber) {
+    Color _color = Colors.grey;
     String imagePath = allergens[allergenNumber][1];
     return GestureDetector(
       onTap: () {
         if (allergens[allergenNumber][0]) {
-          allergens[allergenNumber][0] = false;
-          _color = Colors.blueAccent;
+          setState(() {
+            allergens[allergenNumber][0] = false;
+          });
         } else {
-          allergens[allergenNumber][0] = true;
-          _color = Colors.grey;
+          setState(() {
+            allergens[allergenNumber][0] = true;
+          });
         }
-        setState(() {});
       },
       child: Container(
           padding: const EdgeInsets.all(8),
-          color: _color,
+          color: allergens[allergenNumber][0] ? Colors.blueAccent : Colors.grey,
           child: new Image.asset(
               'assets/images/products/allergens/$imagePath.png')),
     );
   }
 
   Widget buildButton(pageChangedInt) {
-    if (pageChangedInt == 3) {
-      return ElevatedButton(
-          child: Text('Cerrar'),
-          onPressed: () => Navigator.pushAndRemoveUntil(
-              context,
-              new MaterialPageRoute(
-                builder: (context) => new TabsScreen(0),
-              ),
-              (r) => false));
-    } else {
-      return ElevatedButton(
-        child: Text('Adelante'),
-        onPressed: () => pageChangedInt++,
-      );
-    }
+    return Visibility(
+        visible: pageChangedInt == 3,
+        maintainState: true,
+        maintainAnimation: true,
+        maintainSize: true,
+        child: ElevatedButton(
+            child: Text('Cerrar'),
+            onPressed: () => {
+                  print(allergens),
+                  print(_alergenos),
+                  print(_intereses),
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      new MaterialPageRoute(
+                        builder: (context) => new TabsScreen(0),
+                      ),
+                      (r) => false)
+                }));
   }
 }
