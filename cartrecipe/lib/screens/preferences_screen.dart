@@ -18,7 +18,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   PageController pageController = PageController(initialPage: 0);
   int pageChangedInt = 0;
   double pageChangedDouble = 0.0;
-  int end = 4;
+  int end = 3;
   List<List<dynamic>> allergens = [
     [false, "alcohol"],
     [false, "celery"],
@@ -42,7 +42,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     [false, "vegan"],
   ];
   Intereses _intereses = Intereses.descubrir;
-  Alergenos _alergenos = Alergenos.si;
+  Alergenos _alergenos = Alergenos.no;
 
   @override
   Widget build(BuildContext context) {
@@ -163,8 +163,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     } else if (pageChangedInt == 1) {
       return <Widget>[
         RadioListTile<Alergenos>(
-          title: const Text('Si'),
-          value: Alergenos.si,
+          title: const Text('No'),
+          value: Alergenos.no,
           groupValue: _alergenos,
           onChanged: (Alergenos value) {
             setState(() {
@@ -173,8 +173,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           },
         ),
         RadioListTile<Alergenos>(
-          title: const Text('No'),
-          value: Alergenos.no,
+          title: const Text('Si'),
+          value: Alergenos.si,
           groupValue: _alergenos,
           onChanged: (Alergenos value) {
             setState(() {
@@ -189,17 +189,21 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   }
 
   Widget gridView(pageChangedInt) {
-    if (pageChangedInt == 2) {
-      return GridView.count(
-        primary: false,
-        padding: const EdgeInsets.all(20),
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        crossAxisCount: 3,
-        children: [
-          for (int i = 0; i < allergens.length; i++) allergenButton(i)
+    return Visibility(
+        visible: (pageChangedInt == 1 && (_alergenos == Alergenos.si)),
+        maintainState: true,
+        maintainAnimation: true,
+        maintainSize: true,
+        child: GridView.count(
+          primary: false,
+          padding: const EdgeInsets.all(20),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          crossAxisCount: 3,
+          children: [
+            for (int i = 0; i < allergens.length; i++) allergenButton(i)
 
-          /* GestureDetector(
+            /* GestureDetector(
             onTap: () {
               if (_color == Colors.grey)
                 _color = Colors.blueAccent;
@@ -227,15 +231,11 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 child: new Image.asset(
                     'assets/images/products/allergens/celery.png')),
           ),*/
-        ],
-      );
-    } else {
-      return Container();
-    }
+          ],
+        ));
   }
 
   Widget allergenButton(int allergenNumber) {
-    Color _color = Colors.grey;
     String imagePath = allergens[allergenNumber][1];
     return GestureDetector(
       onTap: () {
@@ -259,7 +259,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
 
   Widget buildButton(pageChangedInt) {
     return Visibility(
-        visible: pageChangedInt == 3,
+        visible: pageChangedInt == 2,
         maintainState: true,
         maintainAnimation: true,
         maintainSize: true,
