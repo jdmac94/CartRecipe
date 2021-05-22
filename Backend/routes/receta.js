@@ -40,15 +40,15 @@ async function fillReceta(body, receta) {
 }
 
 router.get("/suggested", auth, async (req, res) => {
-  const { productos } = await Nevera.find(
+  const productos = await Nevera.find(
     { usuario: req.user._id },
     { productos: 1, _id: 0 }
   );
-  const { name } = await ProductV2.find(
-    { products: { $in: productos } },
+  const names = await ProductV2.find(
+    { products: { $elemMatch: { id: { $in: productos } } } },
     { _id: 0, name: 1 }
   );
-  const recetas = await Receta.find({ ingredientes: { $in: name } });
+  const recetas = await Receta.find({ ingredientes: { $in: names } });
   console.log("Productos: ");
   console.log(productos);
   console.log("Nombres: ");
