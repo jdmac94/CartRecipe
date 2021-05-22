@@ -39,8 +39,25 @@ async function fillReceta(body, receta) {
   return receta;
 }
 
+router.get("/suggested", auth, async (req, res) => {
+  const { productos } = await Nevera.find(
+    { usuario: req.user._id },
+    { productos: 1, _id: 0 }
+  );
+  const { name } = await ProductV2.find(
+    { products: { $in: productos } },
+    { _id: 0, name: 1 }
+  );
+  const recetas = await Receta.find({ ingredientes: { $in: name } });
+  console.log("Productos: ");
+  console.log(productos);
+  console.log("Nombres: ");
+  console.log(name);
+  res.send(recetas);
+});
+
 router.get("/getAllergens", auth, async (req, res) => {
-// async function fetchAllergens(ingredients) {
+  // async function fetchAllergens(ingredients) {
 
   //formatear lista de ingredientes a array simple
   // var dict = [
@@ -49,8 +66,8 @@ router.get("/getAllergens", auth, async (req, res) => {
   // ];
 
   var test = "Nuez natural";
-  const allergens = await ProductV2.find({ name : test });
-  
+  const allergens = await ProductV2.find({ name: test });
+
   // const allergens = await ProductV2.aggregate([
   //   { $match: { name: test } },
   //   {
@@ -67,7 +84,7 @@ router.get("/getAllergens", auth, async (req, res) => {
   console.log(a);
 
   res.send(a);
-// }
+  // }
 });
 
 router.get("/getAllRecetas", auth, async (req, res) => {
@@ -236,8 +253,9 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
   receta.usuario = "0";
   receta.titulo = "Hummus de zanahoria";
   receta.dificultad = 2;
-  receta.descripcion = "¡Hola a tod@s! ¡¿Cuántas versiones de hummus os habré presentado hasta la fecha?! Desde luego, no me aburro de comerlo en sus distintas variedades, y mis invitad@s tampoco.\n\n Os traigo una opción para acompañar en cualquier pica-pica que se preste. ¡Y esta triunfa ¡seguro! A mi me gusta acompañarlo de sticks de zanahoria, pepino, tomate cherry, endibia…Pero los crackers, nachos y palitos también son una buena alternativa. Para gustos, colores. Y para hummus, ¡sabores!";
-  
+  receta.descripcion =
+    "¡Hola a tod@s! ¡¿Cuántas versiones de hummus os habré presentado hasta la fecha?! Desde luego, no me aburro de comerlo en sus distintas variedades, y mis invitad@s tampoco.\n\n Os traigo una opción para acompañar en cualquier pica-pica que se preste. ¡Y esta triunfa ¡seguro! A mi me gusta acompañarlo de sticks de zanahoria, pepino, tomate cherry, endibia…Pero los crackers, nachos y palitos también son una buena alternativa. Para gustos, colores. Y para hummus, ¡sabores!";
+
   receta.tiempo = "15:00";
   receta.imagenes = [
     "https://www.lagloriavegana.com/wp-content/uploads/2020/08/IMG_9275-1280x1280.jpg",
@@ -247,7 +265,7 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
   receta.pasos = [
     "Lavamos y cortamos en rodajas las zanahorias.",
     "Las ponemos en un recipiente apto para microondas y cocinamos a máxima potencia durante 5 minutos (o hasta que estén tiernas). También se pueden hornear o hacer al vapor. Dejamos que se templen.",
-	"Ponemos en el procesador todos los ingredientes y trituramos hasta conseguir una crema fina. ¡ESTÁ INCREÍBLE!",
+    "Ponemos en el procesador todos los ingredientes y trituramos hasta conseguir una crema fina. ¡ESTÁ INCREÍBLE!",
   ];
   receta.consejos = [];
 
@@ -267,7 +285,6 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
   res.send(receta);
 });
 
-
 router.get("/addRecetaFIXED2", auth, async (req, res) => {
   let receta = new Receta();
   //esta receta tiene dos secciones https://www.lagloriavegana.com/makis-vegetales/, podemos plantear el implenmetar eso como extra llegado el momento
@@ -282,24 +299,24 @@ router.get("/addRecetaFIXED2", auth, async (req, res) => {
     { 8: ["aguacate", "0.5", ""] },
     { 9: ["mayonesa de wasabi casera", "3", "cucharada"] },
   ];
-  
 
   receta.usuario = "0";
   receta.titulo = "Makis vegetales";
   receta.dificultad = 3;
-  receta.descripcion = "¡Hola a tod@s! Hoy os traigo una receta más elaborada, pero que mola mucho hacer: makis caseros. Y es que desde Le Creuset me retaron a hacerlos usando su Cocotte Every. \n\n Para el interior, he usado mango y aguacate para que tuviera un sabor más refinado, combinados con la mayonesa de wasabi casera (el toque mágico). Para cortarlos, mejor hacerlo por mitades, como los japoneses.";
-  
+  receta.descripcion =
+    "¡Hola a tod@s! Hoy os traigo una receta más elaborada, pero que mola mucho hacer: makis caseros. Y es que desde Le Creuset me retaron a hacerlos usando su Cocotte Every. \n\n Para el interior, he usado mango y aguacate para que tuviera un sabor más refinado, combinados con la mayonesa de wasabi casera (el toque mágico). Para cortarlos, mejor hacerlo por mitades, como los japoneses.";
+
   receta.tiempo = "15:00";
   receta.imagenes = [
     "https://www.lagloriavegana.com/wp-content/uploads/2020/08/Makis-vegetales-1280x1280.jpg",
-	"https://www.lagloriavegana.com/wp-content/uploads/2020/08/Makis-vegetales-2.jpg",
+    "https://www.lagloriavegana.com/wp-content/uploads/2020/08/Makis-vegetales-2.jpg",
   ];
   receta.ingredientes = dict;
 
   receta.pasos = [
     "Ponemos en la Cocotte Every el agua y el arroz y encendemos el fuego. Cuando arranque a hervir tapamos la cacerola, bajamos el fuego al mínimo y cocemos durante 10 min. No levantamos la tapa en ningún momento.",
     "Pasados los 10 min apagamos el fuego y, sin levantar la tapa, dejamos reposar 15 min más.",
-	"Mientras se hace este proceso, preparamos el aderezo mezclando el vinagre de arroz, la sal y el azúcar hasta que se diluya todo bien. Cortamos tb el mango y el aguacate en tiras.",
+    "Mientras se hace este proceso, preparamos el aderezo mezclando el vinagre de arroz, la sal y el azúcar hasta que se diluya todo bien. Cortamos tb el mango y el aguacate en tiras.",
   ];
   receta.consejos = [];
 
@@ -325,19 +342,26 @@ router.get("/addRecetaFIXED3", auth, async (req, res) => {
   var dict = [
     { 1: ["Penne de Lentejas Rojas", "250", "gramos"] },
     { 2: ["cebolla", "1", ""] },
-    { 3: ["calabacín pequeño", "1", ""] },// maybe añadir campo de "artibutos", como "troceado", en dados,etc.
+    { 3: ["calabacín pequeño", "1", ""] }, // maybe añadir campo de "artibutos", como "troceado", en dados,etc.
     { 4: ["champiñones", "150", "gramos"] },
     { 5: ["tomates cherry", "10", ""] },
     { 6: ["caldo de verduras", "750", "mililitros"] },
-    { 7: ["manteca de anacardos (o de nata vegetal o de tahini)", "2", "cucharada"] },
+    {
+      7: [
+        "manteca de anacardos (o de nata vegetal o de tahini)",
+        "2",
+        "cucharada",
+      ],
+    },
     { 8: ["Sal, pimienta y aove", "", ""] },
   ];
 
   receta.usuario = "0";
   receta.titulo = "One Pot Pasta";
   receta.dificultad = 3;
-  receta.descripcion = "¡Hola a tod@s!\n Hoy os comparto una receta de la que estoy muy orgullosa por dos motivos:\n - Me ha salido riquísima de la muerte.\n - Solo he encendido un fuego y ensuciado una olla para prepararla.\n El punto 2 es importante porque debemos ir haciendo pequeños gestos para ir fortaleciendo la sostenibilidad.\n\n Por mi parte, en esta receta:\n\n - He escogido verduras de temporada.\n - El caldo que he usado lo hago como ya sabéis aprovechando las peladuras de las verduras (troncos de brócoli, piel de las cebollas, hojas de apio…).\nSolo he ensuciado una olla y encendido un fuego.";
-  
+  receta.descripcion =
+    "¡Hola a tod@s!\n Hoy os comparto una receta de la que estoy muy orgullosa por dos motivos:\n - Me ha salido riquísima de la muerte.\n - Solo he encendido un fuego y ensuciado una olla para prepararla.\n El punto 2 es importante porque debemos ir haciendo pequeños gestos para ir fortaleciendo la sostenibilidad.\n\n Por mi parte, en esta receta:\n\n - He escogido verduras de temporada.\n - El caldo que he usado lo hago como ya sabéis aprovechando las peladuras de las verduras (troncos de brócoli, piel de las cebollas, hojas de apio…).\nSolo he ensuciado una olla y encendido un fuego.";
+
   receta.tiempo = "15:00";
   receta.imagenes = [
     "https://www.lagloriavegana.com/wp-content/uploads/2020/11/ONE-POT-pasta-foto-1280x1280.jpeg",
@@ -347,11 +371,10 @@ router.get("/addRecetaFIXED3", auth, async (req, res) => {
   receta.pasos = [
     "Pochamos la cebolla y el ajo.",
     "Incorporamos el resto de las verduras.",
-	"Añadimos el caldo de verduras.",
-	"Cuando arranque a hervir, echamos la pasta, removemos y dejamos cocer durante 9 minutos.",
-	"Un minuto antes de apagar el fuego, le añadimos la manteca de anacardos (anacardos triturados hasta hacerlos crema) y removemos. Esto le va a aportar una cremosidad brutal.",
-	"Apagamos el fuego y servimos con un poco de pimienta por encima.",
-	
+    "Añadimos el caldo de verduras.",
+    "Cuando arranque a hervir, echamos la pasta, removemos y dejamos cocer durante 9 minutos.",
+    "Un minuto antes de apagar el fuego, le añadimos la manteca de anacardos (anacardos triturados hasta hacerlos crema) y removemos. Esto le va a aportar una cremosidad brutal.",
+    "Apagamos el fuego y servimos con un poco de pimienta por encima.",
   ];
   receta.consejos = [];
 
@@ -379,10 +402,10 @@ router.get("/addRecetaFIXED4", auth, async (req, res) => {
     { 2: ["dátiles", "100", "gramos"] },
     { 3: ["zanahoria", "80", "gramos"] },
     { 4: ["canela en polvo", "1", "cucharadita"] },
-	  { 5: ["cacao puro en polvo", "20", "gramos"] },
+    { 5: ["cacao puro en polvo", "20", "gramos"] },
   ];
-  
-	/*
+
+  /*
 	100 g de nueces (o almendras, avellanas, pistachos, mezcla de varios…)
 	100 g de dátiles
 	80 g de zanahoria cruda pelada
@@ -394,8 +417,9 @@ router.get("/addRecetaFIXED4", auth, async (req, res) => {
   receta.usuario = "0";
   receta.titulo = "Bolitas de cacao y Zanahoria";
   receta.dificultad = 3;
-  receta.descripcion = "¡Hola a tod@s!  Feliz día de otoño familia. Os comparto la receta de las bolitas que tanto os gustaron cuando las compartí como idea de snack para Álvaro.\n\nSe las puse junto con fruta y al día siguiente me dijo: “mamá, ponme muchas bolitas”.\n\n¡Un triunfazo total!";
-  
+  receta.descripcion =
+    "¡Hola a tod@s!  Feliz día de otoño familia. Os comparto la receta de las bolitas que tanto os gustaron cuando las compartí como idea de snack para Álvaro.\n\nSe las puse junto con fruta y al día siguiente me dijo: “mamá, ponme muchas bolitas”.\n\n¡Un triunfazo total!";
+
   receta.tiempo = "15:00";
   receta.imagenes = [
     "https://www.lagloriavegana.com/wp-content/uploads/2020/11/image00009-1280x1280.jpeg",
@@ -405,9 +429,8 @@ router.get("/addRecetaFIXED4", auth, async (req, res) => {
   receta.pasos = [
     "Si los dátiles están muy duros, los ponemos 10-15 min en remojo con agua caliente. Después colamos el agua y la desechamos. Otra opción sería meterlos 10 seg en el microondas para ablandarlos.",
     "Ponemos todos los ingredientes en el procesador o en la picadora y trituramos hasta conseguir una pasta. No hace falta que esté muy fina. ¡Ojo con pasarse triturando! que podría empezar a salir el aceite de los frutos secos y eso no es lo que queremos.",
-	"Damos forma a las bolitas con las manos (del tamaño que queráis) y las rebozamos con semillas trituradas, con coco rallado, con cacao en polvo, con frutos secos picados… El rebozado nos ayudara a proteger el interior y a que queden más firmes.",
-	"Las conservamos en el frigorífico. Aguantan 7-10 días aprox. Se pueden congelar.",
-	
+    "Damos forma a las bolitas con las manos (del tamaño que queráis) y las rebozamos con semillas trituradas, con coco rallado, con cacao en polvo, con frutos secos picados… El rebozado nos ayudara a proteger el interior y a que queden más firmes.",
+    "Las conservamos en el frigorífico. Aguantan 7-10 días aprox. Se pueden congelar.",
   ];
   receta.consejos = ["Podéis hacer las variaciones que queráis con esta base."];
 
@@ -433,15 +456,15 @@ router.get("/addRecetaFIXED5", auth, async (req, res) => {
   var dict = [
     { 1: ["bebida de nuez de Borges", "125", "mililitros"] },
     { 2: ["Zumo de limón", "1", "cucharadita"] },
-    { 3: ["aceite de oliva virgen extra", "1", "cucharadita"] },// maybe añadir campo de "artibutos", como "troceado", en dados,etc.
+    { 3: ["aceite de oliva virgen extra", "1", "cucharadita"] }, // maybe añadir campo de "artibutos", como "troceado", en dados,etc.
     { 4: ["harina de trigo", "80", "gramos"] },
     { 5: ["lavadura", "10", "gramos"] },
     { 6: ["endulzante", "1", "cucharada"] },
     { 7: ["Sal", "", ""] },
     { 8: ["Canela en polvo", "", ""] },
   ];
-  
-	/*
+
+  /*
 	125 ml bebida de nuez de Borges
 	1 cdta zumo de limón
 	1 cdta de aceite de oliva virgen extra
@@ -456,22 +479,22 @@ router.get("/addRecetaFIXED5", auth, async (req, res) => {
   receta.usuario = "0";
   receta.titulo = "Fluffy pancakes";
   receta.dificultad = 3;
-  receta.descripcion = "¡Hola a tod@s! ¡Llegan las tortitas más esponjosas de la historia de la cocina vegana!\n\nHoy os comparto mi versión de los típicos fluffy pancakes americanos. Si los acompañáis de fruta, mermelada, chocolate o cualquier otro sirope, ¡vais a tocar el cielo!\n\nQuedan súper aireados y suaves, por lo que os recomiendo que probéis a hacerlos y me contéis si habéis notado la diferencia con los tradicionales.";
-  
+  receta.descripcion =
+    "¡Hola a tod@s! ¡Llegan las tortitas más esponjosas de la historia de la cocina vegana!\n\nHoy os comparto mi versión de los típicos fluffy pancakes americanos. Si los acompañáis de fruta, mermelada, chocolate o cualquier otro sirope, ¡vais a tocar el cielo!\n\nQuedan súper aireados y suaves, por lo que os recomiendo que probéis a hacerlos y me contéis si habéis notado la diferencia con los tradicionales.";
+
   receta.tiempo = "15:00";
   receta.imagenes = [
     "https://www.lagloriavegana.com/wp-content/uploads/2020/09/IMG_7722-1280x1280.jpg",
   ];
-  
+
   receta.ingredientes = dict;
 
   receta.pasos = [
     "Mezclamos en un vaso la bebida de nuez con el zumo de limón. Removemos y dejamos reposar 5 minutos. Es normal que se corte; de hecho, lo que queremos conseguir es una burtermilk.",
     "Añadimos la cdta de aceite y removemos.",
-	"En un bol mezclamos el resto de los ingredientes. Añadimos la buttermilk y removemos despacio (no queremos batir en exceso, sino lo justo para que quede integrado). Dejamos reposar la mezcla 5-10 min.",
-	"Calentamos una sartén pequeña antiadherente y la engrasamos con un poco de aceite de oliva. Hacemos una a una las tortitas añadiendo un poco de masa a la sartén (lentamente para evitar que se extienda mucho). Dejamos que se haga 1 min y le damos la vuelta. Cocinamos 40 seg más aproximadamente. Hacemos la misma operación con el resto de la masa.",
-	"Servimos con fruta, nueces y chocolate derretido por encima.",
-	
+    "En un bol mezclamos el resto de los ingredientes. Añadimos la buttermilk y removemos despacio (no queremos batir en exceso, sino lo justo para que quede integrado). Dejamos reposar la mezcla 5-10 min.",
+    "Calentamos una sartén pequeña antiadherente y la engrasamos con un poco de aceite de oliva. Hacemos una a una las tortitas añadiendo un poco de masa a la sartén (lentamente para evitar que se extienda mucho). Dejamos que se haga 1 min y le damos la vuelta. Cocinamos 40 seg más aproximadamente. Hacemos la misma operación con el resto de la masa.",
+    "Servimos con fruta, nueces y chocolate derretido por encima.",
   ];
   receta.consejos = [];
 
@@ -503,8 +526,8 @@ router.get("/addRecetaFIXED6", auth, async (req, res) => {
     { 6: ["Aceite de oliva", "", ""] },
     { 7: ["Harina", "", ""] },
   ];
-  
-	/*
+
+  /*
 	450-500 g de hamburguesas tipo Beyond, Heura, Lidl… (las que se asemejan a carne) o 20 albóndigas Heura.
 	4 dientes de ajo
 	1 cdta de pimentón dulce
@@ -518,27 +541,28 @@ router.get("/addRecetaFIXED6", auth, async (req, res) => {
   receta.usuario = "0";
   receta.titulo = "Albóndigas veganas al estilo de mi abuelo";
   receta.dificultad = 3;
-  receta.descripcion = "¡Hola a tod@s! ¡Llegan las tortitas más esponjosas de la historia de la cocina vegana!\n\nHoy os comparto mi versión de los típicos fluffy pancakes americanos. Si los acompañáis de fruta, mermelada, chocolate o cualquier otro sirope, ¡vais a tocar el cielo!\n\nQuedan súper aireados y suaves, por lo que os recomiendo que probéis a hacerlos y me contéis si habéis notado la diferencia con los tradicionales.";
-  
+  receta.descripcion =
+    "¡Hola a tod@s! ¡Llegan las tortitas más esponjosas de la historia de la cocina vegana!\n\nHoy os comparto mi versión de los típicos fluffy pancakes americanos. Si los acompañáis de fruta, mermelada, chocolate o cualquier otro sirope, ¡vais a tocar el cielo!\n\nQuedan súper aireados y suaves, por lo que os recomiendo que probéis a hacerlos y me contéis si habéis notado la diferencia con los tradicionales.";
+
   receta.tiempo = "15:00";
   receta.imagenes = [
     "https://www.lagloriavegana.com/wp-content/uploads/2020/09/IMG_9908-1280x1280.jpg",
   ];
-  
+
   receta.ingredientes = dict;
 
   receta.pasos = [
     "Desmenuzamos las hamburguesas y les añadimos un ajo bien picado o trinchado. Mezclamos todo bien. Podemos echar también un poco de perejil picado. Si usamos las albóndigas de Heura este paso no es necesario.",
     "Les damos forma de albóndigas y las pasamos por harina (yo he usado de trigo, pero podéis usar cualquiera).",
-	"En una cacerola honda ponemos un fondito de aceite de oliva y freímos los 3 ajos restantes. Los sacamos y los reservamos en el mortero.",
-	"Freímos las albóndigas en el mismo aceite y las sacamos sobre papel absorbente.",
-	"Bajamos el fuego y echamos una cucharadita de pimentón dulce sin dejar de remover. Incorporamos de inmediato las salsas de tomate, removemos y tapamos la cacerola.",
-	"Machacamos, junto con un poco de sal, el ajo que teníamos reservado y lo echamos en la cacerola. Añadimos también las albóndigas.",
-	"Dejamos que se cocine todo durante 25-30 minutos a fuego lento y con la tapa puesta. Removemos de vez en cuando y lo ajustamos de sal.",
-	"Apartamos del fuego y servimos con unas patatas horneadas o con arroz hervido."
+    "En una cacerola honda ponemos un fondito de aceite de oliva y freímos los 3 ajos restantes. Los sacamos y los reservamos en el mortero.",
+    "Freímos las albóndigas en el mismo aceite y las sacamos sobre papel absorbente.",
+    "Bajamos el fuego y echamos una cucharadita de pimentón dulce sin dejar de remover. Incorporamos de inmediato las salsas de tomate, removemos y tapamos la cacerola.",
+    "Machacamos, junto con un poco de sal, el ajo que teníamos reservado y lo echamos en la cacerola. Añadimos también las albóndigas.",
+    "Dejamos que se cocine todo durante 25-30 minutos a fuego lento y con la tapa puesta. Removemos de vez en cuando y lo ajustamos de sal.",
+    "Apartamos del fuego y servimos con unas patatas horneadas o con arroz hervido.",
   ];
   receta.consejos = [
-	"Si las hacemos de un día para otro o, por lo menos, las dejamos reposar un par de horas antes de comerlas, estarán aún más ricas.",
+    "Si las hacemos de un día para otro o, por lo menos, las dejamos reposar un par de horas antes de comerlas, estarán aún más ricas.",
   ];
 
   receta.rating_num = 4;
