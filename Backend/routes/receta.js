@@ -44,16 +44,18 @@ router.get("/suggested", auth, async (req, res) => {
     { usuario: req.user._id },
     { productos: 1, _id: 0 }
   );
-  const names = await ProductV2.find(
-    { products: { $elemMatch: { id: { $in: productos } } } },
-    { _id: 0, name: 1 }
-  );
-  const recetas = await Receta.find({ ingredientes: { $in: names } });
-  console.log("Productos: ");
-  console.log(productos);
-  console.log("Nombres: ");
-  console.log(names);
-  res.send(recetas);
+  if (productos) {
+    const names = await ProductV2.find(
+      { products: { $elemMatch: { id: { $in: productos } } } },
+      { _id: 0, name: 1 }
+    );
+    console.log(names);
+    if (names) {
+      const recetas = await Receta.find({ ingredientes: { $in: names } });
+      res.send(recetas);
+    }
+  }
+  res.send("No hay nada");
 });
 
 router.get("/getAllergens", auth, async (req, res) => {
