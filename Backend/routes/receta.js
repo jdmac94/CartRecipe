@@ -44,6 +44,9 @@ router.get("/suggested", auth, async (req, res) => {
     { usuario: req.user._id },
     { productos: 1, _id: 0 }
   );
+
+  console.log(productos);
+  
   if (productos) {
     const names = await ProductV2.find(
       { products: { $elemMatch: { id: { $in: productos } } } },
