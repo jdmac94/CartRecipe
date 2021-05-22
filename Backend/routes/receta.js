@@ -52,7 +52,7 @@ router.get("/suggested", auth, async (req, res) => {
   console.log("Productos: ");
   console.log(productos);
   console.log("Nombres: ");
-  console.log(name);
+  console.log(names);
   res.send(recetas);
 });
 
