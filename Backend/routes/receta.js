@@ -44,9 +44,11 @@ router.get("/suggested", auth, async (req, res) => {
     { usuario: req.user._id },
     { productos: 1, _id: 0 }
   );
-  
+  console.log("//////////////////");
   console.log(productos);
+  console.log("//////////////////");
   console.log(productos.productos);
+  console.log("//////////////////");
 
   if (productos) {
 
