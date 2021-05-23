@@ -42,7 +42,6 @@ async function fillReceta(body, receta) {
 router.get("/suggested", auth, async (req, res) => {
   const nevera = await Nevera.find(
     { usuario: req.user._id },
-    { productos: 1, _id: 0 }
   );
   console.log("//////////////////");
   console.log(nevera);
