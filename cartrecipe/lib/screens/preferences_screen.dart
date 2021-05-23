@@ -11,38 +11,32 @@ class PreferencesScreen extends StatefulWidget {
   _PreferencesScreenState createState() => _PreferencesScreenState();
 }
 
-enum Intereses { equilibrado, descubrir, mejorar }
+enum Dieta { ninguna, vegetariana, vegana }
 enum Alergenos { si, no }
+enum Nivel { ninguno, bajo, medio, bueno, excelente }
 
 class _PreferencesScreenState extends State<PreferencesScreen> {
   PageController pageController = PageController(initialPage: 0);
   int pageChangedInt = 0;
   double pageChangedDouble = 0.0;
   int end = 3;
-  List<List<dynamic>> allergens = [
-    [false, "alcohol"],
+  List<List<dynamic>> allergensList = [
     [false, "celery"],
-    [false, "corn"],
     [false, "crustaceans"],
     [false, "eggs"],
     [false, "fish"],
     [false, "gluten"],
-    [false, "gmo"],
-    [false, "meat"],
     [false, "milk"],
     [false, "molluscs"],
     [false, "mustard"],
     [false, "nuts"],
     [false, "peanuts"],
-    [false, "pork"],
     [false, "soybeans"],
-    [false, "sugar"],
     [false, "sulphites"],
-    [false, "trans_fat"],
-    [false, "vegan"],
   ];
-  Intereses _intereses = Intereses.descubrir;
+  Dieta _dieta = Dieta.vegetariana;
   Alergenos _alergenos = Alergenos.no;
+  Nivel _nivel = Nivel.medio;
 
   @override
   Widget build(BuildContext context) {
@@ -129,38 +123,91 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   List<Widget> radiobutton(int pageChangedInt) {
     if (pageChangedInt == 0) {
       return <Widget>[
-        RadioListTile<Intereses>(
-          title: const Text('Comer más equilibrado y sano'),
-          value: Intereses.equilibrado,
-          groupValue: _intereses,
-          onChanged: (Intereses value) {
+        RadioListTile<Dieta>(
+          title: const Text('No'),
+          value: Dieta.ninguna,
+          groupValue: _dieta,
+          onChanged: (Dieta value) {
             setState(() {
-              _intereses = value;
+              _dieta = value;
             });
           },
         ),
-        RadioListTile<Intereses>(
-          title: const Text('Mejorar mis habilidades de Cocina'),
-          value: Intereses.mejorar,
-          groupValue: _intereses,
-          onChanged: (Intereses value) {
+        RadioListTile<Dieta>(
+          title: const Text('Sigo una dieta vegana'),
+          value: Dieta.vegana,
+          groupValue: _dieta,
+          onChanged: (Dieta value) {
             setState(() {
-              _intereses = value;
+              _dieta = value;
             });
           },
         ),
-        RadioListTile<Intereses>(
-          title: const Text('Descubrir nuevas recetas'),
-          value: Intereses.descubrir,
-          groupValue: _intereses,
-          onChanged: (Intereses value) {
+        RadioListTile<Dieta>(
+          title: const Text('Sigo una dieta vegetariana'),
+          value: Dieta.vegetariana,
+          groupValue: _dieta,
+          onChanged: (Dieta value) {
             setState(() {
-              _intereses = value;
+              _dieta = value;
             });
           },
         ),
       ];
     } else if (pageChangedInt == 1) {
+      return <Widget>[
+        RadioListTile<Nivel>(
+          title: const Text('Ninguno'),
+          value: Nivel.ninguno,
+          groupValue: _nivel,
+          onChanged: (Nivel value) {
+            setState(() {
+              _nivel = value;
+            });
+          },
+        ),
+        RadioListTile<Nivel>(
+          title: const Text('Bajo'),
+          value: Nivel.bajo,
+          groupValue: _nivel,
+          onChanged: (Nivel value) {
+            setState(() {
+              _nivel = value;
+            });
+          },
+        ),
+        RadioListTile<Nivel>(
+          title: const Text('Medio'),
+          value: Nivel.medio,
+          groupValue: _nivel,
+          onChanged: (Nivel value) {
+            setState(() {
+              _nivel = value;
+            });
+          },
+        ),
+        RadioListTile<Nivel>(
+          title: const Text('Bueno'),
+          value: Nivel.bueno,
+          groupValue: _nivel,
+          onChanged: (Nivel value) {
+            setState(() {
+              _nivel = value;
+            });
+          },
+        ),
+        RadioListTile<Nivel>(
+          title: const Text('Excelente'),
+          value: Nivel.excelente,
+          groupValue: _nivel,
+          onChanged: (Nivel value) {
+            setState(() {
+              _nivel = value;
+            });
+          },
+        ),
+      ];
+    } else if (pageChangedInt == 2) {
       return <Widget>[
         RadioListTile<Alergenos>(
           title: const Text('No'),
@@ -190,7 +237,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
 
   Widget gridView(pageChangedInt) {
     return Visibility(
-        visible: (pageChangedInt == 1 && (_alergenos == Alergenos.si)),
+        visible: (pageChangedInt == 2 && (_alergenos == Alergenos.si)),
         maintainState: true,
         maintainAnimation: true,
         maintainSize: true,
@@ -201,57 +248,30 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           mainAxisSpacing: 10,
           crossAxisCount: 3,
           children: [
-            for (int i = 0; i < allergens.length; i++) allergenButton(i)
-
-            /* GestureDetector(
-            onTap: () {
-              if (_color == Colors.grey)
-                _color = Colors.blueAccent;
-              else
-                _color = Colors.grey;
-              setState(() {});
-            },
-            child: Container(
-                padding: const EdgeInsets.all(8),
-                color: _color,
-                child: new Image.asset(
-                    'assets/images/products/allergens/alcohol.png')),
-          ),
-          GestureDetector(
-            onTap: () {
-              if (_color == Colors.grey)
-                _color = Colors.blueAccent;
-              else
-                _color = Colors.grey;
-              setState(() {});
-            },
-            child: Container(
-                padding: const EdgeInsets.all(8),
-                color: _color,
-                child: new Image.asset(
-                    'assets/images/products/allergens/celery.png')),
-          ),*/
+            for (int i = 0; i < allergensList.length; i++) allergenButton(i)
           ],
         ));
   }
 
   Widget allergenButton(int allergenNumber) {
-    String imagePath = allergens[allergenNumber][1];
+    String imagePath = allergensList[allergenNumber][1];
     return GestureDetector(
       onTap: () {
-        if (allergens[allergenNumber][0]) {
+        if (allergensList[allergenNumber][0]) {
           setState(() {
-            allergens[allergenNumber][0] = false;
+            allergensList[allergenNumber][0] = false;
           });
         } else {
           setState(() {
-            allergens[allergenNumber][0] = true;
+            allergensList[allergenNumber][0] = true;
           });
         }
       },
       child: Container(
           padding: const EdgeInsets.all(8),
-          color: allergens[allergenNumber][0] ? Colors.blueAccent : Colors.grey,
+          color: allergensList[allergenNumber][0]
+              ? Colors.blueAccent
+              : Colors.grey,
           child: new Image.asset(
               'assets/images/products/allergens/$imagePath.png')),
     );
@@ -259,16 +279,16 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
 
   Widget buildButton(pageChangedInt) {
     return Visibility(
-        visible: pageChangedInt == 2,
+        visible: pageChangedInt == 3,
         maintainState: true,
         maintainAnimation: true,
         maintainSize: true,
         child: ElevatedButton(
             child: Text('Cerrar'),
             onPressed: () => {
-                  print(allergens),
+                  print(allergensList),
                   print(_alergenos),
-                  print(_intereses),
+                  print(_dieta),
                   Navigator.pushAndRemoveUntil(
                       context,
                       new MaterialPageRoute(
