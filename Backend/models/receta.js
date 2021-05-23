@@ -45,7 +45,7 @@ const recetaSchema = new mongoose.Schema({
     type: Array,
     default: [],
   }, */
-  rating_num : {
+  comensales : {
     type: Number
   },
   tags : {

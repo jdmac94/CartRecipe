@@ -57,9 +57,9 @@ const usuarioSchema = new mongoose.Schema({
     type: Number,
     default: null,
   },
-  sistema_unidades: {
-    type: String,
-    default: "sist_int",
+  sistema_internacional: {
+    type: Boolean,
+    default: true,
   },
   recetas_favs: {
     type: Array,
@@ -77,7 +77,7 @@ usuarioSchema.methods.generateAuthToken = function () {
       dieta: this.dieta,
       tags: this.tags,
       nivel_cocina: this.nivel_cocina,
-      sistema_unidades: this.sistema_unidades,
+      sistema_internacional: this.sistema_internacional,
       recetas_favs: this.recetas_favs,
     },
     config.get("jwtPrivateKey")

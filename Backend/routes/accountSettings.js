@@ -31,6 +31,7 @@ router.use(passport.initialize());
 
 router.post("/fillPreferences", auth, async (req, res) => {
 
+    console.log("ADDING PREFERENCES TO USER " + req.user.correo);
     console.log(req.body);
     let user = await Usuario.findOne({ correo: req.user.correo });
 
@@ -63,7 +64,7 @@ router.post("/fillPreferences", auth, async (req, res) => {
     
     // definir alimentos no deseados
     // if (typeof req.body.banArray[Symbol.iterator] === "function") {
-    //     user.trazas = req.body.banArray;
+    //     user.banArray = req.body.banArray;
     // }
 
     // cocina level
@@ -80,6 +81,7 @@ router.post("/fillPreferences", auth, async (req, res) => {
 // en:sulphur dioxide and sulphites, en:lupin, en:molluscs]
 
 router.post("/modAlergias", auth, async (req, res) => {
+    console.log("UPDATING ALLERGIES OF " + req.user.correo);
     console.log(req.body);
     let  = await Usuario.findOne({ correo: req.user.correo });
 
@@ -112,6 +114,7 @@ router.post("/modAlergias", auth, async (req, res) => {
 // "en:non-vegetarian"
 
 router.post("/modDieta", auth, async (req, res) => {
+    console.log("UPDATING DIET OF " + req.user.correo);
     console.log(req.body);
     let user = await Usuario.findOne({ correo: req.user.correo });
 
@@ -129,25 +132,50 @@ router.post("/modDieta", auth, async (req, res) => {
     res.send(result);
 });
 
+router.get("/modSistemaMedida", auth, async (req, res) => {
+    console.log("TOGGLING RECIPE " + req.params.id);
 
-router.post("/modTrazas", auth, async (req, res) => {
+    if (!req.body.sistema_unidades || !typeof req.body.sistema_unidades === "boolean")
+        return res.status(400).send("Error al intentar actualizar el sistema de unidades");
+
+    let perfil = await Usuario.findOne({ correo: req.user.correo },
+        {
+            sistema_unidades: 1,
+        });
+        
+    if (!perfil)
+        return res.status(404).send("Usuario no encontrado");
+    
+        perfil.sistema_unidades = req.body.sistema_unidades;
+    
+    const result = perfil.save();
+    if(!result)
+        return res.status(400).send("Error al intentar actualizar el sistema de unidades");
+
+    res.send("sistema internacional: " + perfil.sistema_unidades);
+});
+
+
+router.post("/modNivel", auth, async (req, res) => {
+
+    console.log("UPDATING COOK LEVEL TO " + req.body.level);
+
     console.log(req.body);
     let user = await Usuario.findOne({ correo: req.user.correo });
 
-    // definir trazas
-    if (typeof req.body.traceArray[Symbol.iterator] === "function") {
-        user.trazas = req.body.traceArray;
-    }
+    if (req.body.level && typeof req.body.level === 'int')
+        user.nivel_cocina = req.body.level;
 
     const result = user.save();
     if(!result)
-        return res.status(400).send("Error al intentar actualizar los alérgenos");
+        return res.status(400).send("Error al intentar actualizar el nivel de cocina del usuario");
 
     res.send(result);
 });
 
 
 router.get("/recetario", auth, async (req, res) => {
+    console.log("GETTING RECETARIO (LIKES)");
 
     let recetario = await Usuario.findOne({ correo: req.user.correo },
         {
@@ -159,7 +187,7 @@ router.get("/recetario", auth, async (req, res) => {
 
 //si existe lo borra, si no lo añade
 router.get("/toggleInRecetario/:id", auth, async (req, res) => {
-
+    console.log("TOGGLING RECIPE " + req.params.id);
     let recetario = await Usuario.findOne({ correo: req.user.correo },
         {
             recetas_favs: 1,
@@ -188,6 +216,7 @@ router.get("/toggleInRecetario/:id", auth, async (req, res) => {
 ///     MODIFICACIONES DE CUENTA    ///
 
 router.put("/modIdFields", auth, async (req, res) => {
+    console.log("MODIFYING PROFILE FIELDS OF " + req.user.correo);
 
     let user = await Usuario.findOne({ correo: req.user.correo });
     var mail = req.body.correo.toLowerCase();
@@ -207,8 +236,8 @@ router.put("/modIdFields", auth, async (req, res) => {
     if (req.body.apellido && typeof req.body.apellido === 'string')
         user.apellido = req.body.apellido;
 
-    if (req.body.level && typeof req.body.level === 'int')
-        user.nivel_cocina = req.body.level;
+    // if (req.body.level && typeof req.body.level === 'int')
+    //     user.nivel_cocina = req.body.level;
 
 });
 
@@ -275,7 +304,6 @@ router.delete("/deleteAccount", auth, async (req, res) => {
   });
 
   router.post("/deleteAccountMotive", async (req, res) => {
-
     console.log("DELETING ACCOUNT MOTIVE");
     
     delLog = new DeleteLog();

@@ -39,7 +39,7 @@ router.get("/recetas/:search", async (req, res) => {
     var replace = ".*" + req.params.search.trim() + ".*";
     var re = new RegExp(replace, "i");
 
-    var fetchResult = await Product.find({ name: re }).limit(10);
+    var fetchResult = await Product.find({ $or: [{ product_name: re }, { product_name_es: re }] }).limit(10);//to test
     
     if (!fetchResult)
       return res.status(404).send("No ha resultados coincidentes");
