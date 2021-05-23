@@ -49,7 +49,7 @@ router.get("/suggested", auth, async (req, res) => {
   console.log(nevera.productos);
   console.log("//////////////////");
 
-  if (productos) {
+  if (nevera) {
 
     intArray = [];
 
