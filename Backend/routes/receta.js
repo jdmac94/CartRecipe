@@ -40,7 +40,7 @@ async function fillReceta(body, receta) {
 }
 
 router.get("/suggested", auth, async (req, res) => {
-  const nevera = await Nevera.find(
+  const nevera = await Nevera.findOne(
     { usuario: req.user._id },
   );
   console.log("//////////////////");
