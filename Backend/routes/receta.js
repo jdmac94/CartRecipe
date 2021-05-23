@@ -44,7 +44,10 @@ router.get("/suggested", auth, async (req, res) => {
     { usuario: req.user._id },
     { productos: 1, _id: 0 }
   );
-    
+  
+  console.log(productos);
+  console.log(productos.productos);
+
   if (productos) {
 
     intArray = [];
@@ -52,6 +55,8 @@ router.get("/suggested", auth, async (req, res) => {
     productos.forEach(function (item) {
       intArray.push(parseInt(item, 10));
     });
+
+    console.log(intArray);
 
     const names = await ProductV2.find(
       { products: { $elemMatch: { id: { $in: intArray } } } },
