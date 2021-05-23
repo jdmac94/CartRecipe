@@ -40,21 +40,21 @@ async function fillReceta(body, receta) {
 }
 
 router.get("/suggested", auth, async (req, res) => {
-  const productos = await Nevera.find(
+  const nevera = await Nevera.find(
     { usuario: req.user._id },
     { productos: 1, _id: 0 }
   );
   console.log("//////////////////");
-  console.log(productos);
+  console.log(nevera);
   console.log("//////////////////");
-  console.log(productos.productos);
+  console.log(nevera.productos);
   console.log("//////////////////");
 
   if (productos) {
 
     intArray = [];
 
-    productos.forEach(function (item) {
+    nevera.productos.forEach(function (item) {
       intArray.push(parseInt(item, 10));
     });
 
