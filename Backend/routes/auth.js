@@ -37,8 +37,13 @@ router.post("/register", async (req, res) => {
     return res.status(462).send("El correo introducido no tiene un formato válido.");
 
   let user = await Usuario.findOne({ correo: mail });
-  if (user)
+  console.log(user);
+  
+  if (user) {
+    console.log(user.correo);
     return res.status(461).send("El usuario ya se encuentra registrado.");
+  }
+    
   user = new Usuario(
     _.pick(req.body, ["nombre", "apellido", "correo", "password"])
   );
