@@ -222,6 +222,8 @@ class _SignIn extends State<SignIn> {
                             onPressed: () => {
                                   if (_formKey.currentState.validate())
                                     {
+                                      saveUserDataLocally(
+                                          nombreText.text, apellidoText.text),
                                       ApiWrapper()
                                           .registrarUsuario(
                                               nombreText.text,
@@ -235,5 +237,13 @@ class _SignIn extends State<SignIn> {
                 ),
               ),
             ))));
+  }
+
+  saveUserDataLocally(String nombre, String apellido) async {
+    SharedPreferences user = await SharedPreferences.getInstance();
+    user.setString('nombre', nombre);
+    user.setString('apellido', apellido);
+
+    print(nombre = user.getString('nombre'));
   }
 }

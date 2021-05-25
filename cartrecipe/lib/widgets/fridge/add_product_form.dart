@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cartrecipe/providers/products_data_provider.dart';
 import 'package:cartrecipe/screens/fridge_screen.dart';
 import 'package:cartrecipe/screens/tabs_screens.dart';
@@ -11,6 +13,8 @@ class AddProductForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   //variable para guardar el texto introducido
   final _textFieldController = TextEditingController();
+
+  String productToDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -51,36 +55,48 @@ class AddProductForm extends StatelessWidget {
             },
             child: Text('Cancelar'),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.deepPurple,
-              onPrimary: Colors.white,
-            ),
-            onPressed: () {
-              //if (_formKey.currentState.validate()) {
-              print('Valor del input: ${_textFieldController.text}');
-              proveedor.addProduct(_textFieldController.text);
-              //addProduct(_textFieldController.text);
+          Consumer<ProductsDataProvider>(
+            builder: (context, proveedor, child) => ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.deepPurple,
+                onPrimary: Colors.white,
+              ),
+              onPressed: () {
+                //if (_formKey.currentState.validate()) {
+                print('Valor del input: ${_textFieldController.text}');
+                productToDelete = _textFieldController.text;
+                proveedor.addProduct(_textFieldController.text);
+                //addProduct(_textFieldController.text);
 
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      'Se ha añadido el producto con el código ${_textFieldController.text}'),
-                  action: SnackBarAction(
-                    label: 'Deshacer',
-                    onPressed: () {},
-                  )));
-              // showSnackBarMessage(
-              //     'Se ha añadido el producto con el código ${_textFieldController.text}');
-              _textFieldController.clear();
-              //Navigator.of(context).popAndPushNamed(FridgeScreen.routeName);
-              Navigator.pop(context);
-              // Navigator.pushReplacement(
-              //     context,
-              //     new MaterialPageRoute(
-              //         builder: (context) => new TabsScreen(3, true)));
-              //}
-            },
-            child: Text('Añadir'),
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                        'Se ha añadido el producto con el código ${_textFieldController.text}'),
+                    action: SnackBarAction(
+                      label: 'Deshacer',
+                      onPressed: () async {
+                        print("Quiero deshacer el añadir de $productToDelete");
+                        proveedor
+                            .deleteProduct([productToDelete]).then((value) {
+                          Navigator.pushReplacement(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new TabsScreen(3)));
+                        });
+                      },
+                    )));
+                // showSnackBarMessage(
+                //     'Se ha añadido el producto con el código ${_textFieldController.text}');
+                _textFieldController.clear();
+                //Navigator.of(context).popAndPushNamed(FridgeScreen.routeName);
+                Navigator.pop(context);
+                // Navigator.pushReplacement(
+                //     context,
+                //     new MaterialPageRoute(
+                //         builder: (context) => new TabsScreen(3, true)));
+                //}
+              },
+              child: Text('Añadir'),
+            ),
           ),
         ],
       ),
