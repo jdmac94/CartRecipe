@@ -56,15 +56,13 @@ class RecipeCard extends StatelessWidget {
                   Column(
                     children: <Widget>[
                       InkWell(
-                        // TODO: Mostrar la barra de navegación al hacer push
                         onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
                                     RecipeDetail(this.recipe))),
                         child: Stack(
-                          children: <Widget>[
-                            ClipRRect(
+                          children: <Widget>[ClipRRect(
                               clipBehavior: Clip.antiAlias,
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(15),
@@ -76,7 +74,8 @@ class RecipeCard extends StatelessWidget {
                                 width: double.infinity,
                                 fit: BoxFit.cover,
                               ),
-                            ),
+                            )
+                            ,
                             Positioned(
                               bottom: 20,
                               right: 10,

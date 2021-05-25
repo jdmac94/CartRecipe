@@ -1,11 +1,12 @@
+import 'package:cartrecipe/api/api_wrapper.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cartrecipe/models/product.dart';
 
 class DetailViewProduct extends StatelessWidget {
   final Product product;
-
-  DetailViewProduct(this.product);
+  final bool typeDetail;
+  DetailViewProduct(this.product, this.typeDetail);
   final double _scoresImagesSize = 70;
   final double _allergensImagesSize = 50;
 
@@ -44,6 +45,19 @@ class DetailViewProduct extends StatelessWidget {
                 ButtonBar(
                   alignment: MainAxisAlignment.center,
                   children: [
+                    Visibility(
+                      visible: typeDetail,
+                      child: TextButton(
+                        onPressed: () {
+                          ApiWrapper().addProduct(product.id);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  'Se ha añadido el producto con el código ${product.id}')));
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Añadir a nevera'),
+                      ),
+                    ),
                     TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: const Text('Cerrar'),

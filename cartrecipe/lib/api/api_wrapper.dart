@@ -34,6 +34,32 @@ class ApiWrapper {
   //     'kyMjF9.1QibofC5JV1krjcnWCc7rLYPFzfDLSukVPIetEvC0Aw';
   //final String endpoint = "a1ac68965a1d.ngrok.io";
 
+  Future<List<Product>> getBusqueda(search) async {
+    String api = "api/v2/search/products/" + search.toString();
+
+    http.Response response =
+        await http.get(Uri.http(endpoint, api), headers: <String, String>{
+      'x-auth-token': authToken,
+    });
+
+    if (response.statusCode == 200) {
+      print("Received correctly product list.");
+      print(response.body);
+      List<Product> prods = [];
+
+      Iterable l = json.decode(response.body);
+      prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
+      print(prods.toString());
+      return prods;
+    } else if (response.statusCode == 404) {
+      print('Not found 404');
+      return null;
+    } else {
+      print('F busqueda');
+      return null;
+    }
+  }
+
   Future<List<Product>> getFridgeProducts() async {
     const String api = "api/v1/nevera";
     final response = await http.get(
@@ -314,13 +340,13 @@ class ApiWrapper {
 
     if (response.statusCode == 200) {
       print("Received correctly recipe list.");
-      print(response.body);
+      //print(response.body);
       /*
       recipeList = (json.decode(response.body) as List)
           .map((i) => Recipe.fromJson(i))
           .toList();
 */
-      recipeList = List<Recipe>.from(
+      recipeList = await List<Recipe>.from(
           json.decode(response.body).map((x) => Recipe.fromJson(x)));
       //Iterable i = json.decode(response.body);
       //recipeList = List<Recipe>.from(i.map((model) => Recipe.fromJson(model)));
@@ -330,43 +356,6 @@ class ApiWrapper {
 
     if (recipeList.isEmpty) {
       print('No he recibido nada');
-      /*var r = Recipe(
-        id: '0',
-        user: 'Patata2000',
-        recipeName: 'Patatas',
-        difficulty: 4,
-        ingredients: [
-          IngredienteReceta(nombre: 'Patatas', cantidad: 2),
-          IngredienteReceta(
-            nombre: 'Huevos',
-            cantidad: 6,
-          ),
-          IngredienteReceta(
-            nombre: 'Cebolla',
-            cantidad: 3,
-          ),
-          IngredienteReceta(
-            nombre: 'Sal',
-            cantidad: 1,
-          ),
-        ],
-        //ingredients: ['Patatas':2, 'Huevos':3, 'Cebolla':6, 'Sal':7],
-        time: '6:00',
-        image:
-            'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png',
-        steps: [
-          'Coger patata',
-          'Pelar patata',
-          'Cocinar patata',
-          'a',
-          'a',
-          'a'
-        ],
-        tips: ['No tirar la patata al suelo'],
-      );
-
-      recipeList = [r, r, r, r, r, r]; // Until we receive data
-      */
     }
     return recipeList;
   }
@@ -388,10 +377,6 @@ class ApiWrapper {
 
     http.Response response = await http.put(
       Uri.http(endpoint, api),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': authToken,
-      },
       body: jsonEncode(<String, String>{
         'nombre': nombre,
         'apellido': apellido,
@@ -411,6 +396,116 @@ class ApiWrapper {
       print(response.statusCode.toString());
       print(response.body.toString());
       return "Error";
+    }
+  }
+
+  Future<void> fillPreferences(bool is_vegan, bool is_vegetarian,
+      List<String> allergenArray, int level, List<String> tags) async {
+    var api = 'api/v1/accSettings/fillPreferences';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, dynamic>{
+        'is_vegan': is_vegan,
+        'is_vegetarian': is_vegetarian,
+        'allergenArray': allergenArray,
+        'level': level,
+        'tagArray': tags,
+      }),
+    );
+
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('No he recibido preferencias');
+  }
+
+  Future<void> modAlergias(List<String> allergenArray) async {
+    var api = 'api/v1/accountSettings/modAlergias';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, List<String>>{
+        'allergenArray': allergenArray,
+      }),
+    );
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> modDieta(bool isVegan, bool isVegetarian) async {
+    var api = 'api/v1/accountSettings/modDieta';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, bool>{
+        'is_vegan': isVegan,
+        'is_vegetarian': isVegetarian,
+      }),
+    );
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> modNivel(int level) async {
+    var api = 'api/v1/accountSettings/modNivel';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, int>{
+        'level': level,
+      }),
+    );
+    print("${response}");
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> modificaSistemaUnidades(bool metricUnit) async {
+    var api = "api/v1/accSettings/modSistemaMedida";
+    http.Response response = await http.post(Uri.http(endpoint, api),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': authToken,
+        },
+        body: jsonEncode(<String, String>{
+          'sistema_unidades': metricUnit.toString(),
+        }));
+    print('Received response ' + '${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('Received correctly');
+    } else {
+      print('Found a status code different than 200');
     }
   }
 }

@@ -48,11 +48,17 @@ class Product {
       _name = json['product_name'];
     }
 
-    if (json['imgs'][0] != null) {
-      _image = json['imgs'][0].values.toList();
+    if (json['imgs'] != null) {
+      if (json['imgs'][0] == null) {
+        _image = 'null';
+      } else {
+        _image = json['imgs'][0].values.toList();
+      }
     }
 
-    if (json['allergens_tags'] != null) {
+    if (json['allergens_tags'] == null) {
+      _listAllergens = null;
+    } else {
       List<dynamic> tempAllergens = json['allergens_tags'].toList();
 
       for (var i = 0; i < tempAllergens.length; i++) {
@@ -60,11 +66,15 @@ class Product {
       }
     }
 
-    if (json['ingredients_analysis_tags'] != null) {
+    if (json['ingredients_analysis_tags'] == null) {
+      _listIngredientsAnalysis = null;
+    } else {
       _listIngredientsAnalysis = json['ingredients_analysis_tags'].toList();
     }
 
-    if (json['traces_tags'] != null) {
+    if (json['traces_tags'] == null) {
+      _listTraces = null;
+    } else {
       _listTraces = json['traces_tags'].toList();
     }
 
@@ -91,7 +101,8 @@ class Product {
     return Product(
       id: json['_id'],
       name: _name,
-      image: _image[0],
+      image: _image == null ? _image : _image[0],
+      //image: _image[0],
       allergens: _listAllergens,
       nutriScore: _nutriScore,
       ecoScore: _ecosScore,

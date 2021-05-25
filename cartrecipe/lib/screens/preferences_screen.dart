@@ -1,6 +1,7 @@
 import 'package:cartrecipe/screens/tabs_screens.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:cartrecipe/api/api_wrapper.dart';
 
 import 'package:cartrecipe/models/preferences_list_pages.dart';
 
@@ -19,7 +20,38 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   PageController pageController = PageController(initialPage: 0);
   int pageChangedInt = 0;
   double pageChangedDouble = 0.0;
-  int end = 3;
+  int end = 5;
+  List<String> allergenArray = [];
+  List<String> tagsToSend = [];
+  List<List<dynamic>> tags = [
+    [false, "Arroces"],
+    [false, "Asiático"],
+    [false, " Carnes"],
+    [false, "De Cuchara"],
+    [false, "Desayunos"],
+    [false, "Ensaladas y Bowls"],
+    [false, "Fitness"],
+    [false, "Guisos"],
+    [false, "Hamburguesas"],
+    [false, "Legumbres"],
+    [false, "Mexicano"],
+    [false, "Pastas"],
+    [false, "Pizzas"],
+    [false, "Pescados y Mariscos"],
+    [false, "Pollo"],
+    [false, "Postres"],
+    [false, "Revueltos y Tortillas"],
+    [false, "Salsas"],
+    [false, "Salteados"],
+    [false, "Sándwiches y Bocadillos"],
+    [false, "Sin Gluten"],
+    [false, "Snacking Saludable"],
+    [false, "Sopas y Cremas"],
+    [false, "Tostas"],
+    [false, "Vegano"],
+    [false, "Vegetariano"],
+    [false, "Verduras"]
+  ];
   List<List<dynamic>> allergensList = [
     [false, "celery"],
     [false, "crustaceans"],
@@ -37,6 +69,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   Dieta _dieta = Dieta.vegetariana;
   Alergenos _alergenos = Alergenos.no;
   Nivel _nivel = Nivel.medio;
+  bool checkedValue = false;
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +116,12 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                   children: radiobutton(pageChangedInt),
                 )),
                 Container(
-                  child: Expanded(child: gridView(pageChangedInt)),
+                  child: Expanded(child: gridViewAlergenos(pageChangedInt)),
                 ),
+                Container(
+                    child: Expanded(
+                  child: gridView(pageChangedInt),
+                )),
                 Align(
                     //Este es para alinear bien todos losPageview
                     alignment: Alignment.bottomCenter,
@@ -235,7 +272,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     }
   }
 
-  Widget gridView(pageChangedInt) {
+  Widget gridViewAlergenos(int pageChangedInt) {
     return Visibility(
         visible: (pageChangedInt == 2 && (_alergenos == Alergenos.si)),
         maintainState: true,
@@ -251,6 +288,38 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
             for (int i = 0; i < allergensList.length; i++) allergenButton(i)
           ],
         ));
+  }
+
+  Widget gridView(int pageChangedInt) {
+    if (pageChangedInt == 3) {
+      return GridView.count(
+          primary: false,
+          padding: const EdgeInsets.all(20),
+          crossAxisSpacing: 0,
+          mainAxisSpacing: 0,
+          crossAxisCount: 2,
+          childAspectRatio: 4,
+          children: [for (int i = 0; i < tags.length; i++) checkBox(i)]);
+    } else
+      return Container();
+  }
+
+  Widget checkBox(int index) {
+    String tag = tags[index][1];
+    return CheckboxListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 2),
+      title: Text(tag),
+      value: tags[index][0],
+      onChanged: (newValue) {
+        setState(() {
+          tags[index][0] = newValue;
+          tags[index][0]
+              ? tagsToSend.add(tags[index][1])
+              : tagsToSend.remove(tags[index][1]);
+        });
+      },
+      controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
+    );
   }
 
   Widget allergenButton(int allergenNumber) {
@@ -279,16 +348,27 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
 
   Widget buildButton(pageChangedInt) {
     return Visibility(
-        visible: pageChangedInt == 3,
+        visible: pageChangedInt == 5,
         maintainState: true,
         maintainAnimation: true,
         maintainSize: true,
         child: ElevatedButton(
             child: Text('Cerrar'),
             onPressed: () => {
+                  allergensList.forEach((element) {
+                    if (element[0] == true)
+                      allergenArray.add("en:" + (element[1]));
+                  }),
+                  ApiWrapper().fillPreferences(
+                      _dieta.index == 2,
+                      _dieta.index == 1,
+                      allergenArray,
+                      (_nivel.index + 1),
+                      tagsToSend),
                   print(allergensList),
                   print(_alergenos),
                   print(_dieta),
+                  print(tagsToSend),
                   Navigator.pushAndRemoveUntil(
                       context,
                       new MaterialPageRoute(
