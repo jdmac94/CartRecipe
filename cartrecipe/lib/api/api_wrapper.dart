@@ -18,8 +18,9 @@ class ApiWrapper {
 
   factory ApiWrapper() => _instance ?? ApiWrapper._internal();
 
-  final String endpoint =
-      "3bf76ddff8b2.ngrok.io"; //"158.109.74.46:55005"; //'9616b67d4dbf.ngrok.io';
+  final String endpoint = '3587b861185a.ngrok.io';
+
+  ///"158.109.74.46:55005"; //'9616b67d4dbf.ngrok.io';
   String authToken;
 
   //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEyN2NjN2E0NDM0ZjAwMmZlOWRjYzAiLCJjb3JyZW8iOiJwZXBvQHBlcG8uZXMiLCJub21icmUiOiJQZXBlIiwiYWxlcmdpYXMiOltdLCJ0YWdzIjpbXSwibml2ZWxfY29jaW5hIjpudWxsLCJzaXN0ZW1hX3VuaWRhZGVzIjoic2lzdF9pbnQiLCJyZWNldGFzX2ZhdnMiOltdLCJpYXQiOjE2MjEyNjkyOTd9.2gG--BpwBRVhjcvtZeF32XK-Ikb7ghrydIetJXQLRqQ';
