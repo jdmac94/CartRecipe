@@ -334,7 +334,7 @@ class ApiWrapper {
   }
 
   Future<void> fillPreferences(bool is_vegan, bool is_vegetarian,
-      List<String> allergenArray, int level) async {
+      List<String> allergenArray, int level, List<String> tags) async {
     var api = 'api/v1/accSettings/fillPreferences';
 
     http.Response response = await http.post(
@@ -348,6 +348,7 @@ class ApiWrapper {
         'is_vegetarian': is_vegetarian,
         'allergenArray': allergenArray,
         'level': level,
+        'tagArray': tags,
       }),
     );
 
