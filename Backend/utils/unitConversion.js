@@ -1,49 +1,54 @@
-async function convertIngredientsUnits(ingredient, sistInter = true) {
+function convertIngredientsUnits(ingredient, sistInter = true) {
+  console.log("sistInter: " + sistInter);
 
+        if (!sistInter) {
+          console.log(ingredient[1]);
+            switch (ingredient[1]) {
+              case 'kilogramos':
+                ingredient[0] = lbs_to_kg(ingredient[0], sistInter);
+                ingredient[1] = "libras";
+                  break;
+              case 'gramos':
+                ingredient[0] = oz_to_g(ingredient[0], sistInter);
+                ingredient[1] = "onzas";
+                  break;
+              case 'litros':
+                ingredient[0] = cups_to_l(ingredient[0], sistInter);
+                ingredient[1] = "tazas";
+                  break;
+              case 'mililitros':
+                ingredient[0] = liqOnce_to_ml(ingredient[0], sistInter);
+                ingredient[1] = "onzas_liquidas";
+                break;
+            }
+          }
+          
+          if (sistInter) {
+            switch (ingredient[1]) {
+              case 'libras':
+                ingredient[0] = lbs_to_kg(ingredient[0], sistInter);
+                ingredient[1] = "kilogramos";
+                  break;
+              case 'onzas':
+                ingredient[0] = oz_to_g(ingredient[0], sistInter);
+                ingredient[1] = "gramos";
+                  break;
+              case 'tazas':
+                ingredient[0] = cups_to_l(ingredient[0], sistInter);
+                ingredient[1] = "litros";
+                  break;
+              case 'onzas_liquidas':
+                ingredient[0] = liqOnce_to_ml(ingredient[0], sistInter);
+                ingredient[1] = "mililitros";
+                break;
+            }
+          }
 
-    if (!sistInter) {
-      switch (ingredient) {
-        case 'kilogramos':
-            ingredient = lbs_to_kg(ingredient, sistInter)
-            break;
-        case 'gramos':
-            ingredient = oz_to_g(ingredient, sistInter)
-            break;
-        case 'litros':
-            ingredient = cups_to_l(ingredient, sistInter)
-            break;
-        case 'mililitros':
-            ingredient = liqOnce_to_ml(ingredient, sistInter)
-          break;
-        // default:
-        //   //Declaraciones ejecutadas cuando ninguno de los valores coincide con el valor de la expresión
-        //   break;
-      }
-    }
-
-    if (sistInter) {
-      switch (ingredient) {
-        case 'libras':
-            ingredient = lbs_to_kg(ingredient, sistInter)
-            break;
-        case 'onzas':
-            ingredient = oz_to_g(ingredient, sistInter)
-            break;
-        case 'tazas':
-            ingredient = cups_to_l(ingredient, sistInter)
-            break;
-        case 'onzas_liquidas':
-            ingredient = liqOnce_to_ml(ingredient, sistInter)
-          break;
-        // default:
-        //   //Declaraciones ejecutadas cuando ninguno de los valores coincide con el valor de la expresión
-        //   break;
-      }
-    }
-    return [];
+    
+    return ingredient;
   }
  
-  async function lbs_to_kg(qtty, sistInter = true) {
+  function lbs_to_kg(qtty, sistInter = true) {
     
     if (sistInter)
         qtty = qtty * 454;
@@ -53,7 +58,7 @@ async function convertIngredientsUnits(ingredient, sistInter = true) {
     return Number((qtty).toFixed(2));;
   }
 
-  async function oz_to_g(qtty, sistInter = true) {
+  function oz_to_g(qtty, sistInter = true) {
     
     if (sistInter)
         qtty = qtty * 28,35;
@@ -63,7 +68,7 @@ async function convertIngredientsUnits(ingredient, sistInter = true) {
     return Number((qtty).toFixed(2));;
   }
   
-  async function cups_to_l(qtty, sistInter = true) {
+  function cups_to_l(qtty, sistInter = true) {
 
     if (sistInter)
         qtty = qtty / 4,227;
@@ -73,7 +78,8 @@ async function convertIngredientsUnits(ingredient, sistInter = true) {
     return Number((qtty).toFixed(2));;
 
   }
-  async function liqOnce_to_ml(qtty, sistInter = true) {
+
+  function liqOnce_to_ml(qtty, sistInter = true) {
 
     if (sistInter)
         qtty = qtty * 29,574;
@@ -85,4 +91,4 @@ async function convertIngredientsUnits(ingredient, sistInter = true) {
 
 
   
-  module.exports = { checkImgFromAPI };
+  module.exports = { convertIngredientsUnits };

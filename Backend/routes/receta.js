@@ -6,6 +6,7 @@ const { Receta } = require("../models/receta");
 const { Nevera } = require("../models/nevera");
 const { ProductV2 } = require("../models/product_v2");
 const auth = require("../middlewares/auth");
+const { convertIngredientsUnits } = require("../utils/unitConversion");
 
 async function fillReceta(body, receta) {
   if (body.titulo) receta.titulo = body.titulo;
@@ -73,19 +74,25 @@ router.get("/suggested", auth, async (req, res) => {
 });
 
 router.get("/getAllergens", auth, async (req, res) => {
-  // async function fetchAllergens(ingredients) {
-
-  //formatear lista de ingredientes a array simple
-  // var dict = [
-  //   { 1: ["Aceite de Oliva Virgen Extra", "1"] },
-  //   { 2: ["zanahoria", "3"] },
-  // ];
 
   var test = "Nuez natural";
   const allergens = await ProductV2.find({ name: test });
 
+  var a = allergens.productos[0].allergens_from_user;
+
+  console.log(a);
+
+  res.send(a);
+  // }
+});
+
+router.get("/getDiets", auth, async (req, res) => {
+// async function fetchDiet(product) {
+  
+  // var test = "Nuez natural";
+  
   // const allergens = await ProductV2.aggregate([
-  //   { $match: { name: test } },
+  //   { $match: { name: product } },
   //   {
   //     $group:
   //       {
@@ -95,42 +102,49 @@ router.get("/getAllergens", auth, async (req, res) => {
   //   },
   //   { $project: { name: 1, allerg: 1} }
   // ]).exec();
-  var a = allergens.productos[0].allergens_from_user;
 
-  console.log(a);
+  const allergens = await ProductV2.aggregate([
+    { $match: { name: product } },
+    {
+      $group:
+        {
+          _id: "a",
+          allerg: { $push: "$products.ingredients_analysis_tags" },
+        }
+    },
+    { $project: { name: 1, allerg: 1} }
+  ]);
 
-  res.send(a);
+  // x = allergens[0].allerg[0];
+  // console.log(x);
+
+  // arr1 = x[0];
+
+  // for (let i = 1; i < x.length; i++) {
+  //   arr1 = arr1.filter(value => x[i].includes(value));
   // }
+
+  console.log(allergens);
+
+  // const genericProd = await ProductV2.find({ name : test });
+
+  // genericProd.allergens_from_user = arr1;
+
+  // genericProd.save();
+
+  res.send(allergens);
+// }
 });
 
+//ojo con el rendimiento al demandar mucha receta. Pendiente de hacer regulable el limite
 router.get("/getAllRecetas", auth, async (req, res) => {
   let recetaList = await Receta.find().limit(10);
-
-  // if (!recetaList) {
-  //     let receta = new Receta();
-  //     receta.usuario = "0";
-  //     receta.titulo = "Jugo de aloe vera y miel";
-  //     receta.dificultad = 1;
-  //     receta.tiempo = "5:00";
-  //     receta.ingredientes = [
-  //         "6 cucharaditas de gel de aloe vera",
-  //         "½ vaso de agua",
-  //         "1 cucharadita de miel"
-  //     ];
-  //     receta.pasos = [
-  //         "Saca la pulpa de aloe de vera con una cuchara y viértela dentro de la licuadora",
-  //         "Incorpora los demás ingredientes y mézclalos muy bien.",
-  //         "Consume este jugo en ayunas durante una semana completa, no más."
-  //     ]
-  //     receta.consejos = [
-  //         "Para potenciar todavía más los efectos del jugo, puedes sustituir el agua por zumo de alguna de las mejores frutas para ir al baño, como la naranja, el limón o la piña."
-  //     ];
-  //     receta.rating_num = 3;
-  //     const result = receta.save();
-  //     //return res.status(404).send("No hay recetas");
-  //     recetaList = await Receta.find();
-  //     res.send(recetaList);
-  // }
+  
+  for (const [key, value] of Object.entries(recetaList[0].ingredientes)) {
+    let [keyIn, valueIn] = Object.entries(value)[0];
+    valueIn = convertIngredientsUnits(valueIn, req.user.sistema_internacional);
+    
+  }
 
   res.send(recetaList);
 });
@@ -151,11 +165,6 @@ router.get("/addRecetaFIXED", auth, async (req, res) => {
     { 3: ["vaso de agua", "1.5"] },
     { 4: ["cucharadita de miel", "1"] },
   ];
-
-  /*"ingredientes":[
-        { "nombre": "manzana verde", "cantidad: "1" }, 
-        { "nombre" : "rodajas de papaya", "cantidad" : "3"},
-        ... ] */
 
   receta.usuario = "0";
   receta.titulo = "Jugo para el estreñimiento de manzana y papaya";
@@ -178,15 +187,6 @@ router.get("/addRecetaFIXED", auth, async (req, res) => {
 
   receta.rating_num = 4;
   receta.tags = ["fruta", "batido", "zumo", "vegano", "vegetariano"];
-  receta.allergenList = [
-    "alergeno0",
-    "alergeno1",
-    "alergeno2",
-    "alergeno3",
-    "alergeno4",
-    "alergeno5",
-  ];
-  const result = receta.save();
   //return res.status(404).send("No hay recetas");
 
   res.send(receta);
@@ -217,8 +217,6 @@ router.post("/addReceta", auth, async (req, res) => {
   else return res.status(400).send("La receta debe contener pasos a seguir");
 
   if (req.body.consejos) receta.consejos = req.body.consejos;
-
-  //receta.rating_num = 4; por defecto que sea undefined al no tener valoraciones
 
   const result = receta.save();
   //if (result) res.send();
@@ -257,13 +255,13 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
   let receta = new Receta();
   //https://www.lagloriavegana.com/hummus-de-zanahoria/
   var dict = [
-    { 1: ["garbanzos cocidos", "400", "gramos"] },
-    { 2: ["diente de ajo", "1", ""] },
-    { 3: ["zanahoria", "300", "gramos"] },
-    { 4: ["aceite de oliva", "50", "gramos"] },
-    { 5: ["zumo de limón", "1", "cucharada"] }, //1 cda de zumo limón
-    { 6: ["aceite de oliva", "50", "gramos"] }, // 30 g de tahín tostado o 30 g de semillas de sésamo (triturar solas antes)
-    { 7: ["Sal, comino y curry", "", "al gusto"] }, //Sal, comino y curry al gusto
+    { "garbanzos cocidos": ["400", "gramos"] },
+    { "diente de ajo": ["1", ""] },
+    { "zanahoria": ["300", "gramos"] },
+    { "aceite de oliva": ["50", "gramos"] },
+    { "zumo de limón": ["1", "cucharada"] }, //1 cda de zumo limón
+    { "tahín tostado": ["30", "gramos"] }, // 30 g de tahín tostado o 30 g de semillas de sésamo (triturar solas antes)
+    { "Sal": ["", ""] }
   ];
 
   receta.usuario = "0";
@@ -287,14 +285,7 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
 
   receta.rating_num = 4;
   receta.tags = ["tag0", "tag1", "tag2", "tag3", "tag4"];
-  receta.allergenList = [
-    "alergeno0",
-    "alergeno1",
-    "alergeno2",
-    "alergeno3",
-    "alergeno4",
-    "alergeno5",
-  ];
+  receta.allergenList = ["en:gluten", "en:oats", "en:crustaceans", "en:eggs", "en:fish", "en:peanuts", "en:soybeans", "en:milk", "en:nuts", "en:celery", "en:mustard", "en:sesame-seeds", "en:sulphur-dioxide-and -sulphites", "en:lupin", "en:molluscs"];
   const result = receta.save();
   //return res.status(404).send("No hay recetas");
 
