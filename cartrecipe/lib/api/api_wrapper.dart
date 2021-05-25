@@ -32,6 +32,32 @@ class ApiWrapper {
   //     'kyMjF9.1QibofC5JV1krjcnWCc7rLYPFzfDLSukVPIetEvC0Aw';
   //final String endpoint = "a1ac68965a1d.ngrok.io";
 
+  Future<List<Product>> getBusqueda(search) async {
+    String api = "api/v2/search/products/" + search.toString();
+
+    http.Response response =
+        await http.get(Uri.http(endpoint, api), headers: <String, String>{
+      'x-auth-token': authToken,
+    });
+
+    if (response.statusCode == 200) {
+      print("Received correctly product list.");
+      print(response.body);
+      List<Product> prods = [];
+
+      Iterable l = json.decode(response.body);
+      prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
+      print(prods.toString());
+      return prods;
+    } else if (response.statusCode == 404) {
+      print('Not found 404');
+      return null;
+    } else {
+      print('F busqueda');
+      return null;
+    }
+  }
+
   Future<List<Product>> getFridgeProducts() async {
     const String api = "api/v1/nevera";
     final response = await http.get(
