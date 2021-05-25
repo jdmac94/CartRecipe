@@ -18,9 +18,8 @@ class ApiWrapper {
 
   factory ApiWrapper() => _instance ?? ApiWrapper._internal();
 
-  final String endpoint = '3587b861185a.ngrok.io';
-
-  //"158.109.74.46:55005";
+  final String endpoint = "3587b861185a.ngrok.io";
+  //'9616b67d4dbf.ngrok.io'; //"158.109.74.46:55005";
 
   String authToken;
 
@@ -399,8 +398,13 @@ class ApiWrapper {
     }
   }
 
-  Future<void> fillPreferences(bool is_vegan, bool is_vegetarian,
-      List<String> allergenArray, int level, List<String> tags) async {
+  Future<void> fillPreferences(
+      bool is_vegan,
+      bool is_vegetarian,
+      List<String> allergenArray,
+      int level,
+      List<String> tags,
+      List<String> ban) async {
     var api = 'api/v1/accSettings/fillPreferences';
 
     http.Response response = await http.post(
@@ -415,6 +419,7 @@ class ApiWrapper {
         'allergenArray': allergenArray,
         'level': level,
         'tagArray': tags,
+        'banArray': ban
       }),
     );
 
@@ -507,5 +512,25 @@ class ApiWrapper {
     } else {
       print('Found a status code different than 200');
     }
+  }
+
+  Future<List<String>> getGenericIngredients() async {
+    const String api = "api/v1/accSettings/getGenericIngredients";
+    List<String> prods = [];
+    final response = await http.get(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'x-auth-token': authToken,
+      },
+    );
+    if (response.statusCode == 200) {
+      print('ha llegado!!!!');
+
+      prods = List<String>.from(json.decode(response.body));
+    } else {
+      print(response.body);
+      print(response.statusCode);
+    }
+    return prods;
   }
 }
