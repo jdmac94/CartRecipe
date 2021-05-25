@@ -32,6 +32,16 @@ const recetaSchema = new mongoose.Schema({
     required: true,
     default: [],
   },
+  ingredientes_imp: {
+    type: Array,
+    required: true,
+    default: [],
+  },
+  ingredientes_inter: {
+    type: Array,
+    required: true,
+    default: [],
+  },
   pasos: {
     type: Array,
     required: true,

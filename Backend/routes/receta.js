@@ -39,7 +39,7 @@ async function fillReceta(body, receta) {
 
   return receta;
 }
-
+// falta tocarla pero es para el 10, anes quedan otras cosas
 router.get("/suggested", auth, async (req, res) => {
   const nevera = await Nevera.findOne(
     { usuario: req.user._id },
@@ -138,13 +138,29 @@ router.get("/getDiets", auth, async (req, res) => {
 
 //ojo con el rendimiento al demandar mucha receta. Pendiente de hacer regulable el limite
 router.get("/getAllRecetas", auth, async (req, res) => {
-  let recetaList = await Receta.find().limit(10);
-  
-  for (const [key, value] of Object.entries(recetaList[0].ingredientes)) {
-    let [keyIn, valueIn] = Object.entries(value)[0];
-    valueIn = convertIngredientsUnits(valueIn, req.user.sistema_internacional);
-    
-  }
+
+  if (req.user.sistema_internacional || req.user.sistema_unidades == 'sist_int')
+    var ingre = "$ingredientes_inter";
+  else
+    var ingre = "$ingredientes_imp";
+
+  let recetaList = await Receta.aggregate([
+    { "$project": {
+        "_id": "$_id",
+		    "usuario": "$usuario",
+		    "titulo": "$titulo",
+		    "dificultad": "$dificultad",
+		    "descripcion": "$descripcion",
+		    "tiempo": "$tiempo",
+		    "imagenes": "$imagenes",
+        "ingredientes": ingre,
+		    "pasos": "$pasos",
+		    "consejos": "$consejos",
+		    "comensales" : "$comensales",
+		    "tags" : "$tags",
+		    "allergenList" : "$allergenList",
+    }}
+  ]).limit(25);
 
   res.send(recetaList);
 });
@@ -188,7 +204,6 @@ router.get("/addRecetaFIXED", auth, async (req, res) => {
   receta.rating_num = 4;
   receta.tags = ["fruta", "batido", "zumo", "vegano", "vegetariano"];
   //return res.status(404).send("No hay recetas");
-
   res.send(receta);
 });
 
@@ -265,7 +280,7 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
   ];
 
   receta.usuario = "0";
-  receta.titulo = "Hummus de zanahoria";
+  receta.titulo = "Hummus de zanahoriaFIXED";
   receta.dificultad = 2;
   receta.descripcion =
     "¡Hola a tod@s! ¡¿Cuántas versiones de hummus os habré presentado hasta la fecha?! Desde luego, no me aburro de comerlo en sus distintas variedades, y mis invitad@s tampoco.\n\n Os traigo una opción para acompañar en cualquier pica-pica que se preste. ¡Y esta triunfa ¡seguro! A mi me gusta acompañarlo de sticks de zanahoria, pepino, tomate cherry, endibia…Pero los crackers, nachos y palitos también son una buena alternativa. Para gustos, colores. Y para hummus, ¡sabores!";
@@ -291,6 +306,44 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
 
   res.send(receta);
 });
+
+
+router.get("/addImpInterToAll", auth, async (req, res) => {
+
+  let recetas = await Receta.find({}, {ingredientes:1});
+  
+  recetas.forEach(function (x) {
+    dictImp = JSON.parse(JSON.stringify(x.ingredientes));
+    dictInter = JSON.parse(JSON.stringify(x.ingredientes));
+
+    for (const [key, value] of Object.entries(dictImp)) {
+      let [keyIn, valueIn] = Object.entries(value)[0];
+      valueIn = convertIngredientsUnits(valueIn, false);
+    }
+    
+    for (const [key, value] of Object.entries(dictInter)) {
+      let [keyIn, valueIn] = Object.entries(value)[0];
+      valueIn = convertIngredientsUnits(valueIn, true);
+    }
+
+    console.log("/////////////");
+    console.log(x.ingredientes);
+    console.log(dictImp);
+    console.log(dictInter);
+
+    x.ingredientes_imp   = dictImp;
+    x.ingredientes_inter = dictInter;
+
+    const result = x.save();
+      if(!result)
+          return res.status(400).send("ERROR al actualizar perfil");
+    console.log(result);
+  });
+
+    res.send("OK");
+
+});
+
 
 router.get("/addRecetaFIXED2", auth, async (req, res) => {
   let receta = new Receta();

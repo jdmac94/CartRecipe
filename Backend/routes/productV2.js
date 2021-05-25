@@ -16,87 +16,76 @@ router.post("/", async (req, res) => {
 
   if (data.status === 0) return res.send("Product not found");
 
-  const result = await ProductV2.find({ name: name });
+  const result = await ProductV2.find({ product_name: `${name} generico` });
   if (!result) return res.send("There was an error, try later");
   if (result.length === 0) {
-    const item = new ProductV2({
-      name,
-      products: [
-        {
-          id: nowTimestamp(),
-          name: `${name} generico`,
-          allergens_from_user: null,
-          nutriscore_data: {},
-          nova_group: null,
-          imgs: "https://www.blackwallst.directory/images/NoImageAvailable.png",
-        },
-        {
-          // id,
-          // name: data.product.product_name_es,
-          // allergens_tags: data.product.allergens_tags,
-          // nutriscore_data: data.product.nutriscore_data,
-          // nova_group: data.product.nova_group,
-          // imgs: data.product.selected_images.front.display,
-            id,
-            product_name : data.product.product_name,
-            product_name_es : data.product.product_name_es,
-            nutriments : data.product.nutriments,
-            ecoscore_grade : data.product.ecoscore_grade,
-            nova_groups : data.product.nova_groups,
-            quantity : data.product.quantity,
-            nutriscore_grade : data.product.nutriscore_grade,
-            ingredients_analysis_tags : data.product.ingredients_analysis_tags,
-            allergens_tags : data.product.allergens_tags,
-            traces : data.product.traces,
-            traces_tags : data.product.traces_tags,
-            ingredients_text_es : data.product.ingredients_text_es,
 
-            imgs: data.product.selected_images.front.display,
-
-        },
-      ],
-    });
-    return res.send(await item.save());
-  }
-  const productsById = await ProductV2.find({ name, "products.id": id });
-  if (productsById.length === 0) {
-    const result = await ProductV2.findOneAndUpdate(
-      { name },
-      {
-        $push: {
-          products: {
-            id,
-            product_name : data.product.product_name,
-            product_name_es : data.product.product_name_es,
-            nutriments : data.product.nutriments,
-            ecoscore_grade : data.product.ecoscore_grade,
-            nova_groups : data.product.nova_groups,
-            quantity : data.product.quantity,
-            nutriscore_grade : data.product.nutriscore_grade,
-            ingredients_analysis_tags : data.product.ingredients_analysis_tags,
-            allergens_tags : data.product.allergens_tags,
-            traces : data.product.traces,
-            traces_tags : data.product.traces_tags,
-            ingredients_text_es : data.product.ingredients_text_es,
-
-            imgs: data.product.selected_images.front.display,
-
-            /* 
-            id,
-            name: data.product.product_name_es,
-            allergens_tags: data.product.allergens_tags,
-            nutriscore_data: data.product.nutriscore_data,
-            nova_group: data.product.nova_group,
-            imgs: data.product.selected_images.front.display,
-            */
-
-            ////////////////////////////////////////////////////////
-            // hablar con front para saber que campos usan 100% y evitar almacenar info innecesaria
-            // ahora mismo rtabajan con estos datos, pero alguno sobra: 
-          },
-        },
+    const itemGen = new ProductV2({
+          id: nowTimestamp().toString(),
+          product_name: `${name} generico`,
+          product_name_es: `${name} generico`,
+          allergens_tags: null,
+          nutriscore_grade: null,
+          nova_groups: null,
+          imgs: { es:"https://www.blackwallst.directory/images/NoImageAvailable.png" },
       }
     );
+    
+    const resu = await itemGen.save();
+    if (!resu)
+      return res.status(500).send("Error al guardar el producto");
+
+    const itemSpecific = new ProductV2(
+      {
+        id,
+        product_name : data.product.product_name,
+        product_name_es : data.product.product_name_es,
+        nutriments : data.product.nutriments,
+        ecoscore_grade : data.product.ecoscore_grade,
+        nova_groups : data.product.nova_groups,
+        quantity : data.product.quantity,
+        nutriscore_grade : data.product.nutriscore_grade,
+        ingredients_analysis_tags : data.product.ingredients_analysis_tags,
+        allergens_tags : data.product.allergens_tags,
+        traces : data.product.traces,
+        traces_tags : data.product.traces_tags,
+        ingredients_text_es : data.product.ingredients_text_es,
+        inner_ingredient: name,
+        imgs: data.product.selected_images.front.display,
+      }
+    );
+
+    const resu2 = await itemSpecific.save();
+    if (!resu2)
+      return res.status(500).send("Error al guardar el producto");
+
+    return res.send(resu2);
+  }
+
+  const productsById = await ProductV2.find({ inner_ingredient: name, id: id });
+  if (productsById.length === 0) {
+
+    const result = new ProductV2(
+      {
+        id,
+        product_name : data.product.product_name,
+        product_name_es : data.product.product_name_es,
+        nutriments : data.product.nutriments,
+        ecoscore_grade : data.product.ecoscore_grade,
+        nova_groups : data.product.nova_groups,
+        quantity : data.product.quantity,
+        nutriscore_grade : data.product.nutriscore_grade,
+        ingredients_analysis_tags : data.product.ingredients_analysis_tags,
+        allergens_tags : data.product.allergens_tags,
+        traces : data.product.traces,
+        traces_tags : data.product.traces_tags,
+        ingredients_text_es : data.product.ingredients_text_es,
+        inner_ingredient: name,
+        imgs: data.product.selected_images.front.display,
+      }
+    );
+    
+    await result.save();
     return res.send(result);
   } else {
     return res.send("Item already in DB");

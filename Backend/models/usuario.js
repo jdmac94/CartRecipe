@@ -49,10 +49,10 @@ const usuarioSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
-  // category_ban: {
-  //   type: Array,
-  //   default: [],
-  // },
+  category_ban: {
+    type: Array,
+    default: [],
+  },
   nivel_cocina: {
     type: Number,
     default: null,

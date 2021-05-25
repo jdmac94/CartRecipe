@@ -6,6 +6,7 @@ const _ = require("lodash");
 var crypto = require('crypto');
 
 const { Usuario } = require("../models/usuario");
+const { ProductV2 } = require("../models/product_v2");
 const { Nevera } = require("../models/nevera");
 const { DeleteLog } = require("../models/deleteLog");
 const { sendMailPassword } = require("../utils/mailing");
@@ -47,7 +48,7 @@ router.post("/fillPreferences", auth, async (req, res) => {
         user.vegetariano = req.body.is_vegetariano;
 
     // definir alergias
-    if (typeof req.body.allergenArray[Symbol.iterator] === "function") {
+    if (req.body.allergenArray && typeof req.body.allergenArray[Symbol.iterator] === "function") {
         user.alergias = req.body.allergenArray;// lo hacemos de bools o directamente strings? lo ultimo requerirá revisar los campos
         //si hay que revisar, es obtener de la bd los alergenos y comparar el array con cada elemento del allergenArray
     }
@@ -58,22 +59,49 @@ router.post("/fillPreferences", auth, async (req, res) => {
     // }
 
     // definir tags favs
-    if (typeof req.body.tagArray[Symbol.iterator] === "function") {
+    if (req.body.tagArray && typeof req.body.tagArray[Symbol.iterator] === "function") {
         user.tags = req.body.tagArray;
     }
     
     // definir alimentos no deseados
-    // if (typeof req.body.banArray[Symbol.iterator] === "function") {
-    //     user.banArray = req.body.banArray;
-    // }
+    if (typeof req.body.banArray[Symbol.iterator] === "function") {
+        user.banArray = req.body.banArray;
+    }
 
     // cocina level
     if (req.body.level && typeof req.body.level === 'int')
         user.nivel_cocina = req.body.level;
 
-    // sistema de unidades
-        // hablar el tema
+    const result = user.save();
+       if(!result)
+        return res.status(400).send("Error al intentar guardar las preferencias del usuario");
 
+    res.send(result);
+});
+
+router.get("/getGenericIngredients", auth, async (req, res) => {
+
+    console.log("GETTING GENERIC INGREDIENTS");
+
+    let ingredients = await ProductV2.distinct(inner_ingredient);
+
+    if (!ingredients)
+        return res.status(404).send("Error al obtener las preferencias del usuario");
+
+    res.send(ingredients);
+});
+
+
+router.get("/getPreferences", auth, async (req, res) => {
+
+    console.log("ADDING PREFERENCES TO USER " + req.user.correo);
+    console.log(req.body);
+    let user = await Usuario.findOne({ correo: req.user.correo });
+
+    if (!user)
+        return res.status(404).send("Error al obtener las preferencias del usuario");
+
+    res.send(user);
 });
 
 // [en:gluten, en:oats, en:crustaceans, en:eggs, en:fish, en:peanuts,
@@ -132,8 +160,8 @@ router.post("/modDieta", auth, async (req, res) => {
     res.send(result);
 });
 
-router.get("/modSistemaMedida", auth, async (req, res) => {
-    console.log("TOGGLING RECIPE " + req.params.id);
+router.post("/modSistemaMedida", auth, async (req, res) => {
+    console.log("TOGGLING RECIPE " + req.user.correo);
 
     if (!req.body.sistema_unidades || !typeof req.body.sistema_unidades === "boolean")
         return res.status(400).send("Error al intentar actualizar el sistema de unidades");
@@ -152,7 +180,7 @@ router.get("/modSistemaMedida", auth, async (req, res) => {
     if(!result)
         return res.status(400).send("Error al intentar actualizar el sistema de unidades");
 
-    res.send("sistema internacional: " + perfil.sistema_unidades);
+    res.send(perfil.sistema_unidades);
 });
 
 
@@ -219,26 +247,40 @@ router.put("/modIdFields", auth, async (req, res) => {
     console.log("MODIFYING PROFILE FIELDS OF " + req.user.correo);
 
     let user = await Usuario.findOne({ correo: req.user.correo });
-    var mail = req.body.correo.toLowerCase();
+    
+    if (!user)
+        return res.status(400).send("la cuenta no existe");
 
-    if (emailRegEx.test(mail)) {
-        let userCheck = await Usuario.findOne({ correo: mail });
-        if (!userCheck) user.correo = mail;
-        else return res.status(400).send("El correo ya está asociado a otra cuenta.");
+    if (req.body.old_password != user.password)
+        return res.status(460).send("contraseña incorrecta");
+
+    if (req.body.password) {
+        if (typeof req.body.password === 'string')
+            user.password = req.body.password;
+        else
+            return res.status(400).send("datos recibidos con formato incorrecto");
     }
 
-    if (req.body.password && typeof req.body.password === 'string')
-        user.password = req.body.password;
+    if (req.body.nombre) {
+        if (typeof req.body.nombre === 'string')
+            user.nombre = req.body.nombre;
+        else
+            return res.status(400).send("datos recibidos con formato incorrecto");
+    }
 
-    if (req.body.nombre && typeof req.body.nombre === 'string')
-        user.nombre = req.body.nombre;
-        
-    if (req.body.apellido && typeof req.body.apellido === 'string')
-        user.apellido = req.body.apellido;
+    if (req.body.apellido) {
+        if (typeof req.body.apellido === 'string')
+            user.apellido = req.body.apellido;
+        else
+            return res.status(400).send("datos recibidos con formato incorrecto");
+    }
 
-    // if (req.body.level && typeof req.body.level === 'int')
-    //     user.nivel_cocina = req.body.level;
+    const result = user.save();
+    if(!result)
+        return res.status(400).send("ERROR al actualizar perfil");
 
+    console.log(result);
+    res.send("OK");
 });
 
   router.get("/restoreForm/:id", (_, res) => {
