@@ -1,6 +1,7 @@
 import 'package:cartrecipe/screens/tabs_screens.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:cartrecipe/api/api_wrapper.dart';
 
 import 'package:cartrecipe/models/preferences_list_pages.dart';
 
@@ -20,6 +21,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   int pageChangedInt = 0;
   double pageChangedDouble = 0.0;
   int end = 3;
+  List<String> allergenArray = [];
   List<List<dynamic>> allergensList = [
     [false, "celery"],
     [false, "crustaceans"],
@@ -286,6 +288,12 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
         child: ElevatedButton(
             child: Text('Cerrar'),
             onPressed: () => {
+                  allergensList.forEach((element) {
+                    if (element[0] == true)
+                      allergenArray.add("en:" + (element[1]));
+                  }),
+                  ApiWrapper().fillPreferences(_dieta.index == 2,
+                      _dieta.index == 1, allergenArray, (_nivel.index + 1)),
                   print(allergensList),
                   print(_alergenos),
                   print(_dieta),

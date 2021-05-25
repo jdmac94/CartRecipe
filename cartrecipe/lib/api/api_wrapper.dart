@@ -18,9 +18,8 @@ class ApiWrapper {
 
   factory ApiWrapper() => _instance ?? ApiWrapper._internal();
 
-  final String endpoint = '3587b861185a.ngrok.io';
-
-  ///"158.109.74.46:55005"; //'9616b67d4dbf.ngrok.io';
+  final String endpoint = "3587b861185a.ngrok.io";
+  //"158.109.74.46:55005"; //'9616b67d4dbf.ngrok.io';
   String authToken;
 
   //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEyN2NjN2E0NDM0ZjAwMmZlOWRjYzAiLCJjb3JyZW8iOiJwZXBvQHBlcG8uZXMiLCJub21icmUiOiJQZXBlIiwiYWxlcmdpYXMiOltdLCJ0YWdzIjpbXSwibml2ZWxfY29jaW5hIjpudWxsLCJzaXN0ZW1hX3VuaWRhZGVzIjoic2lzdF9pbnQiLCJyZWNldGFzX2ZhdnMiOltdLCJpYXQiOjE2MjEyNjkyOTd9.2gG--BpwBRVhjcvtZeF32XK-Ikb7ghrydIetJXQLRqQ';
@@ -368,5 +367,95 @@ class ApiWrapper {
       */
     }
     return recipeList;
+  }
+
+  Future<void> fillPreferences(bool is_vegan, bool is_vegetarian,
+      List<String> allergenArray, int level) async {
+    var api = 'api/v1/accSettings/fillPreferences';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, dynamic>{
+        'is_vegan': is_vegan,
+        'is_vegetarian': is_vegetarian,
+        'allergenArray': allergenArray,
+        'level': level,
+      }),
+    );
+
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('No he recibido preferencias');
+  }
+
+  Future<void> modAlergias(List<String> allergenArray) async {
+    var api = 'api/v1/accountSettings/modAlergias';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, List<String>>{
+        'allergenArray': allergenArray,
+      }),
+    );
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> modDieta(bool isVegan, bool isVegetarian) async {
+    var api = 'api/v1/accountSettings/modDieta';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, bool>{
+        'is_vegan': isVegan,
+        'is_vegetarian': isVegetarian,
+      }),
+    );
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> modNivel(int level) async {
+    var api = 'api/v1/accountSettings/modNivel';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, int>{
+        'level': level,
+      }),
+    );
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
   }
 }
