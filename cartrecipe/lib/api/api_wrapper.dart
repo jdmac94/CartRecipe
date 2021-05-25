@@ -329,43 +329,6 @@ class ApiWrapper {
 
     if (recipeList.isEmpty) {
       print('No he recibido nada');
-      /*var r = Recipe(
-        id: '0',
-        user: 'Patata2000',
-        recipeName: 'Patatas',
-        difficulty: 4,
-        ingredients: [
-          IngredienteReceta(nombre: 'Patatas', cantidad: 2),
-          IngredienteReceta(
-            nombre: 'Huevos',
-            cantidad: 6,
-          ),
-          IngredienteReceta(
-            nombre: 'Cebolla',
-            cantidad: 3,
-          ),
-          IngredienteReceta(
-            nombre: 'Sal',
-            cantidad: 1,
-          ),
-        ],
-        //ingredients: ['Patatas':2, 'Huevos':3, 'Cebolla':6, 'Sal':7],
-        time: '6:00',
-        image:
-            'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png',
-        steps: [
-          'Coger patata',
-          'Pelar patata',
-          'Cocinar patata',
-          'a',
-          'a',
-          'a'
-        ],
-        tips: ['No tirar la patata al suelo'],
-      );
-
-      recipeList = [r, r, r, r, r, r]; // Until we receive data
-      */
     }
     return recipeList;
   }
@@ -452,11 +415,33 @@ class ApiWrapper {
         'level': level,
       }),
     );
+    print("${response}");
     print('Body: ${response.statusCode}');
 
     if (response.statusCode == 200)
       print('Recibido bien');
     else
       print('F');
+  }
+
+  Future<void> modificaSistemaUnidades(bool metricUnit) async{
+    var api = "api/v1/accSettings/modSistemaMedida";
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String> {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token' : authToken,
+      },
+      body: jsonEncode(<String, String>{
+        'sistema_unidades': metricUnit.toString(),
+      }) 
+    );
+    print('Received response ' + '${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('Received correctly');
+    } else {
+      print ('Found a status code different than 200');
+    }
+
   }
 }

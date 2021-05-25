@@ -1,3 +1,4 @@
+import 'package:cartrecipe/api/api_wrapper.dart';
 import 'package:flutter/material.dart';
 
 class EditUnitsScreen extends StatelessWidget {
@@ -5,7 +6,7 @@ class EditUnitsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sistema de unidades'), //TODO: Añadir
+        title: Text('Sistema de unidades'), 
       ),
       body: Center(
         child: ListView(
@@ -13,10 +14,12 @@ class EditUnitsScreen extends StatelessWidget {
             ListTile(
               title: Text("Métrico"),
               leading: Text("kg"),
+              onTap: () {ApiWrapper().modificaSistemaUnidades(true).then((value) => Navigator.pop(context));},
             ),
             ListTile(
               title: Text("Imperial"),
               leading: Text("lb"),
+              onTap: () {ApiWrapper().modificaSistemaUnidades(false).then((value) => Navigator.pop(context));},
             ),
           ],
         ),
