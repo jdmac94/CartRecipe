@@ -15,6 +15,10 @@ var listPages = [
       'Asi podemos recomendarte recetas de tu nivel'),
   new PreferencesListPages('¿Padeces alguna alergia o intolerancia?',
       'Procuraremos filtrar en tus busquedas las recetas que contengan estos ingredientes'),
+  new PreferencesListPages('¿Que tipo de recetas buscas?',
+      'Intentaremos recomendarte recetas de estos tipos'),
+  new PreferencesListPages('¿No te gusta algun ingrediente?',
+      'Dinoslo y evitaremos las recetas que lo contengan!'),
   new PreferencesListPages(
       'Listo!', 'Ahora te mostraremos como usar la aplicación'),
 ];

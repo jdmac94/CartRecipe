@@ -1,4 +1,5 @@
 import 'package:cartrecipe/screens/fridge_screen.dart';
+import 'package:cartrecipe/screens/profile/edit_preferences_screen.dart';
 import 'package:cartrecipe/screens/profile/profile_screen.dart';
 import 'package:cartrecipe/screens/tutorial/tutorial_screen.dart';
 
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:cartrecipe/screens/recipes/recipes_screen.dart';
 import 'package:cartrecipe/screens/search_screen.dart';
 import 'package:cartrecipe/screens/scanner_screen.dart';
+import 'package:cartrecipe/screens/preferences_screen.dart';
 
 //TODO Posible mejora
 enum Pages {
@@ -58,8 +60,8 @@ class _TabsScreenState extends State<TabsScreen> {
         'title': 'Mi nevera',
       },
       {
-        'page': ProfileScreen(),
         //'page': ProfileScreen(),
+        'page': PreferencesScreen(),
         'title': 'Perfil',
       },
     ];
