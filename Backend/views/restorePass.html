@@ -2,29 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+    crossorigin="anonymous"
+  />
     <title>Formulari de Registre</title>
     <script src="../public/scripts.js"></script>
 </head>
-<body>
+<body style="background-color: #8AE1FC;">
 
-<h1>INTRODUCE TU CONTRASEÑA:</h1>
-<div id="main_container">
+    <div id="main_container" style="text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px;
+    ">
+    <h1>INTRODUCE TU CONTRASEÑA</h1>
     <form id="passform" method="get">
         <div id="regPass">
             <label for="RPassword">Contraseña:</label>
             <br>
-            <input type="password" id="RPassword" name="RPassword" required="" pattern="[a-z0-9A-Z]+" title="Introdueiu un codi alfanumèric">
+            <input type="password"  class="form-control" id="RPassword" name="RPassword" required="" pattern="[a-z0-9A-Z]+" title="Introdueiu un codi alfanumèric">
         </div>
         <div id="regPass">
             <br>
             <label for="CPassword">Repite la contraseña:</label>
             <br>
-            <input type="password" id="CPassword" name="CPassword" required="" pattern="[a-z0-9A-Z]+" title="Introdueiu un codi alfanumèric">
+            <input type="password"  class="form-control" id="CPassword" name="CPassword" required="" pattern="[a-z0-9A-Z]+" title="Introdueiu un codi alfanumèric">
             
             <p id="warning"></p>
             
         </div>
-        <input id="sub" type="button" value="Enviar">
+        <input id="sub" type="button" class="btn btn-primary btn-block" value="Enviar">
     </form>
 
 </div>
