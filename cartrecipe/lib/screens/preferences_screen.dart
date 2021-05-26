@@ -1,3 +1,4 @@
+import 'package:cartrecipe/models/product.dart';
 import 'package:cartrecipe/screens/tabs_screens.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,11 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   int pageChangedInt = 0;
   double pageChangedDouble = 0.0;
   int end = 5;
+  List<String> productNames = [];
   List<String> allergenArray = [];
+  List<String> productsToSend = [];
+  List<bool> productban = [];
+  Future<List<String>> products = ApiWrapper().getGenericIngredients();
   List<String> tagsToSend = [];
   List<List<dynamic>> tags = [
     [false, "Arroces"],
@@ -128,7 +133,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: Visibility(
-                          visible: pageChangedInt == 3,
+                          visible: pageChangedInt == 5,
                           child: SizedBox(
                             height: 22,
                             //child: Text("hola"),
@@ -291,7 +296,15 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   }
 
   Widget gridView(int pageChangedInt) {
-    if (pageChangedInt == 3) {
+    products.then((value) {
+      productNames = value;
+    });
+    print(productNames.length);
+
+    productNames.forEach((element) {
+      productban.add(false);
+    });
+    if (pageChangedInt == 3 || pageChangedInt == 4) {
       return GridView.count(
           primary: false,
           padding: const EdgeInsets.all(20),
@@ -299,27 +312,53 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           mainAxisSpacing: 0,
           crossAxisCount: 2,
           childAspectRatio: 4,
-          children: [for (int i = 0; i < tags.length; i++) checkBox(i)]);
+          children: [
+            if (pageChangedInt == 3)
+              for (int i = 0; i < tags.length; i++) checkBox(i)
+            else if (pageChangedInt == 4)
+              for (int i = 0; i < productNames.length; i++) checkBox(i)
+          ]);
     } else
       return Container();
   }
 
   Widget checkBox(int index) {
-    String tag = tags[index][1];
-    return CheckboxListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 2),
-      title: Text(tag),
-      value: tags[index][0],
-      onChanged: (newValue) {
-        setState(() {
-          tags[index][0] = newValue;
-          tags[index][0]
-              ? tagsToSend.add(tags[index][1])
-              : tagsToSend.remove(tags[index][1]);
-        });
-      },
-      controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
-    );
+    if (pageChangedInt == 3) {
+      String tag = tags[index][1];
+      return CheckboxListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 2),
+        title: Text(tag),
+        value: tags[index][0],
+        onChanged: (newValue) {
+          setState(() {
+            tags[index][0] = newValue;
+            tags[index][0]
+                ? tagsToSend.add(tags[index][1])
+                : tagsToSend.remove(tags[index][1]);
+          });
+        },
+        controlAffinity:
+            ListTileControlAffinity.leading, //  <-- leading Checkbox
+      );
+    } else if (pageChangedInt == 4) {
+      return CheckboxListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 2),
+        title: Text(productNames[index]),
+        value: productban[index],
+        onChanged: (newValue) {
+          setState(() {
+            print(newValue);
+            productban[index] = newValue;
+            productban[index]
+                ? productsToSend.add(productNames[index])
+                : productsToSend.remove(productNames[index]);
+          });
+        },
+        controlAffinity:
+            ListTileControlAffinity.leading, //  <-- leading Checkbox
+      );
+    } else
+      return (Container());
   }
 
   Widget allergenButton(int allergenNumber) {
@@ -364,7 +403,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                       _dieta.index == 1,
                       allergenArray,
                       (_nivel.index + 1),
-                      tagsToSend),
+                      tagsToSend,
+                      productsToSend),
                   print(allergensList),
                   print(_alergenos),
                   print(_dieta),
