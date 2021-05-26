@@ -60,8 +60,8 @@ class _TabsScreenState extends State<TabsScreen> {
         'title': 'Mi nevera',
       },
       {
-        //'page': ProfileScreen(),
-        'page': PreferencesScreen(),
+        'page': ProfileScreen(),
+        //'page': PreferencesScreen(),
         'title': 'Perfil',
       },
     ];

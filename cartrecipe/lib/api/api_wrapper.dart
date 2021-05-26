@@ -377,6 +377,10 @@ class ApiWrapper {
 
     http.Response response = await http.put(
       Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
       body: jsonEncode(<String, String>{
         'nombre': nombre,
         'apellido': apellido,
