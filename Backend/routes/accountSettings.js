@@ -83,7 +83,7 @@ router.get("/getGenericIngredients", auth, async (req, res) => {
 
     console.log("GETTING GENERIC INGREDIENTS");
 
-    let ingredients = await ProductV2.distinct(inner_ingredient);
+    let ingredients = await ProductV2.distinct("inner_ingredient");
 
     if (!ingredients)
         return res.status(404).send("Error al obtener las preferencias del usuario");
@@ -309,7 +309,7 @@ router.put("/modIdFields", auth, async (req, res) => {
     console.log("RESTORING PWD RECEIVED");
     console.log(req.body);
 
-    var user = await Product.findById(req.body.id);
+    var user = await Usuario.findById(req.body.id);
     if (!user) return res.status(400).send("ERROR al procesar la nueva contraseña");
     console.log(user.correo);
     

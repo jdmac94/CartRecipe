@@ -20,9 +20,7 @@ async function sendMailPassword(destinationAddress, userid) {
     var mailOptions = {
         to: destinationAddress,
         subject: 'Recuperación de contraseña de CartRecipe',
-        html: `<h1>Welcome</h1>
-          <p>That was easy!</p>
-          <a href="${url}">Haga click aquí para reestablecer contraseña</a>`,
+        html: `<h3>Hemos recibido una solicitud para restablecer tu contraseña. Si no has realizado esta solicitud, sencillamente ignora este mensaje. Si has sido tú, puedes restablecer tu contraseña haciendo clic sobre el siguiente enlace:</h3><a href="${url}">Haga click aquí para reestablecer contraseña</a>`,
     };
 
     transporter.sendMail(mailOptions, function(error, info){
