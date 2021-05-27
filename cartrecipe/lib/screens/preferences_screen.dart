@@ -120,13 +120,12 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                     child: Column(
                   children: radiobutton(pageChangedInt),
                 )),
-                Container(
-                  child: Expanded(child: gridViewAlergenos(pageChangedInt)),
-                ),
-                Container(
-                    child: Expanded(
-                  child: gridView(pageChangedInt),
-                )),
+                if (pageChangedInt == 2)
+                  Expanded(child: gridViewAlergenos(pageChangedInt)),
+                if (pageChangedInt == 3 || pageChangedInt == 4)
+                  Expanded(
+                    child: gridView(pageChangedInt),
+                  ),
                 Align(
                     //Este es para alinear bien todos losPageview
                     alignment: Alignment.bottomCenter,

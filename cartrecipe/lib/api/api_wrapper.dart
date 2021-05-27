@@ -429,7 +429,7 @@ class ApiWrapper {
   }
 
   Future<void> modAlergias(List<String> allergenArray) async {
-    var api = 'api/v1/accountSettings/modAlergias';
+    var api = 'api/v1/accSettings/modAlergias';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -450,7 +450,7 @@ class ApiWrapper {
   }
 
   Future<void> modDieta(bool isVegan, bool isVegetarian) async {
-    var api = 'api/v1/accountSettings/modDieta';
+    var api = 'api/v1/accSettings/modDieta';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -472,7 +472,7 @@ class ApiWrapper {
   }
 
   Future<void> modNivel(int level) async {
-    var api = 'api/v1/accountSettings/modNivel';
+    var api = 'api/v1/acctSettings/modNivel';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -526,7 +526,6 @@ class ApiWrapper {
     );
     if (response.statusCode == 200) {
       print('ha llegado!!!!');
-
       prods = List<String>.from(json.decode(response.body));
     } else {
       print(response.body);

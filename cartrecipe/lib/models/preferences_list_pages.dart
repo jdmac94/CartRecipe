@@ -9,7 +9,7 @@ class PreferencesListPages {
 }
 
 var listPages = [
-  new PreferencesListPages('¿Que tipo de dieta sigues?',
+  new PreferencesListPages('¿Sigues algún tipo de dieta?',
       'Si entendemos que buscas podremos ayudarte mejor'),
   new PreferencesListPages('¿Cual es tu nivel de cocina?',
       'Asi podemos recomendarte recetas de tu nivel'),
