@@ -79,6 +79,8 @@ usuarioSchema.methods.generateAuthToken = function () {
       nivel_cocina: this.nivel_cocina,
       sistema_internacional: this.sistema_internacional,
       recetas_favs: this.recetas_favs,
+      vegano: this.vegano,
+      vegetariano: this.vegetariano,
     },
     config.get("jwtPrivateKey")
   );

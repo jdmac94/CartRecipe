@@ -96,7 +96,15 @@ router.get("/getPreferences", auth, async (req, res) => {
 
     console.log("ADDING PREFERENCES TO USER " + req.user.correo);
     console.log(req.body);
-    let user = await Usuario.findOne({ correo: req.user.correo });
+    let user = await Usuario.findOne({ correo: req.user.correo },
+        {
+            vegano: 1,
+            vegetariano: 1,
+            alergias: 1,
+            tags: 1,
+            banArray: 1,
+            nivel_cocina: 1,
+        });
 
     if (!user)
         return res.status(404).send("Error al obtener las preferencias del usuario");

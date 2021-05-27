@@ -169,4 +169,8 @@ async function fetchDiet(product) {
   res.send(allergens);
 }
 
+// router.post("/getCategories", async (req, res) => {
+//   res.send(allergens);
+// });
+
 module.exports = router;

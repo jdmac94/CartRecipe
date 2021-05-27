@@ -25,7 +25,8 @@ router.get("/recetas/:search", async (req, res) => {
     var replace = ".*" + req.params.search.trim() + ".*";
     var re = new RegExp(replace, "i");
 
-    var fetchResult = await Receta.find({ tags: [re] }).limit(10).skip(1);
+    // var fetchResult = await Receta.find({ tags: { $in: [/.*Asiático.*/] } }).limit(10);
+    var fetchResult = await Receta.find({ tags: { $in: [re] } }).limit(10);
     
     if (!fetchResult)
       return res.status(404).send("No ha resultados coincidentes");
@@ -48,17 +49,14 @@ router.get("/recetas/:search", async (req, res) => {
     res.send(fetchResult);
   });
 
-  router.get("/products2/:search", async (req, res) => {
+  router.get("/products/categorias/:search", async (req, res) => {
 
     console.log("search: " + req.params.search);
     
     var replace = ".*" + req.params.search.trim() + ".*";
     var re = new RegExp(replace, "i");
 
-    //var fetchResult = await ProductV2.find({ $or: [{ product_name: re }, { product_name_es: re }] }).limit(10);//to test
-    var fetchResult = await ProductV2.find(
-      { product_name: re },
-    );
+    var fetchResult = await ProductV2.find({ inner_category: re });//.limit(10);//to test
 
     if (!fetchResult || (Array.isArray(fetchResult) && fetchResult.length == 0))
       return res.status(404).send("No ha resultados coincidentes");

@@ -44,11 +44,6 @@ router.get("/suggested", auth, async (req, res) => {
   const nevera = await Nevera.findOne(
     { usuario: req.user._id },
   );
-  console.log("//////////////////");
-  console.log(nevera);
-  console.log("//////////////////");
-  console.log(nevera.productos);
-  console.log("//////////////////");
 
   if (nevera) {
 
@@ -144,23 +139,69 @@ router.get("/getAllRecetas", auth, async (req, res) => {
   else
     var ingre = "$ingredientes_imp";
 
-  let recetaList = await Receta.aggregate([
-    { "$project": {
-        "_id": "$_id",
-		    "usuario": "$usuario",
-		    "titulo": "$titulo",
-		    "dificultad": "$dificultad",
-		    "descripcion": "$descripcion",
-		    "tiempo": "$tiempo",
-		    "imagenes": "$imagenes",
-        "ingredientes": ingre,
-		    "pasos": "$pasos",
-		    "consejos": "$consejos",
-		    "comensales" : "$comensales",
-		    "tags" : "$tags",
-		    "allergenList" : "$allergenList",
-    }}
-  ]).limit(25);
+    // $and: [ 
+    //   {type: {$in: ["TOYS"]}}, 
+    //   {type: {$nin: ["BARBIE"]}}, 
+    //   {time: {$lt:ISODate("2013-12-09T00:00:00Z")}}
+    // ]
+
+    // if (vegano)
+    // if (vegetariano)
+    // if (alimentos baneados)
+    // if (alergias de alimentos)
+    // if (tags)
+
+  // .limit(25);
+  //if (vegano) {//ajustar el tema de token
+    let recetaList = await Receta.aggregate([
+      { $match : { tags : { $in: ["Vegano"] } } },
+      {
+        "$project": {
+          "ide": {
+            "$toObjectId": "$usuario"
+          },
+          "titulo": "$titulo",
+          "dificultad": "$dificultad",
+          "descripcion": "$descripcion",
+          "tiempo": "$tiempo",
+          "imagenes": "$imagenes",
+          "ingredientes": ingre,
+          "pasos": "$pasos",
+          "consejos": "$consejos",
+          "comensales" : "$comensales",
+          "tags" : "$tags",
+          "allergenList" : "$allergenList",
+        }
+      },
+      {
+        "$lookup": {
+          "from": "usuarios",
+          "localField": "ide",
+          "foreignField": "_id",
+          "as": "usr"
+        }
+      },
+      {
+      "$project": {
+          "usuario": "$usuario",
+          "titulo": "$titulo",
+          "dificultad": "$dificultad",
+          "descripcion": "$descripcion",
+          "tiempo": "$tiempo",
+          "imagenes": "$imagenes",
+          "ingredientes": ingre,
+          "pasos": "$pasos",
+          "consejos": "$consejos",
+          "comensales" : "$comensales",
+          "tags" : "$tags",
+          "allergenList" : "$allergenList",
+          "usr.apellido": 1,
+          "usr.nombre": 1,
+        }
+      }
+    ]);
+  //}
+  
 
   res.send(recetaList);
 });
@@ -279,7 +320,7 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
     { "Sal": ["", ""] }
   ];
 
-  receta.usuario = "0";
+  receta.usuario = "60a591ed8c7709002ca47940";
   receta.titulo = "Hummus de zanahoriaFIXED";
   receta.dificultad = 2;
   receta.descripcion =
