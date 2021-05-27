@@ -301,24 +301,17 @@ class ApiWrapper {
   Future<List<Recipe>> getRecipeList() async {
     const String api = "api/v1/receta/getAllRecetas";
     //Currently using  generated auth token
-    final auth =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhiZThlN2IyYjM3YTAwZjgwMTYyOTMiLCJhbGVyZ2lhcyI6W10sImRpZXRhIjpbXSwidGFncyI6W10sIm5pdmVsX2NvY2luYSI6bnVsbCwic2lzdGVtYV91bmlkYWRlcyI6InNpc3RfaW50IiwicmVjZXRhc19mYXZzIjpbXSwiaWF0IjoxNjE5NzgxODYzfQ.aSAmFeibWYrdDvNh9-kV1bCFtAiBMkp5MQJM4qi4zGk";
-
+    
     List<Recipe> recipeList = [];
     //TODO: Recipe filtering - later
     http.Response response =
         await http.get(Uri.http(endpoint, api), headers: <String, String>{
-      'x-auth-token': auth,
+      'x-auth-token': authToken,
     });
 
     if (response.statusCode == 200) {
       print("Received correctly recipe list.");
-      //print(response.body);
-      /*
-      recipeList = (json.decode(response.body) as List)
-          .map((i) => Recipe.fromJson(i))
-          .toList();
-*/
+
       recipeList = await List<Recipe>.from(
           json.decode(response.body).map((x) => Recipe.fromJson(x)));
       //Iterable i = json.decode(response.body);
@@ -436,6 +429,8 @@ class ApiWrapper {
         'sistema_unidades': metricUnit.toString(),
       }) 
     );
+    print(response.body);
+    authToken = response.body.toString();
     print('Received response ' + '${response.statusCode}');
     if (response.statusCode == 200) {
       print('Received correctly');
