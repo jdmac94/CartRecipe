@@ -28,7 +28,7 @@ class _FridgeScreenState extends State<FridgeScreen> {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return DetailViewProduct(product);
+        return DetailViewProduct(product, false);
       },
     );
   }
@@ -183,6 +183,7 @@ class _FridgeScreenState extends State<FridgeScreen> {
           background: Container(
             color: Colors.red,
           ),
+          child: productItem != null ? buildCard(productItem, index) : null,
           onDismissed: (direction) {
             setState(() {
               // if (selectedProducts.containsKey(index)) {
@@ -209,7 +210,6 @@ class _FridgeScreenState extends State<FridgeScreen> {
                   },
                 )));
           },
-          child: productItem != null ? buildCard(productItem, index) : null,
         );
       },
     );

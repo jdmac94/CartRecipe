@@ -9,6 +9,7 @@ import 'package:cartrecipe/screens/profile/edit_profile_screen.dart';
 import 'package:cartrecipe/screens/profile/contact_screen.dart';
 import 'package:cartrecipe/screens/profile/legal_screen.dart';
 import 'package:cartrecipe/screens/profile/about_us_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../welcome.dart';
 
@@ -20,6 +21,22 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String nombre, apellido;
+
+  @override
+  void initState() {
+    super.initState();
+    getLocalUserData().then((result) {
+      setState(() {});
+    });
+  }
+
+  getLocalUserData() async {
+    SharedPreferences user = await SharedPreferences.getInstance();
+    nombre = user.getString('nombre');
+    apellido = user.getString('apellido');
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -27,7 +44,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: ListTile.divideTiles(context: context, tiles: [
             ListTile(
               leading: Icon(Icons.account_circle),
-              title: Text('<Nombre del usuario>'),
+              title: (nombre != null && apellido != null)
+                  ? Text(nombre + ' ' + apellido)
+                  : Text('<Usuario>'),
               subtitle: RichText(
                   text: TextSpan(children: <TextSpan>[
                 TextSpan(

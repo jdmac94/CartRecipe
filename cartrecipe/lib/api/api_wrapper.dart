@@ -19,8 +19,8 @@ class ApiWrapper {
   factory ApiWrapper() => _instance ?? ApiWrapper._internal();
 
   final String endpoint = "3587b861185a.ngrok.io";
-    //'9616b67d4dbf.ngrok.io'; //"158.109.74.46:55005"; 
-  
+  //'9616b67d4dbf.ngrok.io'; //"158.109.74.46:55005";
+
   String authToken;
 
   //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEyN2NjN2E0NDM0ZjAwMmZlOWRjYzAiLCJjb3JyZW8iOiJwZXBvQHBlcG8uZXMiLCJub21icmUiOiJQZXBlIiwiYWxlcmdpYXMiOltdLCJ0YWdzIjpbXSwibml2ZWxfY29jaW5hIjpudWxsLCJzaXN0ZW1hX3VuaWRhZGVzIjoic2lzdF9pbnQiLCJyZWNldGFzX2ZhdnMiOltdLCJpYXQiOjE2MjEyNjkyOTd9.2gG--BpwBRVhjcvtZeF32XK-Ikb7ghrydIetJXQLRqQ';
@@ -32,6 +32,32 @@ class ApiWrapper {
   //     'ZGVzIjoic2lzdF9pbnQiLCJyZWNldGFzX2ZhdnMiOltdLCJpYXQiOjE2MTk5Nj' +
   //     'kyMjF9.1QibofC5JV1krjcnWCc7rLYPFzfDLSukVPIetEvC0Aw';
   //final String endpoint = "a1ac68965a1d.ngrok.io";
+
+  Future<List<Product>> getBusqueda(search) async {
+    String api = "api/v2/search/products/" + search.toString();
+
+    http.Response response =
+        await http.get(Uri.http(endpoint, api), headers: <String, String>{
+      'x-auth-token': authToken,
+    });
+
+    if (response.statusCode == 200) {
+      print("Received correctly product list.");
+      print(response.body);
+      List<Product> prods = [];
+
+      Iterable l = json.decode(response.body);
+      prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
+      print(prods.toString());
+      return prods;
+    } else if (response.statusCode == 404) {
+      print('Not found 404');
+      return null;
+    } else {
+      print('F busqueda');
+      return null;
+    }
+  }
 
   Future<List<Product>> getFridgeProducts() async {
     const String api = "api/v1/nevera";
@@ -326,8 +352,56 @@ class ApiWrapper {
     return recipeList;
   }
 
-  Future<void> fillPreferences(bool is_vegan, bool is_vegetarian,
-      List<String> allergenArray, int level) async {
+  Future<String> modifyProfile(String nombre, String apellido,
+      String oldPassword, String newPassword) async {
+    var api = "/api/v1/accSettings/modIdFields/";
+
+    var bytesOldPass = utf8.encode(oldPassword);
+    var hashOldPass = sha256.convert(bytesOldPass);
+
+    var bytesNewPass = utf8.encode(newPassword);
+    var hashNewPass = sha256.convert(bytesNewPass);
+
+    print('Name + App $nombre$apellido');
+    print('Password Hash $hashOldPass');
+    print('Old Password  $oldPassword');
+    print('New Password  $newPassword');
+
+    http.Response response = await http.put(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, String>{
+        'nombre': nombre,
+        'apellido': apellido,
+        'old_password': hashOldPass.toString(),
+        'password': hashNewPass.toString(),
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("Mofificación de datos completada");
+      print(response.body.toString());
+      return '200';
+    } else if (response.statusCode == 460) {
+      print('Error 460 contraseña errónea');
+      return "460";
+    } else {
+      print(response.statusCode.toString());
+      print(response.body.toString());
+      return "Error";
+    }
+  }
+
+  Future<void> fillPreferences(
+      bool is_vegan,
+      bool is_vegetarian,
+      List<String> allergenArray,
+      int level,
+      List<String> tags,
+      List<String> ban) async {
     var api = 'api/v1/accSettings/fillPreferences';
 
     http.Response response = await http.post(
@@ -341,6 +415,8 @@ class ApiWrapper {
         'is_vegetarian': is_vegetarian,
         'allergenArray': allergenArray,
         'level': level,
+        'tagArray': tags,
+        'banArray': ban
       }),
     );
 
@@ -417,7 +493,7 @@ class ApiWrapper {
       print('F');
   }
 
-  Future<void> modificaSistemaUnidades(bool metricUnit) async{
+  Future<void> modificaSistemaUnidades(bool metricUnit) async {
     var api = "api/v1/accSettings/modSistemaMedida";
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -435,8 +511,27 @@ class ApiWrapper {
     if (response.statusCode == 200) {
       print('Received correctly');
     } else {
-      print ('Found a status code different than 200');
+      print('Found a status code different than 200');
     }
+  }
 
+  Future<List<String>> getGenericIngredients() async {
+    const String api = "api/v1/accSettings/getGenericIngredients";
+    List<String> prods = [];
+    final response = await http.get(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'x-auth-token': authToken,
+      },
+    );
+    if (response.statusCode == 200) {
+      print('ha llegado!!!!');
+
+      prods = List<String>.from(json.decode(response.body));
+    } else {
+      print(response.body);
+      print(response.statusCode);
+    }
+    return prods;
   }
 }

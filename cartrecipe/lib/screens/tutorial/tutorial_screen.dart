@@ -32,6 +32,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
           itemCount: listPages.length,
           itemBuilder: (context, index) {
             return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Align(
                   alignment: Alignment.topCenter,
@@ -54,15 +55,18 @@ class _TutorialScreenState extends State<TutorialScreen> {
                     ),
                   ),
                 ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 40),
-                    child: Text(
-                      listPages[pageChangedInt].subtitle,
-                      style: TextStyle(
-                        fontSize: 20,
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10, bottom: 40),
+                      child: Text(
+                        listPages[pageChangedInt].subtitle,
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
