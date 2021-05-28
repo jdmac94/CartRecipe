@@ -3,6 +3,7 @@ const router = express.Router();
 
 const { Nevera } = require("../models/nevera");
 const { Product } = require("../models/product");
+const { ProductV2 } = require("../models/product_v2");
 const { Categoria } = require("../models/categoria");
 const { Receta } = require("../models/receta");
 
@@ -10,6 +11,7 @@ const { checkImgFromAPI } = require("../utils/imageAPI");
 const auth = require("../middlewares/auth");
 
 const barcodeRegEx = /^[0-9]{13}$/;
+const barcodeRegEx2 = /^[0-9]{8}$/;
 
 router.get("/", auth, async (req, res) => {
   console.log("GETTING NEVERA");
@@ -19,7 +21,7 @@ router.get("/", auth, async (req, res) => {
     return res.status(404).send("No se encuentran los datos de la nevera");
 
   let prodArray = nevera.productos;
-  let listedProds = await Product.find(
+  let listedProds = await ProductV2.find(
     { _id: { $in: prodArray } },
     {
       product_name: 1,
@@ -60,7 +62,7 @@ router.get("/list", auth, async (req, res) => {
 
   console.log(prodArray);
 
-  let listedProds = await Product.find(
+  let listedProds = await ProductV2.find(
     { _id: { $in: prodArray } },
     { product_name: 1, allergens_from_user: 1, product_name_es: 1 }
   );
@@ -151,10 +153,10 @@ router.put("/product/:id", auth, async (req, res) => {
   if (!nevera)
     return res.status(404).send("No se encuentran los datos de la nevera");
 
-  if (!barcodeRegEx.test(req.params.id))
+  if (!barcodeRegEx.test(req.params.id) || !barcodeRegEx2.test(req.params.id))
     return res.status(400).send("Datos del body mal formateados");
 
-  var prod = await Product.findById(req.params.id);
+  var prod = await ProductV2.findById(req.params.id);
 
   if (!prod) return res.status(404).send("El producto a insertar no existe");
 
@@ -168,7 +170,7 @@ router.put("/product/:id", auth, async (req, res) => {
     nevera.productos = prodArray;
     const result = nevera.save();
     if (result) {
-      let listedProds = await Product.findOne(
+      let listedProds = await ProductV2.findOne(
         { _id: req.params.id },
         {
           _id: 1,
@@ -250,7 +252,7 @@ router.get("/getNeveraCat", auth, async (req, res) => {
   if (!nevera)
     return res.status(404).send("No se encuentran los datos de la nevera");
 
-  let neveraCategories = await Product.find(
+  let neveraCategories = await ProductV2.find(
     { _id: { $in: nevera.productos } },
     {
       categories_hierarchy: 1,

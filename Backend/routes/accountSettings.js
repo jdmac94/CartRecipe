@@ -38,7 +38,7 @@ router.post("/fillPreferences", auth, async (req, res) => {
 
     // definir dietas
 
-    if (typeof req.body.palm_oil_free === "boolean")
+    if (req.body.palm_oil_free && typeof req.body.palm_oil_free === "boolean")
         user.palm_oil_free = req.body.palm_oil_free;
 
     if (typeof req.body.is_vegano === "boolean")
@@ -169,26 +169,25 @@ router.post("/modDieta", auth, async (req, res) => {
 });
 
 router.post("/modSistemaMedida", auth, async (req, res) => {
-    console.log("TOGGLING RECIPE " + req.user.correo);
+    console.log("TOGGLING sistema medida " + req.user.correo);
 
     if (!req.body.sistema_unidades || !typeof req.body.sistema_unidades === "boolean")
         return res.status(400).send("Error al intentar actualizar el sistema de unidades");
 
-    let perfil = await Usuario.findOne({ correo: req.user.correo },
-        {
-            sistema_unidades: 1,
-        });
-        
+    let perfil = await Usuario.findOne({ correo: req.user.correo });
+
     if (!perfil)
         return res.status(404).send("Usuario no encontrado");
-    
-        perfil.sistema_unidades = req.body.sistema_unidades;
-    
-    const result = perfil.save();
+
+    perfil.sistema_internacional = req.body.sistema_unidades;
+
+    const result = await perfil.save();
+
     if(!result)
         return res.status(400).send("Error al intentar actualizar el sistema de unidades");
 
-    res.send(perfil.sistema_unidades);
+    const token = perfil.generateAuthToken();
+    res.send(token);
 });
 
 

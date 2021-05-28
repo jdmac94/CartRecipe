@@ -74,7 +74,6 @@ usuarioSchema.methods.generateAuthToken = function () {
       correo: this.correo,
       nombre: this.nombre,
       alergias: this.alergias,
-      dieta: this.dieta,
       tags: this.tags,
       nivel_cocina: this.nivel_cocina,
       sistema_internacional: this.sistema_internacional,

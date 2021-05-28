@@ -134,10 +134,15 @@ router.get("/getDiets", auth, async (req, res) => {
 //ojo con el rendimiento al demandar mucha receta. Pendiente de hacer regulable el limite
 router.get("/getAllRecetas", auth, async (req, res) => {
 
-  if (req.user.sistema_internacional || req.user.sistema_unidades == 'sist_int')
-    var ingre = "$ingredientes_inter";
-  else
-    var ingre = "$ingredientes_imp";
+  var ingre = "";
+  if (req.user.sistema_internacional || req.user.sistema_unidades == 'sist_int') {
+    ingre = "$ingredientes_inter";
+    console.log("internacional");
+  }
+  else {
+    ingre = "$ingredientes_imp";
+    console.log("imperial");
+  }
 
     // $and: [ 
     //   {type: {$in: ["TOYS"]}}, 
@@ -145,16 +150,20 @@ router.get("/getAllRecetas", auth, async (req, res) => {
     //   {time: {$lt:ISODate("2013-12-09T00:00:00Z")}}
     // ]
 
-    // if (vegano)
-    // if (vegetariano)
-    // if (alimentos baneados)
-    // if (alergias de alimentos)
-    // if (tags)
+    // if (req.user.vegano)
+    // if (req.user.vegetariano)
+    // if (req.user.category_ban)
+    //   //inner_ingredient
+
+    // // if (alergias de alimentos)
+    // if (req.user.tags)
 
   // .limit(25);
   //if (vegano) {//ajustar el tema de token
+
+  // AGGREGATE IN ITS PRIME 
     let recetaList = await Receta.aggregate([
-      { $match : { tags : { $in: ["Vegano"] } } },
+      //{ $match : { tags : { $in: ["Vegano"] } } },
       {
         "$project": {
           "ide": {
@@ -189,7 +198,7 @@ router.get("/getAllRecetas", auth, async (req, res) => {
           "descripcion": "$descripcion",
           "tiempo": "$tiempo",
           "imagenes": "$imagenes",
-          "ingredientes": ingre,
+          "ingredientes": "$ingredientes",
           "pasos": "$pasos",
           "consejos": "$consejos",
           "comensales" : "$comensales",
@@ -205,6 +214,110 @@ router.get("/getAllRecetas", auth, async (req, res) => {
 
   res.send(recetaList);
 });
+
+router.get("/getAllRecetas2", auth, async (req, res) => {
+
+  var ingre = "";
+  if (req.user.sistema_internacional || req.user.sistema_unidades == 'sist_int') {
+    ingre = "$ingredientes_inter";
+    console.log("internacional");
+  }
+  else {
+    ingre = "$ingredientes_imp";
+    console.log("imperial");
+  }
+
+    // $and: [ 
+    //   {type: {$in: ["TOYS"]}}, 
+    //   {type: {$nin: ["BARBIE"]}}, 
+    //   {time: {$lt:ISODate("2013-12-09T00:00:00Z")}}
+    // ]
+    var dietArr = [];
+    var dietQuery = {};
+    var banQuery = {};
+
+    if (req.user.vegano)
+      dietArr.push("Vegano");
+
+    if (req.user.vegetariano)
+      dietArr.push("Vegetariano");
+
+    if (dietArr.length > 0)
+      dietQuery = { type: {$in: dietArr }};
+
+    if (req.user.category_ban.length > 0)
+      banQuery = { type: {$nin: req.user.category_ban }};
+
+    // // if (alergias de alimentos)
+    // if (req.user.tags)
+
+  // .limit(25);
+  //if (vegano) {//ajustar el tema de token
+
+  // AGGREGATE IN ITS PRIME 
+    let recetaList = await Receta.aggregate([
+      // { $match : { tags : { $in: ["Vegano"] } } },
+      { 
+        $match: {
+             $and: [ 
+                // {type: {$in: ["TOYS"]}}, 
+                // {type: {$nin: ["BARBIE"]}}, 
+                 {dietQuery},
+                 {banQuery},
+             ]
+        }
+      },
+      {
+        "$project": {
+          "ide": {
+            "$toObjectId": "$usuario"
+          },
+          "titulo": "$titulo",
+          "dificultad": "$dificultad",
+          "descripcion": "$descripcion",
+          "tiempo": "$tiempo",
+          "imagenes": "$imagenes",
+          "ingredientes": ingre,
+          "pasos": "$pasos",
+          "consejos": "$consejos",
+          "comensales" : "$comensales",
+          "tags" : "$tags",
+          "allergenList" : "$allergenList",
+        }
+      },
+      {
+        "$lookup": {
+          "from": "usuarios",
+          "localField": "ide",
+          "foreignField": "_id",
+          "as": "usr"
+        }
+      },
+      {
+      "$project": {
+          "usuario": "$usuario",
+          "titulo": "$titulo",
+          "dificultad": "$dificultad",
+          "descripcion": "$descripcion",
+          "tiempo": "$tiempo",
+          "imagenes": "$imagenes",
+          "ingredientes": "$ingredientes",
+          "pasos": "$pasos",
+          "consejos": "$consejos",
+          "comensales" : "$comensales",
+          "tags" : "$tags",
+          "allergenList" : "$allergenList",
+          "usr.apellido": 1,
+          "usr.nombre": 1,
+        }
+      }
+    ]);
+  //}
+  
+
+  res.send(recetaList);
+});
+
 
 router.get("/addRecetaFIXED", auth, async (req, res) => {
   let receta = new Receta();
@@ -320,7 +433,7 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
     { "Sal": ["", ""] }
   ];
 
-  receta.usuario = "60a591ed8c7709002ca47940";
+  receta.usuario = "60acad1719bfc70030a006cf";
   receta.titulo = "Hummus de zanahoriaFIXED";
   receta.dificultad = 2;
   receta.descripcion =
