@@ -1,5 +1,3 @@
-import 'package:cartrecipe/data/dummy_data.dart';
-import 'package:cartrecipe/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
@@ -7,7 +5,6 @@ import 'dart:async';
 
 import 'package:cartrecipe/models/product.dart';
 import 'package:cartrecipe/models/recipe.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiWrapper {
   static ApiWrapper _instance;
@@ -18,20 +15,10 @@ class ApiWrapper {
 
   factory ApiWrapper() => _instance ?? ApiWrapper._internal();
 
-  final String endpoint = "3587b861185a.ngrok.io";
-  //'9616b67d4dbf.ngrok.io'; //"158.109.74.46:55005";
+  final String endpoint = "158.109.74.46:55005"; //"3587b861185a.ngrok.io";
+  //'9616b67d4dbf.ngrok.io';
 
   String authToken;
-
-  //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEyN2NjN2E0NDM0ZjAwMmZlOWRjYzAiLCJjb3JyZW8iOiJwZXBvQHBlcG8uZXMiLCJub21icmUiOiJQZXBlIiwiYWxlcmdpYXMiOltdLCJ0YWdzIjpbXSwibml2ZWxfY29jaW5hIjpudWxsLCJzaXN0ZW1hX3VuaWRhZGVzIjoic2lzdF9pbnQiLCJyZWNldGFzX2ZhdnMiOltdLCJpYXQiOjE2MjEyNjkyOTd9.2gG--BpwBRVhjcvtZeF32XK-Ikb7ghrydIetJXQLRqQ';
-  //'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGEyNzdlN2E0NDM0ZjAwMmZlOWRjYmUiLCJjb3JyZW8iOiJhQGdtYWlsLmNvbSIsIm5vbWJyZSI6IlRFU1QiLCJhbGVyZ2lhcyI6W10sInRhZ3MiOltdLCJuaXZlbF9jb2NpbmEiOm51bGwsInNpc3RlbWFfdW5pZGFkZXMiOiJzaXN0X2ludCIsInJlY2V0YXNfZmF2cyI6W10sImlhdCI6MTYyMTI2MDI2M30.32O2L1ODNUf0szphfcOz_EshqTWhAOPS-CANjzxttbk';
-  // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhlYzR' +
-  //     'jNTc5MWNjNDAwMmE5YzQwNzIiLCJjb3JyZW8iOiJhbmRyZXNAYml0dG8uY' +
-  //     '29tIiwibm9tYnJlIjoiYWFhYSIsImFsZXJnaWFzIjpbXSwiZGlldGEiOltd' +
-  //     'LCJ0YWdzIjpbXSwibml2ZWxfY29jaW5hIjpudWxsLCJzaXN0ZW1hX3VuaWRh' +
-  //     'ZGVzIjoic2lzdF9pbnQiLCJyZWNldGFzX2ZhdnMiOltdLCJpYXQiOjE2MTk5Nj' +
-  //     'kyMjF9.1QibofC5JV1krjcnWCc7rLYPFzfDLSukVPIetEvC0Aw';
-  //final String endpoint = "a1ac68965a1d.ngrok.io";
 
   Future<List<Product>> getBusqueda(search) async {
     String api = "api/v2/search/products/" + search.toString();

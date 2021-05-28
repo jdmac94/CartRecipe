@@ -11,7 +11,7 @@ class ContactScreen extends StatelessWidget {
           child: RichText(
               text: TextSpan(children: <TextSpan>[
             TextSpan(
-              text: 'Para contactarnos puedes llamar al XXX XX XX XX',
+              text: 'Para contactarnos puedes llamar al +34 922 921 922',
               style: TextStyle(color: Colors.black),
             )
           ])),

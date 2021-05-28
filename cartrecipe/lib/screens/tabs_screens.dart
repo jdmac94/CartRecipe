@@ -40,6 +40,7 @@ class _TabsScreenState extends State<TabsScreen> {
     _pages = [
       {
         'page': RecipesScreen(),
+        //'page': TutorialScreen(),
         'title': 'Recetas',
       },
       {
