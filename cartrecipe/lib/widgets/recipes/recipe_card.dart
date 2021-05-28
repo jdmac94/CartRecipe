@@ -40,7 +40,7 @@ class RecipeCard extends StatelessWidget {
                               Icons.account_box_sharp,
                             ),
                             Text(
-                              this.recipe.usuario,
+                              this.recipe.usuario[0].nombre + " " + this.recipe.usuario[0].apellido,
                             )
                           ],
                         ),

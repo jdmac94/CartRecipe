@@ -2,6 +2,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:cartrecipe/models/recipe.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+//import 'package:share/share.dart';
 
 class RecipeDetail extends StatefulWidget {
   Recipe recipe;
@@ -16,20 +17,8 @@ class RecipeDetail extends StatefulWidget {
   _RecipeDetailState createState() => _RecipeDetailState();
 }
 
-/*
-IDEA: 
-
-  IMAGEN - OK
-  NOMBRE RECETA
-  TIEMPO, DIFICULTAD, Nº COMENSALES
-  ALERGENOS(?)
-  USUARIO CREACION
-  INGREDIENTES
-  PASOS
-  CONSEJOS
-
-*/
 class _RecipeDetailState extends State<RecipeDetail> {
+  bool isLiked = false; // equals isLikedByUser
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,31 +30,27 @@ class _RecipeDetailState extends State<RecipeDetail> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.favorite_border),
+            icon: isLiked? Icon(Icons.favorite, color: Colors.red):Icon(Icons.favorite_border, color: Colors.white),
             color: Colors.white, // Implementar funcion like
-            onPressed: () {},
+            onPressed: () {
+              isLiked = !isLiked;
+              // TODO: ADD IN RECETARIUM BELOW THIS LINE, await API call, MAYBE USE like_button DEPENDENCY
+              setState(() {}); //Could be animated
+            },
           ),
           IconButton(
             icon: Icon(Icons.share),
             color: Colors.white,
-            onPressed: () {},
+            onPressed: () {
+              //Share.share('Mira esta receta de CartRecipe! ' + widget.recipe.titulo + ' de ' 
+              //  + widget.recipe.usuario[0].nombre + " " + widget.recipe.usuario[0].apellido, subject: 'Mira esta receta de CartRecipe');
+            },
           ),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            //1. Image of the recipe
-            //2. Titulo, tiempo, dificultad, we will add allergies later
-            //3. Ingredient list
-            //4. Steps
-            //5. Tips
-            // Image.network( 
-            //   widget.recipe.imagenes[0], 
-            //   height: 200, // maybe set this depending on size of the screen?
-            //   fit: BoxFit.cover,
-            // ),
-            
             Image.network(
                   widget.recipe.imagenes[0],
                   height: 200,
@@ -162,7 +147,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                     children: [
                       Text('Creado por:'),
                       Text(
-                        this.widget.recipe.usuario,
+                        widget.recipe.usuario[0].nombre + " " + widget.recipe.usuario[0].apellido,
                         style: TextStyle(decoration: TextDecoration.underline),
                       ),
                     ],
@@ -196,9 +181,8 @@ class _RecipeDetailState extends State<RecipeDetail> {
           child: Padding(
             padding: EdgeInsets.all(3),
             child: Text(
-              indexKey + " - " + 
-              currentMap[indexKey][0] + " " +
-              currentMap[indexKey][1], 
+              currentMap[indexKey][0] == "" ? indexKey : (currentMap[indexKey][1] == "" ? currentMap[indexKey][0] +" "+ indexKey : indexKey + " :" + currentMap[indexKey][0] + " " +
+              currentMap[indexKey][1] ),
             ),
           ),
         ),        
@@ -449,7 +433,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
               "Creado por: "
             ),
             Text(
-              widget.recipe.usuario,
+              widget.recipe.usuario[0].nombre + " " + widget.recipe.usuario[0].apellido,
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ],

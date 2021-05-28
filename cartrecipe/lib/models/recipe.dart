@@ -28,7 +28,7 @@ class Recipe {
   List<dynamic> allergenList;
   String id;
   List<dynamic> categorias;
-  String usuario;
+  List<Usr> usuario;
   String titulo;
   int dificultad;
   String tiempo;
@@ -37,7 +37,6 @@ class Recipe {
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
       print(json);
-
       return Recipe( 
         imagenes: List<dynamic>.from(json["imagenes"].map((x) => x)),
         ingredientes: List<Map<String, List<String>>>.from(json["ingredientes"]
@@ -52,7 +51,7 @@ class Recipe {
         categorias: json["categorias"] != null //TODO: Handle
             ? List<dynamic>.from(json["categorias"].map((x) => x))
             : [],
-        usuario: json["usuario"],
+        usuario: List<Usr>.from(json["usr"].map((x) => Usr.fromJson(x))),
         titulo: json["titulo"],
         dificultad: json["dificultad"],
         tiempo: json["tiempo"],
@@ -79,4 +78,16 @@ class Recipe {
         "tiempo": tiempo,
         "rating_num": ratingNum,
       };
+}
+
+class Usr {
+  String nombre;
+  String apellido;
+
+  Usr({this.nombre, this.apellido});
+
+  factory Usr.fromJson(Map<String, dynamic> json) => Usr(
+    nombre: json['nombre'],
+    apellido: json['apellido']
+  );
 }

@@ -314,24 +314,17 @@ class ApiWrapper {
   Future<List<Recipe>> getRecipeList() async {
     const String api = "api/v1/receta/getAllRecetas";
     //Currently using  generated auth token
-    final auth =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDhiZThlN2IyYjM3YTAwZjgwMTYyOTMiLCJhbGVyZ2lhcyI6W10sImRpZXRhIjpbXSwidGFncyI6W10sIm5pdmVsX2NvY2luYSI6bnVsbCwic2lzdGVtYV91bmlkYWRlcyI6InNpc3RfaW50IiwicmVjZXRhc19mYXZzIjpbXSwiaWF0IjoxNjE5NzgxODYzfQ.aSAmFeibWYrdDvNh9-kV1bCFtAiBMkp5MQJM4qi4zGk";
-
+    
     List<Recipe> recipeList = [];
     //TODO: Recipe filtering - later
     http.Response response =
         await http.get(Uri.http(endpoint, api), headers: <String, String>{
-      'x-auth-token': auth,
+      'x-auth-token': authToken,
     });
 
     if (response.statusCode == 200) {
       print("Received correctly recipe list.");
-      //print(response.body);
-      /*
-      recipeList = (json.decode(response.body) as List)
-          .map((i) => Recipe.fromJson(i))
-          .toList();
-*/
+
       recipeList = await List<Recipe>.from(
           json.decode(response.body).map((x) => Recipe.fromJson(x)));
       //Iterable i = json.decode(response.body);
@@ -423,7 +416,7 @@ class ApiWrapper {
   }
 
   Future<void> modAlergias(List<String> allergenArray) async {
-    var api = 'api/v1/accountSettings/modAlergias';
+    var api = 'api/v1/accSettings/modAlergias';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -444,7 +437,7 @@ class ApiWrapper {
   }
 
   Future<void> modDieta(bool isVegan, bool isVegetarian) async {
-    var api = 'api/v1/accountSettings/modDieta';
+    var api = 'api/v1/accSettings/modDieta';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -466,7 +459,7 @@ class ApiWrapper {
   }
 
   Future<void> modNivel(int level) async {
-    var api = 'api/v1/accountSettings/modNivel';
+    var api = 'api/v1/acctSettings/modNivel';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -489,14 +482,18 @@ class ApiWrapper {
 
   Future<void> modificaSistemaUnidades(bool metricUnit) async {
     var api = "api/v1/accSettings/modSistemaMedida";
-    http.Response response = await http.post(Uri.http(endpoint, api),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': authToken,
-        },
-        body: jsonEncode(<String, String>{
-          'sistema_unidades': metricUnit.toString(),
-        }));
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String> {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token' : authToken,
+      },
+      body: jsonEncode(<String, String>{
+        'sistema_unidades': metricUnit.toString(),
+      }) 
+    );
+    print(response.body);
+    authToken = response.body.toString();
     print('Received response ' + '${response.statusCode}');
     if (response.statusCode == 200) {
       print('Received correctly');
@@ -516,7 +513,6 @@ class ApiWrapper {
     );
     if (response.statusCode == 200) {
       print('ha llegado!!!!');
-
       prods = List<String>.from(json.decode(response.body));
     } else {
       print(response.body);
