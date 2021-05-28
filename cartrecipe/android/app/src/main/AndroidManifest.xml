@@ -3,7 +3,7 @@
     
    <application
         android:usesCleartextTraffic="true"
-        android:label="cartrecipe"
+        android:label="CartRecipe"
         android:icon="@mipmap/ic_launcher">
         <activity
             

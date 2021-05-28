@@ -4,6 +4,8 @@ import 'package:cartrecipe/screens/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../preferences_screen.dart';
+
 class SignIn extends StatefulWidget {
   final _SignIn state = new _SignIn();
   @override
@@ -122,7 +124,8 @@ class _SignIn extends State<SignIn> {
         //     .showSnackBar(SnackBar(content: Text('Usuario registrado')));
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => TutorialScreen()),
+            MaterialPageRoute(
+                builder: (context) => PreferencesScreen()), //TutorialScreen()),
             (r) => false);
       }
     }

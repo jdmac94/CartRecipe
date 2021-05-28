@@ -1,5 +1,6 @@
 import 'package:cartrecipe/models/product.dart';
 import 'package:cartrecipe/screens/tabs_screens.dart';
+import 'package:cartrecipe/screens/tutorial/tutorial_screen.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:cartrecipe/api/api_wrapper.dart';
@@ -411,7 +412,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                   Navigator.pushAndRemoveUntil(
                       context,
                       new MaterialPageRoute(
-                        builder: (context) => new TabsScreen(0),
+                        builder: (context) => new TutorialScreen(),
                       ),
                       (r) => false)
                 }));

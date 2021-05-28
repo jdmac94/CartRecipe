@@ -121,109 +121,106 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Modificar datos de usuario'),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => pushPage(context),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Modificar datos de usuario'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => pushPage(context),
         ),
-        body: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Container(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 30,
+      ),
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    width: 130,
+                    height: 130,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                "https://cdn.icon-icons.com/icons2/1863/PNG/512/account-circle_119476.png"))),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: "Nombre",
                     ),
-                    Container(
-                      width: 130,
-                      height: 130,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                  "https://cdn.icon-icons.com/icons2/1863/PNG/512/account-circle_119476.png"))),
+                    controller: nombreController,
+                    validator: (value) => _validateNombreyApellido(value),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Apellidos',
+                      hintText: apellidoUsuario,
                     ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "Nombre",
-                      ),
-                      controller: nombreController,
-                      validator: (value) => _validateNombreyApellido(value),
+                    controller: apellidoController,
+                    validator: (value) => _validateNombreyApellido(value),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Contraseña actual',
+                      hintText: '************',
                     ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Apellidos',
-                        hintText: apellidoUsuario,
-                      ),
-                      controller: apellidoController,
-                      validator: (value) => _validateNombreyApellido(value),
+                    controller: oldPasswordController,
+                    validator: (value) => _validateOldPassword(value),
+                    obscureText: true,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Nueva contraseña',
+                      hintText: '************',
                     ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Contraseña actual',
-                        hintText: '************',
-                      ),
-                      controller: oldPasswordController,
-                      validator: (value) => _validateOldPassword(value),
-                      obscureText: true,
+                    controller: newPasswordController,
+                    validator: (value) => _validateNewPassword(value),
+                    obscureText: true,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Repite la nueva contraseña',
+                      hintText: '************',
                     ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Nueva contraseña',
-                        hintText: '************',
-                      ),
-                      controller: newPasswordController,
-                      validator: (value) => _validateNewPassword(value),
-                      obscureText: true,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Repite la nueva contraseña',
-                        hintText: '************',
-                      ),
-                      controller: repitedPasswordController,
-                      validator: (value) {
-                        if (value != newPasswordController.text) {
-                          return 'La nueva contraseña no coincide';
-                        }
+                    controller: repitedPasswordController,
+                    validator: (value) {
+                      if (value != newPasswordController.text) {
+                        return 'La nueva contraseña no coincide';
+                      }
 
-                        return null;
-                      },
-                      obscureText: true,
-                    ),
-                    ElevatedButton(
-                      child: Text('Modificar datos'),
-                      onPressed: () => {
-                        if (_formKey.currentState.validate())
-                          {
-                            ApiWrapper()
-                                .modifyProfile(
-                                    nombreController.text,
-                                    apellidoController.text,
-                                    oldPasswordController.text,
-                                    newPasswordController.text)
-                                .then((value) => _validateForm(value))
-                          },
-                      },
-                    )
-                  ],
-                ),
+                      return null;
+                    },
+                    obscureText: true,
+                  ),
+                  ElevatedButton(
+                    child: Text('Modificar datos'),
+                    onPressed: () => {
+                      if (_formKey.currentState.validate())
+                        {
+                          ApiWrapper()
+                              .modifyProfile(
+                                  nombreController.text,
+                                  apellidoController.text,
+                                  oldPasswordController.text,
+                                  newPasswordController.text)
+                              .then((value) => _validateForm(value))
+                        },
+                    },
+                  )
+                ],
               ),
             ),
           ),
         ),
       ),
-      onWillPop: () async {
-        return false;
-      },
     );
+
+    //);
   }
 
   void _showDialog(BuildContext context) {
