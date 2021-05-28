@@ -208,6 +208,38 @@ router.post("/modNivel", auth, async (req, res) => {
     res.send(result);
 });
 
+router.post("/modTags", auth, async (req, res) => {
+    console.log("UPDATING WANTED TAGS OF " + req.user.correo);
+    console.log(req.body);
+    let  = await Usuario.findOne({ correo: req.user.correo });
+
+    if (req.body.tagArray && typeof req.body.tagArray[Symbol.iterator] === "function") {
+        user.tags = req.body.tagArray;
+    }
+
+    const result = user.save();
+    if(!result)
+        return res.status(400).send("Error al intentar actualizar los alérgenos");
+
+    res.send(result);
+});
+
+router.post("/modBanned", auth, async (req, res) => {
+    console.log("UPDATING BANNED PRODUCTS OF " + req.user.correo);
+    console.log(req.body);
+    let  = await Usuario.findOne({ correo: req.user.correo });
+
+    if (typeof req.body.banArray[Symbol.iterator] === "function") {
+        user.banArray = req.body.banArray;
+    }
+
+    const result = user.save();
+    if(!result)
+        return res.status(400).send("Error al intentar actualizar los alérgenos");
+
+    res.send(result);
+});
+
 
 router.get("/recetario", auth, async (req, res) => {
     console.log("GETTING RECETARIO (LIKES)");
