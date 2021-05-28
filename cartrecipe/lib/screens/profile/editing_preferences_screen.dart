@@ -20,7 +20,7 @@ class EdittingPreferencesScreen extends StatefulWidget {
 class _EdittingPreferencesScreen extends State<EdittingPreferencesScreen> {
   EditPreferencesScreen edit = new EditPreferencesScreen();
   int _selectedPageIndex;
-
+  List<String> allergenList = [];
   void initState() {
     _selectedPageIndex = widget.receivedPage;
     super.initState();
@@ -35,20 +35,39 @@ class _EdittingPreferencesScreen extends State<EdittingPreferencesScreen> {
         ),
         body: Column(
           children: [
-            if (_selectedPageIndex == 0) Expanded(child: Allergens()),
-            if (_selectedPageIndex == 1) Expanded(child: Dieta()),
-            if (_selectedPageIndex == 2) Expanded(child: NivelCocina()),
-            if (_selectedPageIndex == 3) Expanded(child: WantedTags()),
-            if (_selectedPageIndex == 4) Expanded(child: ProductBans()),
+            if (_selectedPageIndex == 0)
+              Expanded(child: Allergens())
+            else if (_selectedPageIndex == 1)
+              Expanded(child: Dieta())
+            else if (_selectedPageIndex == 2)
+              Expanded(child: NivelCocina())
+            else if (_selectedPageIndex == 3)
+              Expanded(child: WantedTags())
+            else if (_selectedPageIndex == 4)
+              Expanded(child: ProductBans()),
             buildButton()
           ],
         ));
   }
 
   Widget buildButton() {
+    if (_selectedPageIndex == 0)
+      Allergens().getAllergensArray.forEach((element) {
+        if (element[0] == true) allergenList.add("en:" + (element[1]));
+      });
     return ElevatedButton(
         child: Text('Guardar'),
         onPressed: () => {
+              if (_selectedPageIndex == 0)
+                ApiWrapper().modAlergias(allergenList)
+              else if (_selectedPageIndex == 1)
+                ApiWrapper().modDieta(Dieta().getVegan, Dieta().getVegetarian)
+              else if (_selectedPageIndex == 2)
+                ApiWrapper().modNivel(NivelCocina().getNivel)
+              else if (_selectedPageIndex == 3)
+                ApiWrapper().modTags(WantedTags().getTagsArray)
+              else if (_selectedPageIndex == 4)
+                ApiWrapper().modBanned(ProductBans().getProducts),
               Navigator.pushAndRemoveUntil(
                   context,
                   new MaterialPageRoute(
