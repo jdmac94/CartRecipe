@@ -1,4 +1,5 @@
 import 'package:cartrecipe/api/api_wrapper.dart';
+import 'package:cartrecipe/screens/preferences_screen.dart';
 import 'package:cartrecipe/screens/tutorial/tutorial_screen.dart';
 import 'package:cartrecipe/screens/welcome.dart';
 import 'package:flutter/material.dart';
@@ -143,7 +144,7 @@ class _SignInWithGoogle extends State<SignInWithGoogle> {
         //     .showSnackBar(SnackBar(content: Text('Usuario registrado')));
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => TutorialScreen()),
+            MaterialPageRoute(builder: (context) => PreferencesScreen()),
             (r) => false);
       }
     }
