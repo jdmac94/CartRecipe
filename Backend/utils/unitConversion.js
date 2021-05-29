@@ -1,8 +1,5 @@
 function convertIngredientsUnits(ingredient, sistInter = true) {
-  console.log("sistInter: " + sistInter);
-
         if (!sistInter) {
-          console.log(ingredient[1]);
             switch (ingredient[1]) {
               case 'kilogramos':
                 ingredient[0] = lbs_to_kg(ingredient[0], sistInter).toString();

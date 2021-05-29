@@ -411,10 +411,13 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
 router.get("/addImpInterToAll", auth, async (req, res) => {
 
   let recetas = await Receta.find({}, {ingredientes:1});
-  
+
+  console.log("//////print de recetas enteras///////");
+  console.log(recetas);
+
   recetas.forEach(function (x) {
-    dictImp = JSON.parse(JSON.stringify(x.ingredientes));
-    dictInter = JSON.parse(JSON.stringify(x.ingredientes));
+    var dictImp = JSON.parse(JSON.stringify(x.ingredientes));
+    var dictInter = JSON.parse(JSON.stringify(x.ingredientes));
     var ingArr = [];
 
     for (const [key, value] of Object.entries(dictImp)) {
@@ -428,10 +431,13 @@ router.get("/addImpInterToAll", auth, async (req, res) => {
       valueIn = convertIngredientsUnits(valueIn, true);
     }
 
-    console.log("/////////////");
+    console.log("//////x.ingredientes///////");
     console.log(x.ingredientes);
+    console.log("//////dictImp///////");
     console.log(dictImp);
+    console.log("//////dictInter///////");
     console.log(dictInter);
+    console.log("//////ingArr///////");
     console.log(ingArr);
 
     x.ingredientes_imp    = dictImp;
