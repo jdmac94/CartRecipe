@@ -119,9 +119,9 @@ router.get("/getPreferences", auth, async (req, res) => {
 router.post("/modAlergias", auth, async (req, res) => {
     console.log("UPDATING ALLERGIES OF " + req.user.correo);
     console.log(req.body);
-    let  = await Usuario.findOne({ correo: req.user.correo });
+    let user = await Usuario.findOne({ correo: req.user.correo });
 
-    if (typeof listedProds[Symbol.iterator] === "function") {
+    if (req.body.allergenArray && typeof req.body.allergenArray[Symbol.iterator] === "function") {
         user.alergias = req.body.allergenArray;// lo hacemos de bools o directamente strings? lo ultimo requerirá revisar los campos
         //si hay que revisar, es obtener de la bd los alergenos y comparar el array con cada elemento del allergenArray
     }

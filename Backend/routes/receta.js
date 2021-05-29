@@ -217,11 +217,14 @@ router.get("/getAllRecetas2", auth, async (req, res) => {
         tags: 1,
         banArray: 1,
         nivel_cocina: 1,
+        category_ban: 1,
     });
 
   if (!user)
     return res.status(404).send("Error al obtener las preferencias del usuario");
   
+  console.log(user);
+
   var ingre = "";
   if (req.user.sistema_internacional || req.user.sistema_unidades == 'sist_int') {
     ingre = "$ingredientes_inter";
@@ -244,13 +247,19 @@ router.get("/getAllRecetas2", auth, async (req, res) => {
 
     if (dietArr.length > 0)
       dietQuery = { tags: {$in: dietArr }};
-
+      
+    // esto peta por el tema de que los users están desfasados
     if (user.category_ban.length > 0)
       banQuery = { ingredientes_list: {$nin: user.category_ban }};
       // banQuery = { ingredientes_list: {$nin: ["zanahoria"] }};
 
     // if (alergias de alimentos)
     // if (req.user.tags)
+
+    console.log(dietQuery);
+    console.log(dietArr);
+    console.log("/////////////");
+    console.log(banQuery);
 
   // .limit(25);
   //if (vegano) {//ajustar el tema de token
