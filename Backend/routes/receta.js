@@ -5,8 +5,10 @@ const router = express.Router();
 const { Receta } = require("../models/receta");
 const { Nevera } = require("../models/nevera");
 const { ProductV2 } = require("../models/product_v2");
+const { Usuario } = require("../models/usuario");
 const auth = require("../middlewares/auth");
 const { convertIngredientsUnits } = require("../utils/unitConversion");
+const { query } = require("express");
 
 async function fillReceta(body, receta) {
   if (body.titulo) receta.titulo = body.titulo;
@@ -68,68 +70,79 @@ router.get("/suggested", auth, async (req, res) => {
   res.send("No hay nada");
 });
 
-router.get("/getAllergens", auth, async (req, res) => {
-
-  var test = "Nuez natural";
-  const allergens = await ProductV2.find({ name: test });
-
-  var a = allergens.productos[0].allergens_from_user;
-
-  console.log(a);
-
-  res.send(a);
-  // }
-});
-
-router.get("/getDiets", auth, async (req, res) => {
-// async function fetchDiet(product) {
+// router.get("/getDiets", auth, async (req, res) => {
+ async function fetchDiet(product) {
   
-  // var test = "Nuez natural";
-  
+  // var product = "Patatas Fritas";
+
   // const allergens = await ProductV2.aggregate([
-  //   { $match: { name: product } },
+  //   { $match: { inner_ingredient: product } },//MODIFICAR!!!!!!!!
+  //   { "$group": {
+  //   "_id": "analysis",
+  //   "tags": { "$addToSet": "$ingredients_analysis_tags" }
+	// }},
+	// { "$addFields": {
+  //   "tags": {
+  //     "$reduce": {
+  //       "input": "$tags",
+  //       "initialValue": [],
+  //       "in": { "$setUnion": [ "$$value", "$$this" ] }
+  //     }
+  //   }
+  // }}
+  // ]);
+
+  autoTags = [];
+
+  console.log(product.tags);
+
+  //if (allergens.tags.includes("en:non-vegan"))
+  if (product.tags.includes("en:vegan"))
+    autoTags.push("Vegano");
+
+  //se puede sustituir para hacer un flitro más suave
+  //if (allergens.tags.includes("en:non-vegetarian"))
+  if (product.tags.includes("en:vegetarian"))
+    autoTags.push("Vegetariano");
+
+
+  res.send(autoTags);
+}
+// });
+
+// router.get("/getAllergens/:id", auth, async (req, res) => {
+async function fetchAllergens(product) {
+
+  // const allergens = await ProductV2.aggregate([
+  //   { $match: { inner_ingredient: product } },
   //   {
-  //     $group:
-  //       {
-  //         _id: "a",
-  //         allerg: { $push: "$products.allergens_tags" },
-  //       }
+  //     $group: {
+  //       _id: "$inner_ingredient",
+  //       allerg: { $push: "$allergens_tags" },
+  //     },
   //   },
-  //   { $project: { name: 1, allerg: 1} }
-  // ]).exec();
+  //   { $project: { name: 1, allerg: 1 } },
+  // ]);
 
-  const allergens = await ProductV2.aggregate([
-    { $match: { name: product } },
-    {
-      $group:
-        {
-          _id: "a",
-          allerg: { $push: "$products.ingredients_analysis_tags" },
-        }
-    },
-    { $project: { name: 1, allerg: 1} }
-  ]);
+  // x = allergens[0].allerg;
+  x = product.allerg;
 
-  // x = allergens[0].allerg[0];
-  // console.log(x);
+  if (x.length > 0) {
+    arr1 = x[0];
+    for (let i = 1; i < x.length; i++) {
+      arr1 = arr1.filter((value) => x[i].includes(value));
+    }
+    console.log(arr1);
+    return res.send(arr1);
+  }
 
-  // arr1 = x[0];
-
-  // for (let i = 1; i < x.length; i++) {
-  //   arr1 = arr1.filter(value => x[i].includes(value));
-  // }
-
-  console.log(allergens);
-
-  // const genericProd = await ProductV2.find({ name : test });
-
+  // const genericProd = await ProductV2.find({ name: test });
   // genericProd.allergens_from_user = arr1;
-
   // genericProd.save();
 
-  res.send(allergens);
-// }
-});
+  res.send([]);
+}  
+// });
 
 //ojo con el rendimiento al demandar mucha receta. Pendiente de hacer regulable el limite
 router.get("/getAllRecetas", auth, async (req, res) => {
@@ -144,26 +157,7 @@ router.get("/getAllRecetas", auth, async (req, res) => {
     console.log("imperial");
   }
 
-    // $and: [ 
-    //   {type: {$in: ["TOYS"]}}, 
-    //   {type: {$nin: ["BARBIE"]}}, 
-    //   {time: {$lt:ISODate("2013-12-09T00:00:00Z")}}
-    // ]
-
-    // if (req.user.vegano)
-    // if (req.user.vegetariano)
-    // if (req.user.category_ban)
-    //   //inner_ingredient
-
-    // // if (alergias de alimentos)
-    // if (req.user.tags)
-
-  // .limit(25);
-  //if (vegano) {//ajustar el tema de token
-
-  // AGGREGATE IN ITS PRIME 
     let recetaList = await Receta.aggregate([
-      //{ $match : { tags : { $in: ["Vegano"] } } },
       {
         "$project": {
           "ide": {
@@ -209,14 +203,25 @@ router.get("/getAllRecetas", auth, async (req, res) => {
         }
       }
     ]);
-  //}
   
 
   res.send(recetaList);
 });
-
 router.get("/getAllRecetas2", auth, async (req, res) => {
 
+  let user = await Usuario.findOne({ correo: req.user.correo },
+    {
+        vegano: 1,
+        vegetariano: 1,
+        alergias: 1,
+        tags: 1,
+        banArray: 1,
+        nivel_cocina: 1,
+    });
+
+  if (!user)
+    return res.status(404).send("Error al obtener las preferencias del usuario");
+  
   var ingre = "";
   if (req.user.sistema_internacional || req.user.sistema_unidades == 'sist_int') {
     ingre = "$ingredientes_inter";
@@ -227,43 +232,35 @@ router.get("/getAllRecetas2", auth, async (req, res) => {
     console.log("imperial");
   }
 
-    // $and: [ 
-    //   {type: {$in: ["TOYS"]}}, 
-    //   {type: {$nin: ["BARBIE"]}}, 
-    //   {time: {$lt:ISODate("2013-12-09T00:00:00Z")}}
-    // ]
     var dietArr = [];
     var dietQuery = {};
     var banQuery = {};
 
-    if (req.user.vegano)
+    if (user.vegano)
       dietArr.push("Vegano");
 
-    if (req.user.vegetariano)
+    if (user.vegetariano)
       dietArr.push("Vegetariano");
 
     if (dietArr.length > 0)
-      dietQuery = { type: {$in: dietArr }};
+      dietQuery = { tags: {$in: dietArr }};
 
-    if (req.user.category_ban.length > 0)
-      banQuery = { type: {$nin: req.user.category_ban }};
+    if (user.category_ban.length > 0)
+      banQuery = { ingredientes_list: {$nin: user.category_ban }};
+      // banQuery = { ingredientes_list: {$nin: ["zanahoria"] }};
 
-    // // if (alergias de alimentos)
+    // if (alergias de alimentos)
     // if (req.user.tags)
 
   // .limit(25);
   //if (vegano) {//ajustar el tema de token
 
-  // AGGREGATE IN ITS PRIME 
     let recetaList = await Receta.aggregate([
-      // { $match : { tags : { $in: ["Vegano"] } } },
       { 
         $match: {
-             $and: [ 
-                // {type: {$in: ["TOYS"]}}, 
-                // {type: {$nin: ["BARBIE"]}}, 
-                 {dietQuery},
-                 {banQuery},
+             $and: [
+                 dietQuery,
+                 banQuery,
              ]
         }
       },
@@ -312,55 +309,10 @@ router.get("/getAllRecetas2", auth, async (req, res) => {
         }
       }
     ]);
-  //}
   
 
   res.send(recetaList);
 });
-
-
-router.get("/addRecetaFIXED", auth, async (req, res) => {
-  let receta = new Receta();
-
-  // var dict = {
-  //     "manzana verde": "1",
-  //     "rodajas de papaya madura": "3",
-  //     "vaso de agua": "1.5",
-  //     "cucharadita de miel": "1"
-  // };
-
-  var dict = [
-    { 1: ["manzana verde", "1"] },
-    { 2: ["rodajas de papaya", "3"] },
-    { 3: ["vaso de agua", "1.5"] },
-    { 4: ["cucharadita de miel", "1"] },
-  ];
-
-  receta.usuario = "0";
-  receta.titulo = "Jugo para el estreñimiento de manzana y papaya";
-  receta.dificultad = 1;
-  receta.descripcion = "Esto es una introducción";
-  receta.tiempo = "5:00";
-  receta.imagenes = [
-    "https://www.laespanolaaceites.com/wp-content/uploads/2019/06/pizza-con-chorizo-jamon-y-queso-1080x671.jpg",
-  ];
-  receta.ingredientes = dict;
-
-  receta.pasos = [
-    "Trocea las frutas y agrégalas en el vaso de la licuadora junto al resto de los ingredientes.",
-    "Mezcla hasta que no veas grumos.",
-  ];
-  receta.consejos = [
-    "Si lo prefieres, puedes agregar naranja a la receta, siguiendo estas indicaciones de nuestra receta de jugo de papaya, manzana y naranja.",
-    "La manzana es una de esas frutas cuya piel beneficia la regulación del tránsito intestinal, de manera que lávala muy bien y prepara el jugo sin quitarla.",
-  ];
-
-  receta.rating_num = 4;
-  receta.tags = ["fruta", "batido", "zumo", "vegano", "vegetariano"];
-  //return res.status(404).send("No hay recetas");
-  res.send(receta);
-});
-
 router.post("/addReceta", auth, async (req, res) => {
   let receta = new Receta();
 
@@ -371,28 +323,26 @@ router.post("/addReceta", auth, async (req, res) => {
 
   if (req.body.dificultad) receta.dificultad = req.body.dificultad;
   else
-    return res
-      .status(400)
-      .send("No se ha enviado un nivel de dificultad válido");
+    return res.status(400).send("No se ha enviado un nivel de dificultad válido");
 
   if (req.body.tiempo) receta.tiempo = req.body.tiempo;
   else return res.status(400).send("No se ha insertado una duración válida");
 
-  if (req.body.ingredientes) receta.ingredientes = req.body.ingredientes;
+  if (req.body.ingredientes.length && req.body.ingredientes.length > 0) receta.ingredientes = req.body.ingredientes;
   else
     return res.status(400).send("La receta debe coneter ingredietes válidos");
 
-  if (req.body.pasos.length) receta.pasos = req.body.pasos;
+  if (req.body.pasos.length && req.body.pasos.length > 0) receta.pasos = req.body.pasos;
   else return res.status(400).send("La receta debe contener pasos a seguir");
 
   if (req.body.consejos) receta.consejos = req.body.consejos;
 
+  // receta = processReceta(receta);
+
   const result = receta.save();
-  //if (result) res.send();
 
-  res.send(receta);
+  res.send(result);
 });
-
 router.get("/sugerida", auth, async (req, res) => {
   const recetas = [];
   const palabrasClaveNevera = [];
@@ -412,14 +362,12 @@ router.get("/sugerida", auth, async (req, res) => {
     ? await Receta.find({ ingredientes: { $regex: palabrasClaveNevera } })
     : [];
 });
-
 router.get("/getReceta/:id", auth, async (req, res) => {
   let receta = await Receta.findById(req.params.id);
   console.log("Buscando receta: " + req.params.id);
   if (!receta) return res.status(404).send("La receta solicitada no existe");
   res.send(receta);
 });
-
 router.get("/addRecetaFIXED1", auth, async (req, res) => {
   let receta = new Receta();
   //https://www.lagloriavegana.com/hummus-de-zanahoria/
@@ -444,7 +392,7 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
     "https://www.lagloriavegana.com/wp-content/uploads/2020/08/IMG_9275-1280x1280.jpg",
   ];
   receta.ingredientes = dict;
-
+  
   receta.pasos = [
     "Lavamos y cortamos en rodajas las zanahorias.",
     "Las ponemos en un recipiente apto para microondas y cocinamos a máxima potencia durante 5 minutos (o hasta que estén tiernas). También se pueden hornear o hacer al vapor. Dejamos que se templen.",
@@ -460,8 +408,6 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
 
   res.send(receta);
 });
-
-
 router.get("/addImpInterToAll", auth, async (req, res) => {
 
   let recetas = await Receta.find({}, {ingredientes:1});
@@ -469,10 +415,12 @@ router.get("/addImpInterToAll", auth, async (req, res) => {
   recetas.forEach(function (x) {
     dictImp = JSON.parse(JSON.stringify(x.ingredientes));
     dictInter = JSON.parse(JSON.stringify(x.ingredientes));
+    var ingArr = [];
 
     for (const [key, value] of Object.entries(dictImp)) {
       let [keyIn, valueIn] = Object.entries(value)[0];
       valueIn = convertIngredientsUnits(valueIn, false);
+      ingArr.push(keyIn);
     }
     
     for (const [key, value] of Object.entries(dictInter)) {
@@ -484,9 +432,11 @@ router.get("/addImpInterToAll", auth, async (req, res) => {
     console.log(x.ingredientes);
     console.log(dictImp);
     console.log(dictInter);
+    console.log(ingArr);
 
-    x.ingredientes_imp   = dictImp;
-    x.ingredientes_inter = dictInter;
+    x.ingredientes_imp    = dictImp;
+    x.ingredientes_inter  = dictInter;
+    x.ingredientes_list   = ingArr;
 
     const result = x.save();
       if(!result)
@@ -498,301 +448,80 @@ router.get("/addImpInterToAll", auth, async (req, res) => {
 
 });
 
+async function unitConverting(x) {
 
-router.get("/addRecetaFIXED2", auth, async (req, res) => {
-  let receta = new Receta();
-  //esta receta tiene dos secciones https://www.lagloriavegana.com/makis-vegetales/, podemos plantear el implenmetar eso como extra llegado el momento
-  var dict = [
-    { 1: ["arroz de sushi", "250", "mililitros"] },
-    { 2: ["agua", "250", "mililitros"] },
-    { 3: ["vinagre de arroz", "1", "cucharada"] },
-    { 4: ["sal", "0.5", "cucharadita"] },
-    { 5: ["azúcar", "1", "cucharadita"] },
-    { 6: ["alga nori", "3", "láminas"] },
-    { 7: ["mango", "0.5", ""] },
-    { 8: ["aguacate", "0.5", ""] },
-    { 9: ["mayonesa de wasabi casera", "3", "cucharada"] },
-  ];
+  dictImp = JSON.parse(JSON.stringify(x.ingredientes));
+  dictInter = JSON.parse(JSON.stringify(x.ingredientes));
+  var ingArr = [];
 
-  receta.usuario = "0";
-  receta.titulo = "Makis vegetales";
-  receta.dificultad = 3;
-  receta.descripcion =
-    "¡Hola a tod@s! Hoy os traigo una receta más elaborada, pero que mola mucho hacer: makis caseros. Y es que desde Le Creuset me retaron a hacerlos usando su Cocotte Every. \n\n Para el interior, he usado mango y aguacate para que tuviera un sabor más refinado, combinados con la mayonesa de wasabi casera (el toque mágico). Para cortarlos, mejor hacerlo por mitades, como los japoneses.";
+  for (const [key, value] of Object.entries(dictImp)) {
+    let [keyIn, valueIn] = Object.entries(value)[0];
+    valueIn = convertIngredientsUnits(valueIn, false);
+    ingArr.push(keyIn);
+  }
+  
+  for (const [key, value] of Object.entries(dictInter)) {
+    let [keyIn, valueIn] = Object.entries(value)[0];
+    valueIn = convertIngredientsUnits(valueIn, true);
+  }
 
-  receta.tiempo = "15:00";
-  receta.imagenes = [
-    "https://www.lagloriavegana.com/wp-content/uploads/2020/08/Makis-vegetales-1280x1280.jpg",
-    "https://www.lagloriavegana.com/wp-content/uploads/2020/08/Makis-vegetales-2.jpg",
-  ];
-  receta.ingredientes = dict;
+  console.log("/////////////");
+  console.log(x.ingredientes);
+  console.log(dictImp);
+  console.log(dictInter);
+  console.log(ingArr);
 
-  receta.pasos = [
-    "Ponemos en la Cocotte Every el agua y el arroz y encendemos el fuego. Cuando arranque a hervir tapamos la cacerola, bajamos el fuego al mínimo y cocemos durante 10 min. No levantamos la tapa en ningún momento.",
-    "Pasados los 10 min apagamos el fuego y, sin levantar la tapa, dejamos reposar 15 min más.",
-    "Mientras se hace este proceso, preparamos el aderezo mezclando el vinagre de arroz, la sal y el azúcar hasta que se diluya todo bien. Cortamos tb el mango y el aguacate en tiras.",
-  ];
-  receta.consejos = [];
+  x.ingredientes_imp    = dictImp;
+  x.ingredientes_inter  = dictInter;
+  x.ingredientes_list   = ingArr;
 
-  receta.rating_num = 4;
-  receta.tags = ["tag0", "tag1", "tag2", "tag3", "tag4"];
-  receta.allergenList = [
-    "alergeno0",
-    "alergeno1",
-    "alergeno2",
-    "alergeno3",
-    "alergeno4",
-    "alergeno5",
-  ];
-  const result = receta.save();
-  //return res.status(404).send("No hay recetas");
+  const result = x.save();
+    if(!result)
+        return res.status(400).send("ERROR al actualizar perfil");
+  console.log(result);
+}
 
-  res.send(receta);
-});
+async function allergenDietQuery(product) {
 
-router.get("/addRecetaFIXED3", auth, async (req, res) => {
-  let receta = new Receta();
-  //https://www.lagloriavegana.com/one-pot-pasta-version-2-0/
-  var dict = [
-    { 1: ["Penne de Lentejas Rojas", "250", "gramos"] },
-    { 2: ["cebolla", "1", ""] },
-    { 3: ["calabacín pequeño", "1", ""] }, // maybe añadir campo de "artibutos", como "troceado", en dados,etc.
-    { 4: ["champiñones", "150", "gramos"] },
-    { 5: ["tomates cherry", "10", ""] },
-    { 6: ["caldo de verduras", "750", "mililitros"] },
-    {
-      7: [
-        "manteca de anacardos (o de nata vegetal o de tahini)",
-        "2",
-        "cucharada",
-      ],
-    },
-    { 8: ["Sal, pimienta y aove", "", ""] },
-  ];
+  db.customProducts.aggregate([
+    { $match: { inner_ingredient: product } },
+    { "$group": {
+    "_id": "analysis",
+    "tags": { "$addToSet": "$ingredients_analysis_tags" },
+	  "allerg": { $push: "$allergens_tags" },
+	}},
+	{ "$addFields": {
+    "tags": {
+      "$reduce": {
+        "input": "$tags",
+        "initialValue": [],
+        "in": { "$setUnion": [ "$$value", "$$this" ] }
+      }
+    }
+  }}
+  ]);
 
-  receta.usuario = "0";
-  receta.titulo = "One Pot Pasta";
-  receta.dificultad = 3;
-  receta.descripcion =
-    "¡Hola a tod@s!\n Hoy os comparto una receta de la que estoy muy orgullosa por dos motivos:\n - Me ha salido riquísima de la muerte.\n - Solo he encendido un fuego y ensuciado una olla para prepararla.\n El punto 2 es importante porque debemos ir haciendo pequeños gestos para ir fortaleciendo la sostenibilidad.\n\n Por mi parte, en esta receta:\n\n - He escogido verduras de temporada.\n - El caldo que he usado lo hago como ya sabéis aprovechando las peladuras de las verduras (troncos de brócoli, piel de las cebollas, hojas de apio…).\nSolo he ensuciado una olla y encendido un fuego.";
+}
 
-  receta.tiempo = "15:00";
-  receta.imagenes = [
-    "https://www.lagloriavegana.com/wp-content/uploads/2020/11/ONE-POT-pasta-foto-1280x1280.jpeg",
-  ];
-  receta.ingredientes = dict;
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
 
-  receta.pasos = [
-    "Pochamos la cebolla y el ajo.",
-    "Incorporamos el resto de las verduras.",
-    "Añadimos el caldo de verduras.",
-    "Cuando arranque a hervir, echamos la pasta, removemos y dejamos cocer durante 9 minutos.",
-    "Un minuto antes de apagar el fuego, le añadimos la manteca de anacardos (anacardos triturados hasta hacerlos crema) y removemos. Esto le va a aportar una cremosidad brutal.",
-    "Apagamos el fuego y servimos con un poco de pimienta por encima.",
-  ];
-  receta.consejos = [];
+async function processReceta(receta) {
 
-  receta.rating_num = 4;
-  receta.tags = ["tag0", "tag1", "tag2", "tag3", "tag4"];
-  receta.allergenList = [
-    "alergeno0",
-    "alergeno1",
-    "alergeno2",
-    "alergeno3",
-    "alergeno4",
-    "alergeno5",
-  ];
-  const result = receta.save();
-  //return res.status(404).send("No hay recetas");
+  receta.ingredientes_list.forEach(function (ingredient) {
+    var query = allergenDietQuery(ingredient);
 
-  res.send(receta);
-});
+    receta.allergenList = receta.allergenList.concat(fetchAllergens(query));
+    receta.tags = receta.tags.concat(fetchDiet(query));
+  });
 
-router.get("/addRecetaFIXED4", auth, async (req, res) => {
-  let receta = new Receta();
-  // https://www.lagloriavegana.com/bolitas-de-cacao-y-zanahoria/
-  var dict = [
-    { 1: ["nueces", "100", "gramos"] },
-    { 2: ["dátiles", "100", "gramos"] },
-    { 3: ["zanahoria", "80", "gramos"] },
-    { 4: ["canela en polvo", "1", "cucharadita"] },
-    { 5: ["cacao puro en polvo", "20", "gramos"] },
-  ];
+  receta.allergenList = receta.allergenList.filter(onlyUnique);
+  receta.tags = receta.tags.filter(onlyUnique);
 
-  /*
-	100 g de nueces (o almendras, avellanas, pistachos, mezcla de varios…)
-	100 g de dátiles
-	80 g de zanahoria cruda pelada
-	1 cucharadita de canela en polvo
-	20 g de cacao puro en polvo
-	
-	*/
 
-  receta.usuario = "0";
-  receta.titulo = "Bolitas de cacao y Zanahoria";
-  receta.dificultad = 3;
-  receta.descripcion =
-    "¡Hola a tod@s!  Feliz día de otoño familia. Os comparto la receta de las bolitas que tanto os gustaron cuando las compartí como idea de snack para Álvaro.\n\nSe las puse junto con fruta y al día siguiente me dijo: “mamá, ponme muchas bolitas”.\n\n¡Un triunfazo total!";
-
-  receta.tiempo = "15:00";
-  receta.imagenes = [
-    "https://www.lagloriavegana.com/wp-content/uploads/2020/11/image00009-1280x1280.jpeg",
-  ];
-  receta.ingredientes = dict;
-
-  receta.pasos = [
-    "Si los dátiles están muy duros, los ponemos 10-15 min en remojo con agua caliente. Después colamos el agua y la desechamos. Otra opción sería meterlos 10 seg en el microondas para ablandarlos.",
-    "Ponemos todos los ingredientes en el procesador o en la picadora y trituramos hasta conseguir una pasta. No hace falta que esté muy fina. ¡Ojo con pasarse triturando! que podría empezar a salir el aceite de los frutos secos y eso no es lo que queremos.",
-    "Damos forma a las bolitas con las manos (del tamaño que queráis) y las rebozamos con semillas trituradas, con coco rallado, con cacao en polvo, con frutos secos picados… El rebozado nos ayudara a proteger el interior y a que queden más firmes.",
-    "Las conservamos en el frigorífico. Aguantan 7-10 días aprox. Se pueden congelar.",
-  ];
-  receta.consejos = ["Podéis hacer las variaciones que queráis con esta base."];
-
-  receta.rating_num = 4;
-  receta.tags = ["tag0", "tag1", "tag2", "tag3", "tag4"];
-  receta.allergenList = [
-    "alergeno0",
-    "alergeno1",
-    "alergeno2",
-    "alergeno3",
-    "alergeno4",
-    "alergeno5",
-  ];
-  const result = receta.save();
-  //return res.status(404).send("No hay recetas");
-
-  res.send(receta);
-});
-
-router.get("/addRecetaFIXED5", auth, async (req, res) => {
-  let receta = new Receta();
-  // https://www.lagloriavegana.com/fluffy-pancakes/
-  var dict = [
-    { 1: ["bebida de nuez de Borges", "125", "mililitros"] },
-    { 2: ["Zumo de limón", "1", "cucharadita"] },
-    { 3: ["aceite de oliva virgen extra", "1", "cucharadita"] }, // maybe añadir campo de "artibutos", como "troceado", en dados,etc.
-    { 4: ["harina de trigo", "80", "gramos"] },
-    { 5: ["lavadura", "10", "gramos"] },
-    { 6: ["endulzante", "1", "cucharada"] },
-    { 7: ["Sal", "", ""] },
-    { 8: ["Canela en polvo", "", ""] },
-  ];
-
-  /*
-	125 ml bebida de nuez de Borges
-	1 cdta zumo de limón
-	1 cdta de aceite de oliva virgen extra
-	80 g harina de trigo (también sale con 40 trigo + 40 trigo sarraceno o con 80 trigo sarraceno)
-	10 g levadura tipo Royal (1 cdta)
-	1 cda del endulzante que quieras
-	1 pizca de sal
-	Canela en polvo
-	
-	*/
-
-  receta.usuario = "0";
-  receta.titulo = "Fluffy pancakes";
-  receta.dificultad = 3;
-  receta.descripcion =
-    "¡Hola a tod@s! ¡Llegan las tortitas más esponjosas de la historia de la cocina vegana!\n\nHoy os comparto mi versión de los típicos fluffy pancakes americanos. Si los acompañáis de fruta, mermelada, chocolate o cualquier otro sirope, ¡vais a tocar el cielo!\n\nQuedan súper aireados y suaves, por lo que os recomiendo que probéis a hacerlos y me contéis si habéis notado la diferencia con los tradicionales.";
-
-  receta.tiempo = "15:00";
-  receta.imagenes = [
-    "https://www.lagloriavegana.com/wp-content/uploads/2020/09/IMG_7722-1280x1280.jpg",
-  ];
-
-  receta.ingredientes = dict;
-
-  receta.pasos = [
-    "Mezclamos en un vaso la bebida de nuez con el zumo de limón. Removemos y dejamos reposar 5 minutos. Es normal que se corte; de hecho, lo que queremos conseguir es una burtermilk.",
-    "Añadimos la cdta de aceite y removemos.",
-    "En un bol mezclamos el resto de los ingredientes. Añadimos la buttermilk y removemos despacio (no queremos batir en exceso, sino lo justo para que quede integrado). Dejamos reposar la mezcla 5-10 min.",
-    "Calentamos una sartén pequeña antiadherente y la engrasamos con un poco de aceite de oliva. Hacemos una a una las tortitas añadiendo un poco de masa a la sartén (lentamente para evitar que se extienda mucho). Dejamos que se haga 1 min y le damos la vuelta. Cocinamos 40 seg más aproximadamente. Hacemos la misma operación con el resto de la masa.",
-    "Servimos con fruta, nueces y chocolate derretido por encima.",
-  ];
-  receta.consejos = [];
-
-  receta.rating_num = 4;
-  receta.tags = ["tag0", "tag1", "tag2", "tag3", "tag4"];
-  receta.allergenList = [
-    "alergeno0",
-    "alergeno1",
-    "alergeno2",
-    "alergeno3",
-    "alergeno4",
-    "alergeno5",
-  ];
-  const result = receta.save();
-  //return res.status(404).send("No hay recetas");
-
-  res.send(receta);
-});
-
-router.get("/addRecetaFIXED6", auth, async (req, res) => {
-  let receta = new Receta();
-  // https://www.lagloriavegana.com/albondigas-veganas-al-estilo-de-mi-abuelo/
-  var dict = [
-    { 1: ["albóndigas Heura", "20", ""] },
-    { 2: ["dientes de ajo", "4", ""] },
-    { 3: ["pimentón dulce", "1", "cucharadita"] },
-    { 4: ["tomate triturado", "700", "gramos"] },
-    { 5: ["Sal", "", ""] },
-    { 6: ["Aceite de oliva", "", ""] },
-    { 7: ["Harina", "", ""] },
-  ];
-
-  /*
-	450-500 g de hamburguesas tipo Beyond, Heura, Lidl… (las que se asemejan a carne) o 20 albóndigas Heura.
-	4 dientes de ajo
-	1 cdta de pimentón dulce
-	700 g de tomate triturado de lata o de bote
-	Sal
-	Aceite de oliva
-	Harina de cualquier uso
-	
-	*/
-
-  receta.usuario = "0";
-  receta.titulo = "Albóndigas veganas al estilo de mi abuelo";
-  receta.dificultad = 3;
-  receta.descripcion =
-    "¡Hola a tod@s! ¡Llegan las tortitas más esponjosas de la historia de la cocina vegana!\n\nHoy os comparto mi versión de los típicos fluffy pancakes americanos. Si los acompañáis de fruta, mermelada, chocolate o cualquier otro sirope, ¡vais a tocar el cielo!\n\nQuedan súper aireados y suaves, por lo que os recomiendo que probéis a hacerlos y me contéis si habéis notado la diferencia con los tradicionales.";
-
-  receta.tiempo = "15:00";
-  receta.imagenes = [
-    "https://www.lagloriavegana.com/wp-content/uploads/2020/09/IMG_9908-1280x1280.jpg",
-  ];
-
-  receta.ingredientes = dict;
-
-  receta.pasos = [
-    "Desmenuzamos las hamburguesas y les añadimos un ajo bien picado o trinchado. Mezclamos todo bien. Podemos echar también un poco de perejil picado. Si usamos las albóndigas de Heura este paso no es necesario.",
-    "Les damos forma de albóndigas y las pasamos por harina (yo he usado de trigo, pero podéis usar cualquiera).",
-    "En una cacerola honda ponemos un fondito de aceite de oliva y freímos los 3 ajos restantes. Los sacamos y los reservamos en el mortero.",
-    "Freímos las albóndigas en el mismo aceite y las sacamos sobre papel absorbente.",
-    "Bajamos el fuego y echamos una cucharadita de pimentón dulce sin dejar de remover. Incorporamos de inmediato las salsas de tomate, removemos y tapamos la cacerola.",
-    "Machacamos, junto con un poco de sal, el ajo que teníamos reservado y lo echamos en la cacerola. Añadimos también las albóndigas.",
-    "Dejamos que se cocine todo durante 25-30 minutos a fuego lento y con la tapa puesta. Removemos de vez en cuando y lo ajustamos de sal.",
-    "Apartamos del fuego y servimos con unas patatas horneadas o con arroz hervido.",
-  ];
-  receta.consejos = [
-    "Si las hacemos de un día para otro o, por lo menos, las dejamos reposar un par de horas antes de comerlas, estarán aún más ricas.",
-  ];
-
-  receta.rating_num = 4;
-  receta.tags = ["tag0", "tag1", "tag2", "tag3", "tag4"];
-  receta.allergenList = [
-    "alergeno0",
-    "alergeno1",
-    "alergeno2",
-    "alergeno3",
-    "alergeno4",
-    "alergeno5",
-  ];
-  const result = receta.save();
-  //return res.status(404).send("No hay recetas");
-
-  res.send(receta);
-});
+  receta = unitConverting(receta);
+  return receta;
+}
 
 module.exports = router;

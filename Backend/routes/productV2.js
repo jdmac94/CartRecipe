@@ -77,6 +77,7 @@ router.post("/", async (req, res) => {
       traces_tags: data.product.traces_tags,
       ingredients_text_es: data.product.ingredients_text_es,
       inner_ingredient: name,
+      inner_category: category,
       imgs: data.product.selected_images.front.display,
     });
 

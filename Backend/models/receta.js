@@ -34,12 +34,14 @@ const recetaSchema = new mongoose.Schema({
   },
   ingredientes_imp: {
     type: Array,
-    required: true,
     default: [],
   },
   ingredientes_inter: {
     type: Array,
-    required: true,
+    default: [],
+  },
+  ingredientes_list: {
+    type: Array,
     default: [],
   },
   pasos: {
