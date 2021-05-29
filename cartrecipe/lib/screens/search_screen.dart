@@ -44,8 +44,13 @@ class _SearchsScreen extends State<SearchsScreen> {
                       }); //then
                     })
               ]),
-              _data.isEmpty
-                  ? Text("No hay datos")
+              ((_data == null) || (_data.isEmpty))
+                  ? (Column(children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text("No hay datos")
+                    ]))
                   : Column(
                       children: [
                         ListView.builder(
