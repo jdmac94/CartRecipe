@@ -314,7 +314,7 @@ class ApiWrapper {
   Future<List<Recipe>> getRecipeList() async {
     const String api = "api/v1/receta/getAllRecetas";
     //Currently using  generated auth token
-    
+
     List<Recipe> recipeList = [];
     //TODO: Recipe filtering - later
     http.Response response =
@@ -480,18 +480,58 @@ class ApiWrapper {
       print('F');
   }
 
-  Future<void> modificaSistemaUnidades(bool metricUnit) async {
-    var api = "api/v1/accSettings/modSistemaMedida";
+  Future<void> modTags(List<String> tags) async {
+    var api = 'api/v1/acctSettings/modNivel';
+
     http.Response response = await http.post(
       Uri.http(endpoint, api),
-      headers: <String, String> {
+      headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token' : authToken,
+        'x-auth-token': authToken,
       },
-      body: jsonEncode(<String, String>{
-        'sistema_unidades': metricUnit.toString(),
-      }) 
+      body: jsonEncode(<String, List<String>>{
+        'tagArray': tags,
+      }),
     );
+    print("${response}");
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> modBanned(List<String> ban) async {
+    var api = 'api/v1/acctSettings/modNivel';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, List<String>>{'banArray': ban}),
+    );
+    print("${response}");
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> modificaSistemaUnidades(bool metricUnit) async {
+    var api = "api/v1/accSettings/modSistemaMedida";
+    http.Response response = await http.post(Uri.http(endpoint, api),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': authToken,
+        },
+        body: jsonEncode(<String, String>{
+          'sistema_unidades': metricUnit.toString(),
+        }));
     print(response.body);
     authToken = response.body.toString();
     print('Received response ' + '${response.statusCode}');

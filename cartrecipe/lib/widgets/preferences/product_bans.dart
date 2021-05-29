@@ -9,17 +9,48 @@ class ProductBans extends StatefulWidget {
 }
 
 class _ProductBans extends State<ProductBans> {
+  final Future<String> _calculation = Future<String>.delayed(
+    const Duration(seconds: 2),
+    () => 'Data Loaded',
+  );
   Widget build(BuildContext context) {
     products.then((value) {
       productNames = value;
+      productNames.forEach((element) {
+        productban.add(false);
+      });
     });
     print(productNames.length);
 
-    productNames.forEach((element) {
-      productban.add(false);
-    });
-    //return gridView();
-    return Container();
+    return Container(
+        child: FutureBuilder<String>(
+            future: _calculation,
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              Widget children;
+              if (snapshot.hasData) {
+                children = gridView();
+              } else if (snapshot.hasError) {
+                children = const Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                  size: 60,
+                );
+              } else {
+                children = Column(children: [
+                  SizedBox(
+                    child: CircularProgressIndicator(),
+                    width: 60,
+                    height: 60,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Awaiting result...'),
+                  )
+                ]);
+              }
+              return children;
+            }));
+    //return Container();
   }
 
   List<String> get getProducts {
@@ -32,6 +63,7 @@ class _ProductBans extends State<ProductBans> {
   Future<List<String>> products = ApiWrapper().getGenericIngredients();
 
   Widget checkBox(int index) {
+    print(productNames.length);
     return CheckboxListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 2),
       title: Text(productNames[index]),
@@ -49,7 +81,8 @@ class _ProductBans extends State<ProductBans> {
     );
   }
 
-  Future<Widget> gridView() async {
+  Widget gridView() {
+    print(productNames.length);
     return GridView.count(
         primary: false,
         padding: const EdgeInsets.all(20),

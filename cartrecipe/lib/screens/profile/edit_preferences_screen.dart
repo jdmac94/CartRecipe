@@ -58,7 +58,7 @@ class _EditPreferencesScreen extends State<EditPreferencesScreen> {
               ])),
             ),
             ListTile(
-              leading: Icon(Icons.dinner_dining),
+              leading: Icon(Icons.school),
               title: RichText(
                   text: TextSpan(children: <TextSpan>[
                 TextSpan(
@@ -75,7 +75,7 @@ class _EditPreferencesScreen extends State<EditPreferencesScreen> {
               ])),
             ),
             ListTile(
-              leading: Icon(Icons.dinner_dining),
+              leading: Icon(Icons.filter_none),
               title: RichText(
                   text: TextSpan(children: <TextSpan>[
                 TextSpan(
@@ -92,7 +92,7 @@ class _EditPreferencesScreen extends State<EditPreferencesScreen> {
               ])),
             ),
             ListTile(
-              leading: Icon(Icons.dinner_dining),
+              leading: Icon(Icons.filter_alt),
               title: RichText(
                   text: TextSpan(children: <TextSpan>[
                 TextSpan(

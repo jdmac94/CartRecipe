@@ -4,7 +4,7 @@ class NivelCocina extends StatefulWidget {
   const NivelCocina({Key key}) : super(key: key);
   @override
   State<NivelCocina> createState() => _NivelCocina();
-  //List<String> get getTagsArray => _Dieta().getTags;
+  int get getNivel => _NivelCocina().getNivel;
 }
 
 enum Nivel { ninguno, bajo, medio, bueno, excelente }
@@ -13,6 +13,10 @@ Nivel _nivel = Nivel.medio;
 class _NivelCocina extends State<NivelCocina> {
   Widget build(BuildContext context) {
     return Column(children: radiobutton());
+  }
+
+  int get getNivel {
+    return (_nivel.index + 1);
   }
 
   List<Widget> radiobutton() {

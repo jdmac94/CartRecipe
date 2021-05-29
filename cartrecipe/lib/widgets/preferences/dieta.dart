@@ -4,6 +4,8 @@ class Dieta extends StatefulWidget {
   const Dieta({Key key}) : super(key: key);
   @override
   State<Dieta> createState() => _Dieta();
+  bool get getVegan => _Dieta().getVegan;
+  bool get getVegetarian => _Dieta().getVegetarian;
   //List<String> get getTagsArray => _Dieta().getTags;
 }
 
@@ -13,6 +15,14 @@ Dietas _dieta = Dietas.ninguna;
 class _Dieta extends State<Dieta> {
   Widget build(BuildContext context) {
     return Column(children: radiobutton());
+  }
+
+  bool get getVegan {
+    return _dieta.index == 2;
+  }
+
+  bool get getVegetarian {
+    return _dieta.index == 1;
   }
 
   List<Widget> radiobutton() {
