@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
 class Allergens extends StatefulWidget {
-  const Allergens({Key key}) : super(key: key);
   @override
   State<Allergens> createState() => _Allergens();
-  List<List<dynamic>> get getAllergensArray => _Allergens().getAllergens;
+  List<dynamic> get getAllergensArray => _Allergens().getAllergens;
+  static Allergens _instance;
+  Allergens._internal() {
+    _instance = this;
+  }
+  factory Allergens() => _instance ?? Allergens._internal();
 }
 
 class _Allergens extends State<Allergens> {
+  List<String> allergenSend = [];
   List<List<dynamic>> allergensList = [
     [false, "celery"],
     [false, "crustaceans"],
@@ -26,8 +31,14 @@ class _Allergens extends State<Allergens> {
     return gridViewAlergenos();
   }
 
-  List<List<dynamic>> get getAllergens {
-    return allergensList;
+  List<String> get getAllergens {
+    print(allergensList);
+    allergensList.forEach((element) {
+      if (element[0] == true) {
+        allergenSend.add("en:" + (element[1]));
+      }
+    });
+    return allergenSend;
   }
 
   Widget gridViewAlergenos() {

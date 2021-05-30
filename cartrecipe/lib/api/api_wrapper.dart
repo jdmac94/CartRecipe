@@ -15,8 +15,8 @@ class ApiWrapper {
 
   factory ApiWrapper() => _instance ?? ApiWrapper._internal();
 
-  final String endpoint = "3587b861185a.ngrok.io"; //"158.109.74.46:55005";
-  //'9616b67d4dbf.ngrok.io';
+  final String endpoint = //"158.109.74.46:55005";
+      "3587b861185a.ngrok.io";
 
   String authToken;
 
@@ -459,7 +459,7 @@ class ApiWrapper {
   }
 
   Future<void> modNivel(int level) async {
-    var api = 'api/v1/acctSettings/modNivel';
+    var api = 'api/v1/accSettings/modNivel';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -481,7 +481,7 @@ class ApiWrapper {
   }
 
   Future<void> modTags(List<String> tags) async {
-    var api = 'api/v1/acctSettings/modNivel';
+    var api = 'api/v1/accSettings/modNivel';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -503,7 +503,7 @@ class ApiWrapper {
   }
 
   Future<void> modBanned(List<String> ban) async {
-    var api = 'api/v1/acctSettings/modNivel';
+    var api = 'api/v1/accSettings/modNivel';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -610,4 +610,22 @@ class ApiWrapper {
       print('Found a status code different than 200');
     }
   } */
+  Future<Map<String, dynamic>> getPreferences() async {
+    const String api = "api/v1/accSettings/getPreferences";
+    Map<String, dynamic> preferences = {};
+    final response = await http.get(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'x-auth-token': authToken,
+      },
+    );
+    if (response.statusCode == 200) {
+      print('ha llegado!!!!');
+      preferences = Map<String, dynamic>.from(json.decode(response.body));
+    } else {
+      print(response.body);
+      print(response.statusCode);
+    }
+    return preferences;
+  }
 }
