@@ -78,12 +78,17 @@ class _SignInWithGoogle extends State<SignInWithGoogle> {
     }
   }
 
-  void handleSplit() {
+  void handleSplit() async {
+    SharedPreferences user = await SharedPreferences.getInstance();
     if (_currentUser.displayName.contains(' ')) {
       _userName = _currentUser.displayName.split(' ');
+      user.setString('nombre', _userName[0]);
+      user.setString('apellido', _userName[1]);
     } else {
       _userName[0] = _currentUser.displayName;
       _userName[1] = ' ';
+      user.setString('nombre', _userName[0]);
+      user.setString('apellido', _userName[1]);
     }
   }
 
@@ -266,6 +271,7 @@ class _SignInWithGoogle extends State<SignInWithGoogle> {
                             onPressed: () => {
                                   if (_formKey.currentState.validate())
                                     {
+                                      handleSplit(),
                                       ApiWrapper()
                                           .logInUsuario(_currentUser.email,
                                               passwordText.text)

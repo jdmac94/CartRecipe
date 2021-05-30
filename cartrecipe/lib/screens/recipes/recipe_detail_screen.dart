@@ -25,8 +25,12 @@ Future<void> _willPopCallback(context, bus) async {
   if (bus) {
     Navigator.pop(context);
   } else {
-    Navigator.pushReplacement(context,
-        new MaterialPageRoute(builder: (context) => new TabsScreen(0)));
+    Navigator.pushAndRemoveUntil(
+        context,
+        new MaterialPageRoute(
+          builder: (context) => new TabsScreen(0),
+        ),
+        (r) => false);
   }
 }
 
@@ -39,8 +43,12 @@ class _RecipeDetailState extends State<RecipeDetail> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pushReplacement(context,
-                new MaterialPageRoute(builder: (context) => new TabsScreen(0))),
+            onPressed: () => Navigator.pushAndRemoveUntil(
+                context,
+                new MaterialPageRoute(
+                  builder: (context) => new TabsScreen(0),
+                ),
+                (r) => false),
           ),
           actions: <Widget>[
             IconButton(

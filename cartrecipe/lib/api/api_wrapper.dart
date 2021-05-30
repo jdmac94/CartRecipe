@@ -15,8 +15,8 @@ class ApiWrapper {
 
   factory ApiWrapper() => _instance ?? ApiWrapper._internal();
 
-  final String endpoint = "158.109.74.46:55005";
-      //"3587b861185a.ngrok.io";
+  final String endpoint = //"158.109.74.46:55005";
+      "3587b861185a.ngrok.io";
 
   String authToken;
 
@@ -656,5 +656,50 @@ class ApiWrapper {
       print('F busqueda');
       return null;
     }
+  }
+
+  Future<Product> delReceipt(String _id) async {
+    var api = '/api/v1/receta/$_id';
+
+    print('Receta eliminada es $_id');
+
+    print("Token al eliminar producto $authToken");
+    //var uri = Uri.http(endpoint, api);
+
+    http.Response response = await http.delete(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+    );
+  }
+
+  Future<List<Recipe>> getUserReceiptList() async {
+    const String api = "api/v1/receta/getUserRecetas/";
+    //Currently using  generated auth token
+
+    List<Recipe> recipeList = [];
+    //TODO: Recipe filtering - later
+    http.Response response =
+        await http.get(Uri.http(endpoint, api), headers: <String, String>{
+      'x-auth-token': authToken,
+    });
+
+    if (response.statusCode == 200) {
+      print("Received correctly recipe list.");
+
+      recipeList = await List<Recipe>.from(
+          json.decode(response.body).map((x) => Recipe.fromJson(x)));
+      //Iterable i = json.decode(response.body);
+      //recipeList = List<Recipe>.from(i.map((model) => Recipe.fromJson(model)));
+    } else {
+      print("Did not receive correctly recipe list");
+    }
+
+    if (recipeList.isEmpty) {
+      print('No he recibido nada');
+    }
+    return recipeList;
   }
 }
