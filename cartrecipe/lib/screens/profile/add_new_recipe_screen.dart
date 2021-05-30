@@ -1,8 +1,10 @@
-import 'package:cartrecipe/widgets/preferences/product_bans.dart';
+import 'package:cartrecipe/api/api_wrapper.dart';
+import 'package:cartrecipe/models/recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:cartrecipe/widgets/perfil/cooking_steps_text_fields.dart';
 import 'package:cartrecipe/widgets/perfil/cooking_tips_text_fields.dart';
+import 'package:cartrecipe/widgets/perfil/ingredients_text_fields.dart';
 
 class AddNewRecipeScreen extends StatefulWidget {
   AddNewRecipeScreen({Key key}) : super(key: key);
@@ -17,13 +19,15 @@ class AddNewRecipeScreenState extends State<AddNewRecipeScreen> {
   final _formKey = GlobalKey<FormState>();
   static List<String> cookingTipsList = [null];
   static List<String> cookingStepsList = [null];
+  static List<dynamic> ingredientsFormList = [null];
 
   TextEditingController recipeNameController;
-  TextEditingController ingredientsController;
+  TextEditingController unitsController;
   TextEditingController cookingStepsController;
   TextEditingController cookingTipsController;
 
   _validateRecipeName() {}
+  _validateUnits() {}
   _validateIngredients() {}
   _validateCookingSteps() {}
   _validateCookingTips() {}
@@ -32,7 +36,7 @@ class AddNewRecipeScreenState extends State<AddNewRecipeScreen> {
   void initState() {
     super.initState();
     recipeNameController = TextEditingController();
-    recipeNameController = TextEditingController();
+    unitsController = TextEditingController();
     cookingStepsController = TextEditingController();
     cookingTipsController = TextEditingController();
   }
@@ -40,7 +44,7 @@ class AddNewRecipeScreenState extends State<AddNewRecipeScreen> {
   @override
   void dispose() {
     recipeNameController.dispose();
-    recipeNameController.dispose();
+    unitsController.dispose();
     cookingStepsController.dispose();
     cookingTipsController.dispose();
     super.dispose();
@@ -66,8 +70,6 @@ class AddNewRecipeScreenState extends State<AddNewRecipeScreen> {
         hideHeader: true,
         title: new Text("Tiempo de cocina (en minutos)"),
         onConfirm: (Picker picker, List value) {
-          //print('Valor 1' + value.toString());
-          //print('Valor 2 ${picker.getSelectedValues()}');
           setState(
               () => _currentCookingTime = picker.getSelectedValues().first);
         }).showDialog(context);
@@ -138,6 +140,26 @@ class AddNewRecipeScreenState extends State<AddNewRecipeScreen> {
     );
   }
 
+  List<Widget> _getIngredientsForm() {
+    List<Widget> friendsTextFieldsList = [];
+    for (int i = 0; i < ingredientsFormList.length; i++) {
+      friendsTextFieldsList.add(Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Row(
+          children: [
+            Expanded(child: IngredientsTextFields(i)),
+            SizedBox(
+              width: 16,
+            ),
+            // we need add button at last friends row only
+            _addRemoveIngredientsButton(i == ingredientsFormList.length - 1, i),
+          ],
+        ),
+      ));
+    }
+    return friendsTextFieldsList;
+  }
+
   Widget _addRemoveCookingTipsButton(bool add, int index) {
     return InkWell(
       onTap: () {
@@ -161,6 +183,88 @@ class AddNewRecipeScreenState extends State<AddNewRecipeScreen> {
         ),
       ),
     );
+  }
+
+  Widget _addRemoveIngredientsButton(bool add, int index) {
+    return InkWell(
+      onTap: () {
+        if (add) {
+          // add new text-fields at the top of all friends textfields
+          ingredientsFormList.insert(0, null);
+        } else
+          ingredientsFormList.removeAt(index);
+        setState(() {});
+      },
+      child: Container(
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+          color: (add) ? Colors.green : Colors.red,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Icon(
+          (add) ? Icons.add : Icons.remove,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  _createRecipe() {
+    print('******----******');
+    print('La receta se llama ${recipeNameController.text}');
+    print('Su dificultad es $_currentDifficulty');
+    print('Se tarda $_currentCookingTime tiempo en hacerla');
+    print('El listado de ingredientes es:');
+    List<Map<String, List<String>>> dictList = [];
+    for (int i = 0; i < ingredientsFormList.length; i++) {
+      print('El ingrediente ${i + 1} es ${ingredientsFormList[i]}');
+      Map<String, List<String>> dict = {};
+      dict[ingredientsFormList[i]['ingredient']] = [
+        ingredientsFormList[i]['quantity'],
+        ingredientsFormList[i]['units']
+      ];
+
+      dictList.add(dict);
+    }
+    int i = 1;
+    cookingStepsList.reversed.forEach((element) {
+      print('El paso $i es $element');
+      i++;
+    });
+    i = 1;
+    cookingTipsList.reversed.forEach((element) {
+      print('El truco $i es $element');
+      i++;
+    });
+    print(dictList);
+
+    Recipe receta = Recipe(
+      titulo: recipeNameController.text,
+      dificultad: _currentDifficulty,
+      tiempo: _currentCookingTime.toString(),
+      ingredientes: dictList,
+      pasos: cookingStepsList.reversed.toList(),
+      consejos: cookingTipsList.reversed.toList(),
+      imagenes: [
+        'https://static.openfoodfacts.org/images/products/843/701/703/2298/front_es.21.full.jpg'
+      ],
+      comensales: 2,
+      tags: ['Arroces', 'Asiático'],
+    );
+
+    ApiWrapper().createOwnRecipe(receta);
+    //Titulo
+    //Dificultad
+    //Tiempo (string)
+    //Lista ingredientes ---- { "garbanzos cocidos": ["400", "gramos"] },
+    //Lista pasos [array string]
+    //Lista imagenes [array string]
+    //Lista trucos / consejos
+    //Lista categorias
+    //Lista alergenos
+
+    //print('Ingredientes seleccionados: $ingredientsList');
   }
 
   @override
@@ -192,7 +296,7 @@ class AddNewRecipeScreenState extends State<AddNewRecipeScreen> {
                     validator: (value) => _validateRecipeName(),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.only(top: 20, bottom: 10),
                     child: Text(
                       'Ingredientes',
                       style: TextStyle(
@@ -201,8 +305,7 @@ class AddNewRecipeScreenState extends State<AddNewRecipeScreen> {
                       ),
                     ),
                   ),
-                  ProductBans(),
-                  //..._getCookingTips(),
+                  ..._getIngredientsForm(),
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: Text(
@@ -261,7 +364,7 @@ class AddNewRecipeScreenState extends State<AddNewRecipeScreen> {
                   ),
                   ElevatedButton(
                     child: Text('Crear receta'),
-                    onPressed: () {},
+                    onPressed: () => _createRecipe(),
                   ),
                 ],
               ),

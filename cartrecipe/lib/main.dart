@@ -18,7 +18,7 @@ void main() async {
   String tokenString = token.getString('token');
   if (status) {
     ApiWrapper().setAuthToken(tokenString);
-    print('El token recuperado es al tener sesisón es $tokenString');
+    print('El token recuperado es al tener sesión es $tokenString');
   }
 
   print(status);

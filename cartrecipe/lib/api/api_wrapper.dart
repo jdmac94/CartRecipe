@@ -15,7 +15,7 @@ class ApiWrapper {
 
   factory ApiWrapper() => _instance ?? ApiWrapper._internal();
 
-  final String endpoint = "158.109.74.46:55005"; //"3587b861185a.ngrok.io";
+  final String endpoint = "3587b861185a.ngrok.io"; //"158.109.74.46:55005";
   //'9616b67d4dbf.ngrok.io';
 
   String authToken;
@@ -560,4 +560,54 @@ class ApiWrapper {
     }
     return prods;
   }
+
+  Future<void> createOwnRecipe(Recipe receta) async {
+    const String api = "api/v1/receta/addReceta";
+
+    print(receta.dificultad.toString());
+
+    http.Response response = await http.post(Uri.http(endpoint, api),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': authToken,
+        },
+        body: jsonEncode(<String, String>{
+          'titulo': receta.titulo,
+          'dificultad': receta.dificultad.toString(),
+          'tiempo': receta.tiempo,
+          'ingredientes': receta.ingredientes.toString(),
+          'pasos': receta.pasos.toString(),
+          'consejos': receta.consejos.toString(),
+          'imagenes': receta.imagenes.toString(),
+          'comensales': receta.comensales.toString(),
+          'tags': receta.tags.toString(),
+        }));
+
+    if (response.statusCode == 200) {
+      print('Receta enviada correctamente');
+    } else {
+      print(response.statusCode);
+      print(response.body);
+    }
+  }
+
+  /*  Future<void> modificaSistemaUnidades(bool metricUnit) async {
+    var api = "api/v1/accSettings/modSistemaMedida";
+    http.Response response = await http.post(Uri.http(endpoint, api),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': authToken,
+        },
+        body: jsonEncode(<String, String>{
+          'sistema_unidades': metricUnit.toString(),
+        }));
+    print(response.body);
+    authToken = response.body.toString();
+    print('Received response ' + '${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('Received correctly');
+    } else {
+      print('Found a status code different than 200');
+    }
+  } */
 }
