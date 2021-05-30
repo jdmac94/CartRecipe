@@ -81,6 +81,26 @@ class ApiWrapper {
     }
   }
 
+  Future<Product> addFav(String _id) async {
+    var api = '/api/v1/accSettings/toggleInRecetario/$_id';
+
+    print('Receta es $_id');
+
+    print("Token al añadir producto $authToken");
+    //var uri = Uri.http(endpoint, api);
+
+    http.Response response = await http.get(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        //'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      // body: jsonEncode(<String, String>{
+      //   'barcode': barcode,
+      // },
+    );
+  }
+
   void setAuthToken(token) {
     authToken = token;
     print('Token creado el api wrapper:  $authToken');

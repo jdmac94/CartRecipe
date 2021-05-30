@@ -1,15 +1,25 @@
+import 'dart:io';
+
+import 'package:cartrecipe/api/api_wrapper.dart';
 import 'package:cartrecipe/screens/recipes/recipe_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:social_share/social_share.dart';
 import 'package:cartrecipe/models/recipe.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class RecipeCard extends StatelessWidget {
+class RecipeCard extends StatefulWidget {
   final Recipe recipe;
   //TODO: Añadir favorite?
   RecipeCard({
     @required this.recipe,
   });
 
+  @override
+  _RecipeCardState createState() => _RecipeCardState();
+}
+
+class _RecipeCardState extends State<RecipeCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -40,12 +50,14 @@ class RecipeCard extends StatelessWidget {
                               Icons.account_box_sharp,
                             ),
                             Text(
-                              this.recipe.usuario[0].nombre + " " + this.recipe.usuario[0].apellido,
+                              this.widget.recipe.usuario[0].nombre +
+                                  " " +
+                                  this.widget.recipe.usuario[0].apellido,
                             )
                           ],
                         ),
                         Chip(
-                            label: Text(this.recipe.tiempo),
+                            label: Text(this.widget.recipe.tiempo),
                             avatar: Icon(
                               Icons.timer,
                             )),
@@ -60,22 +72,22 @@ class RecipeCard extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    RecipeDetail(this.recipe))),
+                                    RecipeDetail(this.widget.recipe))),
                         child: Stack(
-                          children: <Widget>[ClipRRect(
+                          children: <Widget>[
+                            ClipRRect(
                               clipBehavior: Clip.antiAlias,
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(15),
                                 topRight: Radius.circular(15),
                               ),
                               child: Image.network(
-                                recipe.imagenes[0],
+                                widget.recipe.imagenes[0],
                                 height: 200,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
                               ),
-                            )
-                            ,
+                            ),
                             Positioned(
                               bottom: 20,
                               right: 10,
@@ -85,7 +97,7 @@ class RecipeCard extends StatelessWidget {
                                   padding: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 20),
                                   child: Text(
-                                    this.recipe.titulo,
+                                    this.widget.recipe.titulo,
                                     style: TextStyle(
                                         fontSize: 20, color: Colors.white),
                                     softWrap: true,
@@ -103,16 +115,16 @@ class RecipeCard extends StatelessWidget {
                       //Difficulty, share and favorite (non functional)
 
                       RatingBarIndicator(
-                        rating: this.recipe.dificultad.toDouble(),
+                        rating: this.widget.recipe.dificultad.toDouble(),
                         itemCount: 5,
                         itemSize: 20,
                         itemBuilder: (context, index) {
-                          if (this.recipe.dificultad <= 2) {
+                          if (this.widget.recipe.dificultad <= 2) {
                             return Icon(
                               Icons.local_fire_department,
                               color: Colors.green[600],
                             );
-                          } else if (this.recipe.dificultad <= 4) {
+                          } else if (this.widget.recipe.dificultad <= 4) {
                             return Icon(
                               Icons.local_fire_department,
                               color: Colors.orange[600],
@@ -126,15 +138,31 @@ class RecipeCard extends StatelessWidget {
                         },
                       ),
                       Row(
-                        children: <Widget>[
-                          //TODO: Functional favorite recipe
-                          Icon(
-                            Icons.favorite_outline,
-                          ),
-                          //TODO: Funcional sharing recipe
-                          Icon(
-                            Icons.share,
-                          ),
+                        children: [
+                          IconButton(
+                              icon: widget.recipe.fav
+                                  ? Icon(Icons.favorite, color: Colors.red)
+                                  : Icon(Icons.favorite_border,
+                                      color: Colors.black),
+                              color: Colors.white, // Implementar funcion like
+                              onPressed: () {
+                                widget.recipe.fav = !widget.recipe.fav;
+                                ApiWrapper().addFav(widget.recipe.id);
+                                // TODO: ADD IN RECETARIUM BELOW THIS LINE, await API call, MAYBE USE like_button DEPENDENCY
+                                setState(() {}); //Could be animated
+                              }), //TODO: Funcional sharing recipe
+                          IconButton(
+                              icon: Icon(Icons.share),
+                              onPressed: () async {
+                                print(widget.recipe.imagenes[0]);
+                                SharedPreferences user =
+                                    await SharedPreferences.getInstance();
+                                SocialShare.shareOptions("Hola, el usuario " +
+                                    user.getString('nombre') +
+                                    " ya hace uso de la aplicación de CartRecipe, si la descargas podrás ver esta deliciosa receta de " +
+                                    widget.recipe.titulo +
+                                    " para mas información pidele la aplicación a Andrés porque no esta en la Play Store");
+                              }),
                         ],
                       ),
                     ],
