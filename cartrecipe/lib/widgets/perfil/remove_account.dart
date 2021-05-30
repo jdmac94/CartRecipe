@@ -52,10 +52,10 @@ class _RemoveAccount extends State<RemoveAccount> {
                   });
                 },
                 items: <String>[
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor .',
-                  'Ut enim ad minim veniam, quis nostrud exercitation',
-                  'Duis aute irure dolor in',
-                  'Excepteur sint occaecat cupidatat non proident, sunt in'
+                  '-',
+                  'No me ha gustado la aplicacion',
+                  'No me ofrece lo esperado',
+                  'Existencia de aplicaciones mejores'
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                       value: value, child: Text(value));

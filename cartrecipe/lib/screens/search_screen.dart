@@ -1,6 +1,7 @@
 import 'package:cartrecipe/api/api_wrapper.dart';
 import 'package:cartrecipe/models/product.dart';
 import 'package:cartrecipe/models/recipe.dart';
+import 'package:cartrecipe/screens/recipes/recipe_detail_screen.dart';
 import 'package:cartrecipe/widgets/fridge/detail_view_product.dart';
 import 'package:cartrecipe/widgets/recipes/recipe_card.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,8 @@ Busqueda _busqueda = Busqueda.products;
 
 class _SearchsScreen extends State<SearchsScreen> {
   final _textFieldController = TextEditingController();
-  List<Product> _data = [];
-  List<Recipe> _dataRecipe = [];
+  List<dynamic> _data = [];
+  //List<Recipe> _dataRecipe = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,20 +54,21 @@ class _SearchsScreen extends State<SearchsScreen> {
                             .getBusquedaRecetas(_textFieldController.text)
                             .then((value) {
                           setState(() {
-                            _dataRecipe = value;
-                            print("Data is: $_dataRecipe");
+                            _data = value;
+                            print("Data is: $_data");
                           }); //setState
                         });
                       } //then
                     })
               ]),
               RadioListTile<Busqueda>(
-                title: const Text('recetas'),
+                title: const Text('Recetas'),
                 value: Busqueda.recetas,
                 groupValue: _busqueda,
                 onChanged: (Busqueda value) {
                   setState(() {
                     _busqueda = value;
+                    _data = [];
                   });
                 },
               ),
@@ -77,6 +79,7 @@ class _SearchsScreen extends State<SearchsScreen> {
                 onChanged: (Busqueda value) {
                   setState(() {
                     _busqueda = value;
+                    _data = [];
                   });
                 },
               ),
@@ -107,11 +110,11 @@ class _SearchsScreen extends State<SearchsScreen> {
                           ListView.builder(
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
-                            itemCount: _dataRecipe.length,
+                            itemCount: _data.length,
                             itemBuilder: (context, index) {
-                              Recipe recipeItem = _dataRecipe[index];
+                              Recipe recipeItem = _data[index];
                               return Column(children: [
-                                _dataRecipe[index].titulo == null
+                                _data[index].titulo == null
                                     ? Text("no hay datos")
                                     : buildCardRecipe(recipeItem, index)
                               ]);
@@ -162,7 +165,10 @@ class _SearchsScreen extends State<SearchsScreen> {
                 ),
           title: Text(recipeItem.titulo),
           onTap: () {
-            //dialogProduct(context, productItem);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => RecipeDetail(_data[index])));
           }),
     );
   }
