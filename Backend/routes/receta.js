@@ -55,15 +55,24 @@ router.get("/suggested", auth, async (req, res) => {
       intArray.push(parseInt(item, 10));
     });
 
-    console.log(intArray);
+    console.log(nevera.productos);
 
-    const names = await ProductV2.find(
-      { products: { $elemMatch: { id: { $in: intArray } } } },
-      { _id: 0, name: 1 }
-    );
-    console.log(names);
+    // const names = await ProductV2.find(
+    //   {  id: { $in: nevera.productos } },
+    //   { _id: 0, inner_ingredient: 1 }
+    // );
+
+    const names = await ProductV2.aggregate([
+      { $match: { id: { $in: nevera.productos } } },
+      { $group: {_id: null, uniqueValues: {$addToSet: "$inner_ingredient"}} }
+    ]);
+
+    console.log(names[0]);
+    console.log(names[0].uniqueValues);
+    
     if (names) {
-      const recetas = await Receta.find({ ingredientes: { $in: names } });
+      const recetas = await Receta.find({ ingredientes_list: { $in: names[0].uniqueValues } });
+      console.log(recetas);
       res.send(recetas);
     }
   }
@@ -124,7 +133,6 @@ async function fetchAllergens(product) {
   //   { $project: { name: 1, allerg: 1 } },
   // ]);
 
-  // x = allergens[0].allerg;
   x = product.allerg;
 
   if (x.length > 0) {
@@ -147,7 +155,25 @@ async function fetchAllergens(product) {
 //ojo con el rendimiento al demandar mucha receta. Pendiente de hacer regulable el limite
 router.get("/getAllRecetas", auth, async (req, res) => {
 
+  let user = await Usuario.findOne({ correo: req.user.correo },
+    {
+        vegano: 1,
+        vegetariano: 1,
+        alergias: 1,
+        tags: 1,
+        banArray: 1,
+        nivel_cocina: 1,
+        category_ban: 1,
+        recetas_favs: 1,
+    });
+
+  if (!user)
+    return res.status(404).send("Error al obtener las preferencias del usuario");
+  
+  console.log(user);
+
   var ingre = "";
+
   if (req.user.sistema_internacional || req.user.sistema_unidades == 'sist_int') {
     ingre = "$ingredientes_inter";
     console.log("internacional");
@@ -157,12 +183,17 @@ router.get("/getAllRecetas", auth, async (req, res) => {
     console.log("imperial");
   }
 
+  console.log(user.recetas_favs);
+  
     let recetaList = await Receta.aggregate([
       {
         "$project": {
           "ide": {
             "$toObjectId": "$usuario"
           },
+          _id: {
+            $toString: "$_id"
+           },
           "titulo": "$titulo",
           "dificultad": "$dificultad",
           "descripcion": "$descripcion",
@@ -200,6 +231,10 @@ router.get("/getAllRecetas", auth, async (req, res) => {
           "allergenList" : "$allergenList",
           "usr.apellido": 1,
           "usr.nombre": 1,
+          "fav": 
+          {
+            $cond: {if: { $in: [ "$_id", user.recetas_favs]}, then: true, else: false}
+          },
         }
       }
     ]);
@@ -211,13 +246,14 @@ router.get("/getAllRecetas2", auth, async (req, res) => {
 
   let user = await Usuario.findOne({ correo: req.user.correo },
     {
-        vegano: 1,
-        vegetariano: 1,
-        alergias: 1,
-        tags: 1,
-        banArray: 1,
-        nivel_cocina: 1,
-        category_ban: 1,
+      vegano: 1,
+      vegetariano: 1,
+      alergias: 1,
+      tags: 1,
+      banArray: 1,
+      nivel_cocina: 1,
+      category_ban: 1,
+      recetas_favs: 1,
     });
 
   if (!user)
@@ -238,6 +274,7 @@ router.get("/getAllRecetas2", auth, async (req, res) => {
     var dietArr = [];
     var dietQuery = {};
     var banQuery = {};
+    var levelQuery = {};
 
     if (user.vegano)
       dietArr.push("Vegano");
@@ -247,6 +284,7 @@ router.get("/getAllRecetas2", auth, async (req, res) => {
 
     if (dietArr.length > 0)
       dietQuery = { tags: {$in: dietArr }};
+      // dietQuery = { tags: {$all: dietArr }};
       
     // esto peta por el tema de que los users están desfasados
     if (user.category_ban.length > 0)
@@ -255,6 +293,9 @@ router.get("/getAllRecetas2", auth, async (req, res) => {
 
     // if (alergias de alimentos)
     // if (req.user.tags)
+    // level de dificultad
+    if (user.nivel_cocina)
+      levelQuery = { score: { $gte: nivel_cocina } };
 
     console.log(dietQuery);
     console.log(dietArr);
@@ -270,6 +311,7 @@ router.get("/getAllRecetas2", auth, async (req, res) => {
              $and: [
                  dietQuery,
                  banQuery,
+                 levelQuery
              ]
         }
       },
@@ -322,6 +364,162 @@ router.get("/getAllRecetas2", auth, async (req, res) => {
 
   res.send(recetaList);
 });
+
+router.get("/getAllRecetas3", auth, async (req, res) => {
+
+    var dietArr = [];
+    var dietQuery = {};
+    var banQuery = {};
+    var levelQuery = {};
+    var neveraQuery = {};
+
+
+  let user = await Usuario.findOne({ correo: req.user.correo },
+    {
+      vegano: 1,
+      vegetariano: 1,
+      alergias: 1,
+      tags: 1,
+      banArray: 1,
+      nivel_cocina: 1,
+      category_ban: 1,
+      recetas_favs: 1,
+    });
+
+  if (!user)
+    return res.status(404).send("Error al obtener las preferencias del usuario");
+  
+  console.log(user);
+  
+  /////
+  const nevera = await Nevera.findOne(
+    { usuario: req.user._id },
+  );
+
+  if (nevera) {
+
+    console.log(nevera.productos);
+
+    const names = await ProductV2.aggregate([
+      { $match: { id: { $in: nevera.productos } } },
+      { $group: {_id: null, uniqueValues: {$addToSet: "$inner_ingredient"}} }
+    ]);
+
+    console.log(names[0]);
+    console.log(names[0].uniqueValues);
+    
+    if (names[0].uniqueValues && names[0].uniqueValues.length > 0) {
+      // const recetas = await Receta.find({ ingredientes_list: { $in: names[0].uniqueValues } });
+      // console.log(recetas);
+      // res.send(recetas);
+      neveraQuery = { ingredientes_list: { $in: names[0].uniqueValues } };
+    }
+  } else
+    return res.status(404).send("No existe la nevera del usuario");
+  /////
+
+  var ingre = "";
+  if (req.user.sistema_internacional || req.user.sistema_unidades == 'sist_int') {
+    ingre = "$ingredientes_inter";
+    console.log("internacional");
+  }
+  else {
+    ingre = "$ingredientes_imp";
+    console.log("imperial");
+  }
+
+  
+    if (user.vegano)
+      dietArr.push("Vegano");
+
+    if (user.vegetariano)
+      dietArr.push("Vegetariano");
+
+    if (dietArr.length > 0)
+      dietQuery = { tags: {$in: dietArr }};
+      // dietQuery = { tags: {$all: dietArr }};
+      
+    // esto peta por el tema de que los users están desfasados
+    if (user.category_ban.length > 0)
+      banQuery = { ingredientes_list: {$nin: user.category_ban }};
+      // banQuery = { ingredientes_list: {$nin: ["zanahoria"] }};
+
+    // if (alergias de alimentos)
+    // if (req.user.tags)
+    // level de dificultad
+    if (user.nivel_cocina)
+      levelQuery = { score: { $gte: nivel_cocina } };
+
+    console.log(dietQuery);
+    console.log(dietArr);
+    console.log("/////////////");
+    console.log(banQuery);
+    console.log(neveraQuery);
+
+  // .limit(25);
+  //if (vegano) {//ajustar el tema de token
+
+    let recetaList = await Receta.aggregate([
+      { 
+        $match: {
+             $and: [
+                 dietQuery,
+                 banQuery,
+                 levelQuery,
+                 neveraQuery
+             ]
+        }
+      },
+      {
+        "$project": {
+          "ide": {
+            "$toObjectId": "$usuario"
+          },
+          "titulo": "$titulo",
+          "dificultad": "$dificultad",
+          "descripcion": "$descripcion",
+          "tiempo": "$tiempo",
+          "imagenes": "$imagenes",
+          "ingredientes": ingre,
+          "pasos": "$pasos",
+          "consejos": "$consejos",
+          "comensales" : "$comensales",
+          "tags" : "$tags",
+          "allergenList" : "$allergenList",
+        }
+      },
+      {
+        "$lookup": {
+          "from": "usuarios",
+          "localField": "ide",
+          "foreignField": "_id",
+          "as": "usr"
+        }
+      },
+      {
+      "$project": {
+          "usuario": "$usuario",
+          "titulo": "$titulo",
+          "dificultad": "$dificultad",
+          "descripcion": "$descripcion",
+          "tiempo": "$tiempo",
+          "imagenes": "$imagenes",
+          "ingredientes": "$ingredientes",
+          "pasos": "$pasos",
+          "consejos": "$consejos",
+          "comensales" : "$comensales",
+          "tags" : "$tags",
+          "allergenList" : "$allergenList",
+          "usr.apellido": 1,
+          "usr.nombre": 1,
+        }
+      }
+    ]);
+  
+
+  res.send(recetaList);
+});
+
 router.post("/addReceta", auth, async (req, res) => {
   let receta = new Receta();
 
@@ -387,10 +585,10 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
     { "aceite de oliva": ["50", "gramos"] },
     { "zumo de limón": ["1", "cucharada"] }, //1 cda de zumo limón
     { "tahín tostado": ["30", "gramos"] }, // 30 g de tahín tostado o 30 g de semillas de sésamo (triturar solas antes)
-    { "Sal": ["", ""] }
+    { "Nutella": ["", ""] }
   ];
 
-  receta.usuario = "60acad1719bfc70030a006cf";
+  receta.usuario = "60b293125590d80030bcded2";
   receta.titulo = "Hummus de zanahoriaFIXED";
   receta.dificultad = 2;
   receta.descripcion =
@@ -410,8 +608,8 @@ router.get("/addRecetaFIXED1", auth, async (req, res) => {
   receta.consejos = [];
 
   receta.rating_num = 4;
-  receta.tags = ["tag0", "tag1", "tag2", "tag3", "tag4"];
-  receta.allergenList = ["en:gluten", "en:oats", "en:crustaceans", "en:eggs", "en:fish", "en:peanuts", "en:soybeans", "en:milk", "en:nuts", "en:celery", "en:mustard", "en:sesame-seeds", "en:sulphur-dioxide-and -sulphites", "en:lupin", "en:molluscs"];
+  receta.tags = ["Vegetariano", "tag1", "tag2", "tag3", "tag4"];
+  receta.allergenList = ["en:gluten", "en:oats", "en:crustaceans", "en:eggs", "en:fish", "en:peanuts", "en:soybeans", "en:milk", "en:nuts", "en:celery", "en:mustard", "en:sesame-seeds", "en:sulphur-dioxide-and-sulphites", "en:lupin", "en:molluscs"];
   const result = receta.save();
   //return res.status(404).send("No hay recetas");
 
