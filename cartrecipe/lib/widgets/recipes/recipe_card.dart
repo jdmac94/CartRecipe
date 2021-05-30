@@ -72,7 +72,7 @@ class _RecipeCardState extends State<RecipeCard> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    RecipeDetail(this.widget.recipe))),
+                                    RecipeDetail(this.widget.recipe, false))),
                         child: Stack(
                           children: <Widget>[
                             ClipRRect(

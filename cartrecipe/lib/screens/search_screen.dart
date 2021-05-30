@@ -222,7 +222,7 @@ class _SearchsScreen extends State<SearchsScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => RecipeDetail(_data[index])));
+                    builder: (context) => RecipeDetail(_data[index], true)));
           }),
     );
   }

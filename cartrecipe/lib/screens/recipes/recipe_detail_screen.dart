@@ -9,19 +9,25 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 class RecipeDetail extends StatefulWidget {
   Recipe recipe;
   int portions;
+  bool busqueda = false;
 
-  RecipeDetail(Recipe r) {
+  RecipeDetail(Recipe r, bool bus) {
     recipe = r;
     portions = 1;
+    busqueda = bus;
   }
 
   @override
   _RecipeDetailState createState() => _RecipeDetailState();
 }
 
-Future<void> _willPopCallback(context) async {
-  Navigator.pushReplacement(
-      context, new MaterialPageRoute(builder: (context) => new TabsScreen(0)));
+Future<void> _willPopCallback(context, bus) async {
+  if (bus) {
+    Navigator.pop(context);
+  } else {
+    Navigator.pushReplacement(context,
+        new MaterialPageRoute(builder: (context) => new TabsScreen(0)));
+  }
 }
 
 class _RecipeDetailState extends State<RecipeDetail> {
@@ -92,7 +98,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
       ),
       // ignore: missing_return
       onWillPop: () {
-        _willPopCallback(context);
+        _willPopCallback(context, widget.busqueda);
       },
     );
   }
