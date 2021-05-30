@@ -42,22 +42,17 @@ router.post("/fillPreferences", auth, async (req, res) => {
     if (req.body.palm_oil_free && typeof req.body.palm_oil_free === "boolean")
         user.palm_oil_free = req.body.palm_oil_free;
 
-    if (typeof req.body.is_vegano === "boolean")
-        user.vegano = req.body.is_vegano;
+    if (typeof req.body.is_vegan === "boolean")
+        user.vegano = req.body.is_vegan;
 
     if (typeof req.body.is_vegetariano === "boolean")
-        user.vegetariano = req.body.is_vegetariano;
+        user.vegetariano = req.body.is_vegetarian;
 
     // definir alergias
     if (req.body.allergenArray && typeof req.body.allergenArray[Symbol.iterator] === "function") {
         user.alergias = req.body.allergenArray;// lo hacemos de bools o directamente strings? lo ultimo requerirá revisar los campos
         //si hay que revisar, es obtener de la bd los alergenos y comparar el array con cada elemento del allergenArray
     }
-
-    // definir trazas
-    // if (typeof req.body.traceArray[Symbol.iterator] === "function") {
-    //     user.trazas = req.body.traceArray;
-    // }
 
     // definir tags favs
     if (req.body.tagArray && typeof req.body.tagArray[Symbol.iterator] === "function") {
@@ -66,11 +61,11 @@ router.post("/fillPreferences", auth, async (req, res) => {
     
     // definir alimentos no deseados
     if (typeof req.body.banArray[Symbol.iterator] === "function") {
-        user.banArray = req.body.banArray;
+        user.category_ban = req.body.banArray;
     }
 
     // cocina level
-    if (req.body.level && typeof req.body.level === 'int')
+    if (req.body.level && typeof req.body.level === 'number')
         user.nivel_cocina = req.body.level;
 
     const result = user.save();
@@ -95,17 +90,18 @@ router.get("/getGenericIngredients", auth, async (req, res) => {
 
 router.get("/getPreferences", auth, async (req, res) => {
 
-    console.log("ADDING PREFERENCES TO USER " + req.user.correo);
-    console.log(req.body);
+    console.log("PREFERENCES TO USER " + req.user.correo);
     let user = await Usuario.findOne({ correo: req.user.correo },
         {
             vegano: 1,
             vegetariano: 1,
             alergias: 1,
             tags: 1,
-            banArray: 1,
+            category_ban: 1,
             nivel_cocina: 1,
         });
+
+    console.log(user);
 
     if (!user)
         return res.status(404).send("Error al obtener las preferencias del usuario");
@@ -157,10 +153,10 @@ router.post("/modDieta", auth, async (req, res) => {
 
     if (typeof req.body.palm_oil_free === "boolean")
         user.palm_oil_free = req.body.palm_oil_free;
-    if (typeof req.body.is_vegano === "boolean")
-        user.vegano = req.body.is_vegano;
-    if (typeof req.body.is_vegetariano === "boolean")
-        user.vegetariano = req.body.is_vegetariano;
+    if (typeof req.body.is_vegan === "boolean")
+        user.vegano = req.body.is_vegan;
+    if (typeof req.body.is_vegetarian === "boolean")
+        user.vegetariano = req.body.is_vegetarian;
 
     const result = user.save();
     if(!result)
@@ -199,7 +195,9 @@ router.post("/modNivel", auth, async (req, res) => {
     console.log(req.body);
     let user = await Usuario.findOne({ correo: req.user.correo });
 
-    if (req.body.level && typeof req.body.level === 'int')
+    console.log(user);
+
+    if (req.body.level && typeof req.body.level === 'number')
         user.nivel_cocina = req.body.level;
 
     const result = user.save();
@@ -212,7 +210,7 @@ router.post("/modNivel", auth, async (req, res) => {
 router.post("/modTags", auth, async (req, res) => {
     console.log("UPDATING WANTED TAGS OF " + req.user.correo);
     console.log(req.body);
-    let  = await Usuario.findOne({ correo: req.user.correo });
+    let user = await Usuario.findOne({ correo: req.user.correo });
 
     if (req.body.tagArray && typeof req.body.tagArray[Symbol.iterator] === "function") {
         user.tags = req.body.tagArray;
@@ -228,10 +226,10 @@ router.post("/modTags", auth, async (req, res) => {
 router.post("/modBanned", auth, async (req, res) => {
     console.log("UPDATING BANNED PRODUCTS OF " + req.user.correo);
     console.log(req.body);
-    let  = await Usuario.findOne({ correo: req.user.correo });
+    let user = await Usuario.findOne({ correo: req.user.correo });
 
     if (typeof req.body.banArray[Symbol.iterator] === "function") {
-        user.banArray = req.body.banArray;
+        user.category_ban = req.body.banArray;
     }
 
     const result = user.save();
