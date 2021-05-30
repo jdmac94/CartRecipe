@@ -631,4 +631,30 @@ class ApiWrapper {
       // },
     );
   }
+
+  Future<List<Recipe>> getBusquedaRecetas(search) async {
+    String api = "api/v2/search/recetas/" + search.toString();
+
+    http.Response response =
+        await http.get(Uri.http(endpoint, api), headers: <String, String>{
+      'x-auth-token': authToken,
+    });
+
+    if (response.statusCode == 200) {
+      print("Received correctly recipe list.");
+      print(response.body);
+      List<Recipe> recipes = [];
+
+      Iterable l = json.decode(response.body);
+      recipes = List<Recipe>.from(l.map((model) => Recipe.fromJson(model)));
+      print(recipes.toString());
+      return recipes;
+    } else if (response.statusCode == 404) {
+      print('Not found 404');
+      return null;
+    } else {
+      print('F busqueda');
+      return null;
+    }
+  }
 }
