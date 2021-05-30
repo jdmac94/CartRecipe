@@ -13,7 +13,8 @@ class SearchsScreen extends StatefulWidget {
 class _SearchsScreen extends State<SearchsScreen> {
   final _textFieldController = TextEditingController();
   List<Product> _data = [];
-
+  List<String> history = [];
+  bool isSearching = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,11 +28,23 @@ class _SearchsScreen extends State<SearchsScreen> {
                   child: TextFormField(
                     controller: _textFieldController,
                     decoration: InputDecoration(hintText: "Buscar"),
+                    autofocus: isSearching,
+                    onTap: () {
+                      isSearching = true;
+                      setState(() {});
+                    },
                   ),
                 ),
                 IconButton(
                     icon: const Icon(Icons.search),
                     onPressed: () {
+                      isSearching = false;
+                      if (history.length >= 5) {
+                        history.removeLast();
+                      }
+                      if (!history.contains(_textFieldController.text)) {
+                        history.insert(0,_textFieldController.text);
+                      }
                       print(
                           'Valor del input buscar: ${_textFieldController.text}');
                       ApiWrapper()
@@ -44,6 +57,35 @@ class _SearchsScreen extends State<SearchsScreen> {
                       }); //then
                     })
               ]),
+              isSearching && history.isNotEmpty ? //Historial de busqueda (ultimos 5 elementos buscados)
+                ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: history.length,
+                itemBuilder: (BuildContext context, int index) {
+                  String currentValue = history[index];
+                  return InkWell(
+                    child: Container( height: 50, child:Card(child: Center( child: Text(currentValue, style: TextStyle(fontWeight: FontWeight.bold),),),)),
+                    onTap: (){
+                      isSearching = false;
+                      _textFieldController.text = currentValue;
+                      if (!history.contains(currentValue)) {
+                        history.remove(currentValue);
+                        history.insert(0, currentValue);
+                      }
+                      ApiWrapper()
+                          .getBusqueda(currentValue)
+                          .then((value) {
+                        setState(() {
+                          _data = value;
+                        }); 
+                      });
+                    },
+                  );
+                },
+               ) : Container()
+              ,
               ((_data == null) || (_data.isEmpty))
                   ? (Column(children: [
                       SizedBox(
@@ -97,5 +139,36 @@ class _SearchsScreen extends State<SearchsScreen> {
             dialogProduct(context, productItem);
           }),
     );
+  }
+
+
+//DELETE
+  Widget buildLatestSearch() {
+    print("Building last 5 searches");
+    Widget a;
+    try {
+       a= Expanded( 
+      child:ListView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: 5,
+        itemBuilder: (BuildContext context, int index) {
+          return Card(
+            
+            child: Center(child: Text(history[index]),),
+          );
+        },
+      ),
+    );
+
+    print("No errors");
+    } on Exception catch(_) {
+      print("Excepcion cogida");
+    } catch (error) {
+      print("Error en busqueda");
+    }
+   
+    return a;
   }
 }
