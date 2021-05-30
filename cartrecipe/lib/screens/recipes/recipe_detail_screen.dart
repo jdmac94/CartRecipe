@@ -42,14 +42,20 @@ class _RecipeDetailState extends State<RecipeDetail> {
         //Temporary solution to not showing bottom navigation bar
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pushAndRemoveUntil(
-                context,
-                new MaterialPageRoute(
-                  builder: (context) => new TabsScreen(0),
-                ),
-                (r) => false),
-          ),
+              icon: Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => {
+                    if (widget.busqueda)
+                      {Navigator.pop(context)}
+                    else
+                      {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            new MaterialPageRoute(
+                              builder: (context) => new TabsScreen(0),
+                            ),
+                            (r) => false),
+                      }
+                  }),
           actions: <Widget>[
             IconButton(
               icon: widget.recipe.fav
