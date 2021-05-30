@@ -19,7 +19,9 @@ Busqueda _busqueda = Busqueda.products;
 class _SearchsScreen extends State<SearchsScreen> {
   final _textFieldController = TextEditingController();
   List<dynamic> _data = [];
-  //List<Recipe> _dataRecipe = [];
+  List<String> history = [];
+  bool isSearching = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +35,23 @@ class _SearchsScreen extends State<SearchsScreen> {
                   child: TextFormField(
                     controller: _textFieldController,
                     decoration: InputDecoration(hintText: "Buscar"),
+                    autofocus: isSearching,
+                    onTap: () {
+                      isSearching = true;
+                      setState(() {});
+                    },
                   ),
                 ),
                 IconButton(
                     icon: const Icon(Icons.search),
                     onPressed: () {
+                      isSearching = false;
+                      if (history.length >= 5) {
+                        history.removeLast();
+                      }
+                      if (!history.contains(_textFieldController.text)) {
+                        history.insert(0, _textFieldController.text);
+                      }
                       print(
                           'Valor del input buscar: ${_textFieldController.text}');
                       if (_busqueda == Busqueda.products) {
@@ -61,6 +75,46 @@ class _SearchsScreen extends State<SearchsScreen> {
                       } //then
                     })
               ]),
+              isSearching && history.isNotEmpty
+                  ? //Historial de busqueda (ultimos 5 elementos buscados)
+                  ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: history.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        String currentValue = history[index];
+                        return InkWell(
+                          child: Container(
+                              height: 50,
+                              child: Card(
+                                child: Center(
+                                  child: Text(
+                                    currentValue,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              )),
+                          onTap: () {
+                            isSearching = false;
+                            _textFieldController.text = currentValue;
+                            if (!history.contains(currentValue)) {
+                              history.remove(currentValue);
+                              history.insert(0, currentValue);
+                            }
+                            ApiWrapper()
+                                .getBusqueda(currentValue)
+                                .then((value) {
+                              setState(() {
+                                _data = value;
+                              });
+                            });
+                          },
+                        );
+                      },
+                    )
+                  : Container(),
               RadioListTile<Busqueda>(
                 title: const Text('Recetas'),
                 value: Busqueda.recetas,
