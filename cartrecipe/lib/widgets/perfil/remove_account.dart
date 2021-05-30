@@ -10,7 +10,7 @@ class RemoveAccount extends StatefulWidget {
   State<RemoveAccount> createState() => _RemoveAccount();
 }
 
-String dropdownValue = 'Duis aute irure dolor in';
+String dropdownValue = 'No especificar';
 
 Future<void> dialogSureRemoveAccount(
     BuildContext context, String dropdownValue) {
@@ -38,7 +38,7 @@ class _RemoveAccount extends State<RemoveAccount> {
               child: DropdownButton<String>(
                 isExpanded: true,
                 value: dropdownValue,
-                icon: const Icon(Icons.arrow_downward),
+                icon: const Icon(Icons.expand_more),
                 iconSize: 24,
                 elevation: 16,
                 style: const TextStyle(color: Colors.deepPurple),
@@ -52,7 +52,7 @@ class _RemoveAccount extends State<RemoveAccount> {
                   });
                 },
                 items: <String>[
-                  '-',
+                  'No especificar',
                   'No me ha gustado la aplicacion',
                   'No me ofrece lo esperado',
                   'Existencia de aplicaciones mejores'
