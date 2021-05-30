@@ -332,7 +332,7 @@ class ApiWrapper {
   }
 
   Future<List<Recipe>> getRecipeList() async {
-    const String api = "api/v1/receta/getAllRecetas";
+    const String api = "api/v1/receta/getAllRecetas3";
     //Currently using  generated auth token
 
     List<Recipe> recipeList = [];
@@ -501,7 +501,7 @@ class ApiWrapper {
   }
 
   Future<void> modTags(List<String> tags) async {
-    var api = 'api/v1/accSettings/modNivel';
+    var api = 'api/v1/accSettings/modTags';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -523,7 +523,7 @@ class ApiWrapper {
   }
 
   Future<void> modBanned(List<String> ban) async {
-    var api = 'api/v1/accSettings/modNivel';
+    var api = 'api/v1/accSettings/modBanned';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
