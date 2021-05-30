@@ -9,10 +9,10 @@
     crossorigin="anonymous"/>
     <!--
         <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css; script-src 'self' 'unsafe-inline' 'unsafe-eval', connect-src * ">
-        <script src="../public/scripts.js"></script>
         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
     -->
-        <title>Formulari de Registre</title>
+    <script src="../public/scripts.js"></script>
+    <title>Formulari de Registre</title>
 </head>
 <body style="background-color: #8AE1FC;">
 
@@ -25,7 +25,7 @@
     padding: 30px;
     ">
     <h1>RECUPERACIÓN DE CONTRASEÑA</h1>
-    <form id="passform" action="/api/v1/accSettings/restorePasswordReception" method="POST">
+    <form id="passform" method="POST">
         <div id="regPass">
             <label for="RPassword">Introduce tu contraseña (mínimo 8 caracteres y uno de ellos alfanumérico):</label>
             <br>
