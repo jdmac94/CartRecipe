@@ -13,6 +13,7 @@ const { sendMailPassword } = require("../utils/mailing");
 const auth = require("../middlewares/auth");
 const path = require("path");
 var bodyParser = require('body-parser');
+const { Receta } = require("../models/receta");
 
 require("../passport-setup");
 
@@ -259,24 +260,25 @@ router.get("/toggleInRecetario/:id", auth, async (req, res) => {
         {
             recetas_favs: 1,
         });
-    
+    console.log(recetario);
+
     delIndex = recetario.recetas_favs.indexOf(req.params.id);
-  
+    console.log(recetario.recetas_favs);
+    console.log(delIndex);
+
     if (delIndex == -1) {
-    
         recetario.recetas_favs.push(req.params.id);
-        const result = recetario.save();
-
-        if (result)
-            return res.send("receta añadida a favoritos correctamente");
-        else
-            return res.status(400).send("Error al intentar añadir receta a favoritos");
-
       }
       else
         recetario.recetas_favs.splice(delIndex, 1);
 
-    res.send(recetario);
+
+    const result = recetario.save();
+
+    if (result)
+        return res.send(recetario);
+    else
+        return res.status(400).send("Error al intentar añadir receta a favoritos");
 });
 
 

@@ -15,7 +15,7 @@ function convertIngredientsUnits(ingredient, sistInter = true) {
                   break;
               case 'mililitros':
                 ingredient[0] = liqOnce_to_ml(ingredient[0], sistInter).toString();
-                ingredient[1] = "onzas_liquidas";
+                ingredient[1] = "onzas líquidas";
                 break;
             }
           }
@@ -34,7 +34,7 @@ function convertIngredientsUnits(ingredient, sistInter = true) {
                 ingredient[0] = cups_to_l(ingredient[0], sistInter).toString();
                 ingredient[1] = "litros";
                   break;
-              case 'onzas_liquidas':
+              case 'onzas líquidas':
                 ingredient[0] = liqOnce_to_ml(ingredient[0], sistInter).toString();
                 ingredient[1] = "mililitros";
                 break;

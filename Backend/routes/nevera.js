@@ -13,8 +13,9 @@ const auth = require("../middlewares/auth");
 const barcodeRegEx = /^[0-9]{13}$/;
 const barcodeRegEx2 = /^[0-9]{8}$/;
 
-router.get("/", auth, async (req, res) => {
+router.get("/", auth, async (req, res) => {// OK
   console.log("GETTING NEVERA");
+  console.log(req.user._id);
   let nevera = await Nevera.findOne({ usuario: req.user._id });
 
   if (!nevera)
@@ -22,7 +23,7 @@ router.get("/", auth, async (req, res) => {
 
   let prodArray = nevera.productos;
   let listedProds = await ProductV2.find(
-    { _id: { $in: prodArray } },
+    { id: { $in: prodArray } },
     {
       product_name: 1,
       product_name_es: 1,
@@ -37,16 +38,17 @@ router.get("/", auth, async (req, res) => {
       traces: 1,
       traces_tags: 1,
       ingredients_text_es: 1,
+      imgs: 1,
     }
   );
 
-  for (let element of listedProds) {
-    element.imgs = await checkImgFromAPI(element._id);
-  }
+  // for (let element of listedProds) {
+  //   element.imgs = await checkImgFromAPI(element._id);
+  // }
 
   res.send(listedProds);
 });
-
+/*
 router.get("/list", auth, async (req, res) => {
   //var date = Date.now();
   //var timeStr = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
@@ -63,7 +65,7 @@ router.get("/list", auth, async (req, res) => {
   console.log(prodArray);
 
   let listedProds = await ProductV2.find(
-    { _id: { $in: prodArray } },
+    { id: { $in: prodArray } },
     { product_name: 1, allergens_from_user: 1, product_name_es: 1 }
   );
 
@@ -83,7 +85,7 @@ router.get("/list", auth, async (req, res) => {
 
   res.send(listedProds);
 });
-
+*/
 /*
 {
     "toDeleteArr": ["111111111111111"]
@@ -152,11 +154,12 @@ router.put("/product/:id", auth, async (req, res) => {
 
   if (!nevera)
     return res.status(404).send("No se encuentran los datos de la nevera");
-
-  if (!barcodeRegEx.test(req.params.id) || !barcodeRegEx2.test(req.params.id))
+  
+  if (!barcodeRegEx.test(req.params.id) && !barcodeRegEx2.test(req.params.id))
     return res.status(400).send("Datos del body mal formateados");
 
-  var prod = await ProductV2.findById(req.params.id);
+    // var prod = await ProductV2.findById(req.params.id);
+    var prod = await ProductV2.findOne({id : req.params.id});
 
   if (!prod) return res.status(404).send("El producto a insertar no existe");
 
@@ -171,9 +174,9 @@ router.put("/product/:id", auth, async (req, res) => {
     const result = nevera.save();
     if (result) {
       let listedProds = await ProductV2.findOne(
-        { _id: req.params.id },
+        { id: req.params.id },
         {
-          _id: 1,
+          id: 1,
           allergens_from_user: 1,
           imgs: 1,
           product_name: 1,
@@ -189,10 +192,11 @@ router.put("/product/:id", auth, async (req, res) => {
           traces: 1,
           traces_tags: 1,
           ingredients_text_es: 1,
+          imgs: 1,
         }
       );
 
-      listedProds.imgs = await checkImgFromAPI(listedProds._id);
+      // listedProds.imgs = await checkImgFromAPI(listedProds._id);
 
       res.send(listedProds);
     }
@@ -253,7 +257,7 @@ router.get("/getNeveraCat", auth, async (req, res) => {
     return res.status(404).send("No se encuentran los datos de la nevera");
 
   let neveraCategories = await ProductV2.find(
-    { _id: { $in: nevera.productos } },
+    { id: { $in: nevera.productos } },
     {
       categories_hierarchy: 1,
     }
