@@ -75,7 +75,8 @@ class _FridgeScreenState extends State<FridgeScreen> {
                               ),
                             ),
                           )
-                        : proveedor.productList.isEmpty
+                        : ((proveedor.productList == null) ||
+                                (proveedor.productList.isEmpty))
                             ? Center(
                                 child: Text('No hay datos en la nevera'),
                               )

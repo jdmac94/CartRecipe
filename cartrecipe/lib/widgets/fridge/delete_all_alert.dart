@@ -23,7 +23,7 @@ class DeleteAllAlert extends StatelessWidget {
         ),
         actions: [
           TextButton(
-            child: Text('Eliminar Todo'),
+            child: Text('Eliminar todo'),
             onPressed: () {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text('Vaciando nevera')));

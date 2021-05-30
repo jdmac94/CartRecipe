@@ -32,7 +32,7 @@ class Welcome extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "Welcome to CartRecipe!",
+            "Bienvendo a CartRecipe!",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           new Image.asset(
@@ -43,7 +43,7 @@ class Welcome extends StatelessWidget {
           Center(
             child: Container(
               child: ElevatedButton(
-                child: Text("Sign In"),
+                child: Text("Registrarse"),
                 onPressed: () => Navigator.push(
                     context, MaterialPageRoute(builder: (context) => SignIn())),
               ),
@@ -51,7 +51,7 @@ class Welcome extends StatelessWidget {
           ),
           Center(
             child: OutlinedButton(
-              child: Text("Log in"),
+              child: Text("Iniciar sesión"),
               onPressed: () => Navigator.push(
                   context, MaterialPageRoute(builder: (context) => LogIn())),
             ),
@@ -59,7 +59,7 @@ class Welcome extends StatelessWidget {
           Center(
             child: Container(
               child: ElevatedButton(
-                child: Text("Sign In or Log In With Google"),
+                child: Text("Registrarte o inicia sesión con Google"),
                 onPressed: () async {
                   await _handleSignIn();
                   Navigator.push(

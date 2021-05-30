@@ -111,17 +111,22 @@ class _EdittingPreferencesScreen extends State<EdittingPreferencesScreen> {
                         size: 60,
                       );
                     } else {
-                      children = Column(children: [
-                        SizedBox(
-                          child: CircularProgressIndicator(),
-                          width: 60,
-                          height: 60,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 16),
-                          child: Text('Awaiting result...'),
-                        )
-                      ]);
+                      children = Center(
+                        child: Column(children: [
+                          SizedBox(
+                            height: 150,
+                          ),
+                          SizedBox(
+                            child: CircularProgressIndicator(),
+                            width: 60,
+                            height: 60,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 16),
+                            child: Text('Esperando resultado...'),
+                          )
+                        ]),
+                      );
                     }
                     return children;
                   })),

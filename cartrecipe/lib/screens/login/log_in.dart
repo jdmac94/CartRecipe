@@ -109,7 +109,7 @@ class _LogIn extends State<LogIn> {
               child: Column(
                 children: [
                   SizedBox(height: 30),
-                  Text("Please log in"),
+                  Text("Porfavor, introduzca los campos para iniciar sesión"),
                   SizedBox(height: 10),
                   new Image.asset(
                     'assets/images/logo/logocart.png',
@@ -137,13 +137,13 @@ class _LogIn extends State<LogIn> {
                       decoration: const InputDecoration(
                         focusColor: Colors.deepPurple,
                         icon: Icon(Icons.lock),
-                        labelText: 'Password',
+                        labelText: 'Contraseña',
                       ),
                     ),
                   ),
                   Center(
                     child: TextButton(
-                        child: Text("Log in"),
+                        child: Text("Iniciar sesión"),
                         onPressed: () => {
                               setState(() {
                                 if (_formKey.currentState.validate()) {

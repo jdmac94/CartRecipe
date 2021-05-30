@@ -39,7 +39,19 @@ class _RecetearioScreenState extends State<RecetearioScreen> {
       builder: (context, recipeSnap) {
         if (recipeSnap.connectionState == ConnectionState.none &&
             recipeSnap.hasData == null) {
-          return Container(); // Do not show anything
+          return Container(
+            child: Text("No hay recetas a mostrar"),
+          ); // Do not show anything
+        }
+        if (recipeSnap.hasData && recipeSnap.data.length == 0) {
+          return Container(
+              child: Center(
+                  child: Column(children: [
+            SizedBox(
+              height: 150,
+            ),
+            Text("No hay recetas a mostrar"),
+          ])));
         }
         return ListView.builder(
           padding: EdgeInsets.all(10),

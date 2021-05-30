@@ -50,7 +50,7 @@ class Product {
 
     if (json['imgs'] != null) {
       if (json['imgs'][0] == null) {
-        _image = 'null';
+        _image = null;
       } else {
         _image = json['imgs'][0].values.toList();
       }
@@ -101,8 +101,8 @@ class Product {
     return Product(
       id: json['id'],
       name: _name,
-      image: _image == null ? _image : _image[0],
-      //image: _image[0],
+      //image: _image == null ? _image : _image[0],
+      image: _image[0],
       allergens: _listAllergens,
       nutriScore: _nutriScore,
       ecoScore: _ecosScore,

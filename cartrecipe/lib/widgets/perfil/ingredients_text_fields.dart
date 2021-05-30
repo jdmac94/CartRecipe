@@ -17,7 +17,7 @@ class IngredientsTextFields extends StatefulWidget {
 class _IngredientsTextFieldsState extends State<IngredientsTextFields> {
   TextEditingController unitsController;
   List<String> ingredientsList = [];
-  String dropdownValueIngredient = 'Nutella';
+  String dropdownValueIngredient = 'aceite';
   String dropdownValueUnits = "gramos";
   List<String> unitsList = [
     "libras",

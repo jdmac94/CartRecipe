@@ -25,8 +25,9 @@ class _SearchsScreen extends State<SearchsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: UniqueKey(),
-        body: Container(
+      key: UniqueKey(),
+      body: Container(
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(18.0),
             child: Column(children: [
@@ -75,6 +76,27 @@ class _SearchsScreen extends State<SearchsScreen> {
                       } //then
                     })
               ]),
+              RadioListTile<Busqueda>(
+                title: const Text('Recetas'),
+                value: Busqueda.recetas,
+                groupValue: _busqueda,
+                onChanged: (Busqueda value) {
+                  setState(() {
+                    _busqueda = value;
+                    _data = [];
+                  });
+                },
+              ),
+              RadioListTile<Busqueda>(
+                  title: const Text('Productos'),
+                  value: Busqueda.products,
+                  groupValue: _busqueda,
+                  onChanged: (Busqueda value) {
+                    setState(() {
+                      _busqueda = value;
+                      _data = [];
+                    });
+                  }),
               isSearching && history.isNotEmpty
                   ? //Historial de busqueda (ultimos 5 elementos buscados)
                   ListView.builder(
@@ -115,28 +137,6 @@ class _SearchsScreen extends State<SearchsScreen> {
                       },
                     )
                   : Container(),
-              RadioListTile<Busqueda>(
-                title: const Text('Recetas'),
-                value: Busqueda.recetas,
-                groupValue: _busqueda,
-                onChanged: (Busqueda value) {
-                  setState(() {
-                    _busqueda = value;
-                    _data = [];
-                  });
-                },
-              ),
-              RadioListTile<Busqueda>(
-                title: const Text('Productos'),
-                value: Busqueda.products,
-                groupValue: _busqueda,
-                onChanged: (Busqueda value) {
-                  setState(() {
-                    _busqueda = value;
-                    _data = [];
-                  });
-                },
-              ),
               ((_data == null) || (_data.isEmpty))
                   ? (Column(children: [
                       SizedBox(
@@ -178,7 +178,9 @@ class _SearchsScreen extends State<SearchsScreen> {
                     ),
             ]),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Future<void> dialogProduct(BuildContext context, Product product) {

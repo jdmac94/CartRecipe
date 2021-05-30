@@ -143,7 +143,7 @@ class _SignIn extends State<SignIn> {
                 child: Column(
                   children: [
                     SizedBox(height: 30),
-                    Text("Please sign in"),
+                    Text("Porfavor, introduzca los campos para registrarse"),
                     SizedBox(height: 20),
                     new Image.asset(
                       'assets/images/logo/logocart.png',
@@ -198,7 +198,7 @@ class _SignIn extends State<SignIn> {
                         controller: passwordText,
                         decoration: const InputDecoration(
                           icon: Icon(Icons.lock),
-                          labelText: 'Password',
+                          labelText: 'Contraseña',
                         ),
                       ),
                     ),
@@ -215,13 +215,13 @@ class _SignIn extends State<SignIn> {
                         obscureText: true,
                         decoration: const InputDecoration(
                           icon: Icon(Icons.lock),
-                          labelText: 'Confirm password',
+                          labelText: 'Confirme la contraseña',
                         ),
                       ),
                     ),
                     Center(
                         child: TextButton(
-                            child: Text("Sign in"),
+                            child: Text("Registrarse"),
                             onPressed: () => {
                                   if (_formKey.currentState.validate())
                                     {

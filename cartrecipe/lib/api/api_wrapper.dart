@@ -15,8 +15,8 @@ class ApiWrapper {
 
   factory ApiWrapper() => _instance ?? ApiWrapper._internal();
 
-  final String endpoint = //"158.109.74.46:55005";
-      "3587b861185a.ngrok.io";
+  final String endpoint = "158.109.74.46:55005";
+  //"3587b861185a.ngrok.io";
 
   String authToken;
 
