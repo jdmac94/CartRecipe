@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:cartrecipe/screens/tabs_screens.dart';
 import 'package:cartrecipe/screens/profile/edit_preferences_screen.dart';
@@ -27,22 +29,106 @@ class _EdittingPreferencesScreen extends State<EdittingPreferencesScreen> {
   int _selectedPageIndex;
   void initState() {
     _selectedPageIndex = widget.receivedPage;
+    preferencias.then((value) {
+      preferences = value;
+      resultado = preferences.values.toList();
+      print(resultado);
+      resultado[0].forEach((element) {
+        element = element.toString().replaceAll("en:", '');
+        allergensList.forEach((alergen) {
+          if (element == alergen[1]) {
+            alergen[0] = true;
+          }
+        });
+      });
+      if (resultado[1]) _dieta = Dietas.vegana;
+      if (resultado[2]) _dieta = Dietas.vegetariana;
+
+      resultado[3].forEach((element) {
+        tagsToSend.add(element);
+        tags.forEach((tag) {
+          if (element == tag[1]) {
+            tag[0] = true;
+          }
+        });
+      });
+      print(tagsToSend);
+      products.then((value) {
+        productNames = value;
+        productNames.forEach((element) {
+          productban.add(false);
+        });
+        resultado[4].forEach((element) {
+          if (!productsToSend.contains(element)) productsToSend.add(element);
+          for (int i = 0; i < productNames.length; i++) {
+            if (element == productNames[i]) {
+              productban[i] = true;
+            }
+          }
+        });
+      });
+
+      _nivel = Nivel.values[(resultado[5] - 1)];
+    });
     super.initState();
   }
 
+  List resultado = [];
+  Future<Map<String, dynamic>> preferencias = ApiWrapper().getPreferences();
+  Map<String, dynamic> preferences;
   final Future<String> _calculation = Future<String>.delayed(
     const Duration(seconds: 2),
     () => 'Data Loaded',
   );
   @override
   Widget build(BuildContext context) {
-    products.then((value) {
-      productNames = value;
-      productNames.forEach((element) {
-        productban.add(false);
-      });
-    });
     return Scaffold(
+        appBar: AppBar(
+          title: Text('Preferencias'),
+        ),
+        body: Column(children: [
+          Expanded(
+              child: FutureBuilder<String>(
+                  future: _calculation,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    Widget children;
+                    if (snapshot.hasData) {
+                      if (_selectedPageIndex == 0)
+                        children = gridViewAlergenos();
+                      else if (_selectedPageIndex == 1)
+                        children = Column(children: radiobuttonDieta());
+                      else if (_selectedPageIndex == 2)
+                        children = Column(children: radiobuttonNivel());
+                      else if (_selectedPageIndex == 3)
+                        children = gridViewTags();
+                      else if (_selectedPageIndex == 4)
+                        children = gridViewBans();
+                    } else if (snapshot.hasError) {
+                      children = const Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 60,
+                      );
+                    } else {
+                      children = Column(children: [
+                        SizedBox(
+                          child: CircularProgressIndicator(),
+                          width: 60,
+                          height: 60,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 16),
+                          child: Text('Awaiting result...'),
+                        )
+                      ]);
+                    }
+                    return children;
+                  })),
+          buildButton()
+        ]));
+
+    /*return Scaffold(
         appBar: AppBar(
           title: Text('Preferencias'),
         ),
@@ -89,7 +175,7 @@ class _EdittingPreferencesScreen extends State<EdittingPreferencesScreen> {
               ),
             buildButton()
           ],
-        ));
+        ));*/
   }
 
   Widget buildButton() {
@@ -106,12 +192,11 @@ class _EdittingPreferencesScreen extends State<EdittingPreferencesScreen> {
                 ApiWrapper().modTags(tagsToSend)
               else if (_selectedPageIndex == 4)
                 ApiWrapper().modBanned(productsToSend),
-              Navigator.pushAndRemoveUntil(
+              Navigator.pop(
                   context,
-                  new MaterialPageRoute(
+                  MaterialPageRoute(
                     builder: (context) => EditPreferencesScreen(),
-                  ),
-                  (r) => false)
+                  ))
             });
   }
 
@@ -297,6 +382,7 @@ class _EdittingPreferencesScreen extends State<EdittingPreferencesScreen> {
       value: tags[index][0],
       onChanged: (newValue) {
         setState(() {
+          print(tagsToSend);
           tags[index][0] = newValue;
           tags[index][0]
               ? tagsToSend.add(tags[index][1])
@@ -338,14 +424,12 @@ class _EdittingPreferencesScreen extends State<EdittingPreferencesScreen> {
       contentPadding: EdgeInsets.symmetric(horizontal: 2),
       title: Text(productNames[index]),
       value: productban[index],
-      onChanged: (newValue) {
-        setState(() {
-          print(newValue);
-          productban[index] = newValue;
-          productban[index]
-              ? productsToSend.add(productNames[index])
-              : productsToSend.remove(productNames[index]);
-        });
+      onChanged: (newValue) async {
+        productban[index] = newValue;
+        await productban[index]
+            ? productsToSend.add(productNames[index])
+            : productsToSend.remove(productNames[index]);
+        setState(() {});
       },
       controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
     );
