@@ -24,7 +24,7 @@
     padding: 30px;
     ">
     <h1>RECUPERACIÓN DE CONTRASEÑA</h1>
-    <form id="passform" action="http://158.109.74.46:55005/api/v1/accSettings/restorePasswordReception" method="post">
+    <form id="passform" action="/api/v1/accSettings/restorePasswordReception" method="POST">
         <div id="regPass">
             <label for="RPassword">Introduce tu contraseña (mínimo 8 caracteres y uno de ellos alfanumérico):</label>
             <br>
@@ -39,7 +39,7 @@
             <p id="warning"></p>
             
         </div>
-        <input id="sub" type="button" class="btn btn-primary btn-block" value="Enviar">
+        <input id="sub" type="submit" class="btn btn-primary btn-block" value="Enviar">
     </form>
 
 </div>
