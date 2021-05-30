@@ -1,6 +1,8 @@
 import 'package:cartrecipe/api/api_wrapper.dart';
 import 'package:cartrecipe/models/product.dart';
+import 'package:cartrecipe/models/recipe.dart';
 import 'package:cartrecipe/widgets/fridge/detail_view_product.dart';
+import 'package:cartrecipe/widgets/recipes/recipe_card.dart';
 import 'package:flutter/material.dart';
 
 class SearchsScreen extends StatefulWidget {
@@ -10,11 +12,15 @@ class SearchsScreen extends StatefulWidget {
   _SearchsScreen createState() => _SearchsScreen();
 }
 
+enum Busqueda { products, recetas }
+Busqueda _busqueda = Busqueda.products;
+
 class _SearchsScreen extends State<SearchsScreen> {
   final _textFieldController = TextEditingController();
   List<Product> _data = [];
   List<String> history = [];
   bool isSearching = false;
+  List<Recipe> _dataRecipe = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,14 +53,25 @@ class _SearchsScreen extends State<SearchsScreen> {
                       }
                       print(
                           'Valor del input buscar: ${_textFieldController.text}');
-                      ApiWrapper()
-                          .getBusqueda(_textFieldController.text)
-                          .then((value) {
-                        setState(() {
-                          _data = value;
-                          print("Data is: $_data");
-                        }); //setState
-                      }); //then
+                      if (_busqueda == Busqueda.products) {
+                        ApiWrapper()
+                            .getBusqueda(_textFieldController.text)
+                            .then((value) {
+                          setState(() {
+                            _data = value;
+                            print("Data is: $_data");
+                          }); //setState
+                        });
+                      } else if (_busqueda == Busqueda.recetas) {
+                        ApiWrapper()
+                            .getBusquedaRecetas(_textFieldController.text)
+                            .then((value) {
+                          setState(() {
+                            _dataRecipe = value;
+                            print("Data is: $_dataRecipe");
+                          }); //setState
+                        });
+                      } //then
                     })
               ]),
               isSearching && history.isNotEmpty ? //Historial de busqueda (ultimos 5 elementos buscados)
@@ -86,6 +103,26 @@ class _SearchsScreen extends State<SearchsScreen> {
                 },
                ) : Container()
               ,
+              RadioListTile<Busqueda>(
+                title: const Text('recetas'),
+                value: Busqueda.recetas,
+                groupValue: _busqueda,
+                onChanged: (Busqueda value) {
+                  setState(() {
+                    _busqueda = value;
+                  });
+                },
+              ),
+              RadioListTile<Busqueda>(
+                title: const Text('Productos'),
+                value: Busqueda.products,
+                groupValue: _busqueda,
+                onChanged: (Busqueda value) {
+                  setState(() {
+                    _busqueda = value;
+                  });
+                },
+              ),
               ((_data == null) || (_data.isEmpty))
                   ? (Column(children: [
                       SizedBox(
@@ -95,19 +132,34 @@ class _SearchsScreen extends State<SearchsScreen> {
                     ]))
                   : Column(
                       children: [
-                        ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: _data.length,
-                          itemBuilder: (context, index) {
-                            Product productItem = _data[index];
-                            return Column(children: [
-                              _data[index].name == null
-                                  ? Text("no hay datos")
-                                  : buildCard(productItem, index),
-                            ]);
-                          },
-                        ),
+                        if (_busqueda == Busqueda.products)
+                          ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: _data.length,
+                            itemBuilder: (context, index) {
+                              Product productItem = _data[index];
+                              return Column(children: [
+                                _data[index].name == null
+                                    ? Text("no hay datos")
+                                    : buildCardProduct(productItem, index)
+                              ]);
+                            },
+                          )
+                        else if (_busqueda == Busqueda.recetas)
+                          ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: _dataRecipe.length,
+                            itemBuilder: (context, index) {
+                              Recipe recipeItem = _dataRecipe[index];
+                              return Column(children: [
+                                _dataRecipe[index].titulo == null
+                                    ? Text("no hay datos")
+                                    : buildCardRecipe(recipeItem, index)
+                              ]);
+                            },
+                          )
                       ],
                     ),
             ]),
@@ -124,7 +176,7 @@ class _SearchsScreen extends State<SearchsScreen> {
     );
   }
 
-  Card buildCard(Product productItem, int index) {
+  Card buildCardProduct(Product productItem, int index) {
     return Card(
       child: ListTile(
           leading: (productItem.image == null)
@@ -141,34 +193,20 @@ class _SearchsScreen extends State<SearchsScreen> {
     );
   }
 
-
-//DELETE
-  Widget buildLatestSearch() {
-    print("Building last 5 searches");
-    Widget a;
-    try {
-       a= Expanded( 
-      child:ListView.builder(
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: 5,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            
-            child: Center(child: Text(history[index]),),
-          );
-        },
-      ),
+  Card buildCardRecipe(Recipe recipeItem, int index) {
+    return Card(
+      child: ListTile(
+          leading: (recipeItem.imagenes == null)
+              ? FlutterLogo(size: 70)
+              : Image.network(
+                  recipeItem.imagenes[0],
+                  width: 70,
+                  height: 70,
+                ),
+          title: Text(recipeItem.titulo),
+          onTap: () {
+            //dialogProduct(context, productItem);
+          }),
     );
-
-    print("No errors");
-    } on Exception catch(_) {
-      print("Excepcion cogida");
-    } catch (error) {
-      print("Error en busqueda");
-    }
-   
-    return a;
   }
 }
