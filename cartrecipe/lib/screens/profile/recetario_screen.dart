@@ -1,39 +1,49 @@
+import 'package:cartrecipe/api/api_wrapper.dart';
+import 'package:cartrecipe/models/recipe.dart';
 import 'package:cartrecipe/screens/profile/add_new_recipe_screen.dart';
+import 'package:cartrecipe/widgets/recipes/recipe_card.dart';
 import 'package:flutter/material.dart';
 
 class RecetearioScreen extends StatefulWidget {
+  List<Recipe> recipeList;
   @override
   _RecetearioScreenState createState() => _RecetearioScreenState();
 }
 
 class _RecetearioScreenState extends State<RecetearioScreen> {
-  Future<void> _addRecipeForm() async {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Title'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: [
-                  Text('Txt1'),
-                  Text('Txt1'),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                child: const Text('Cerrar'),
-                onPressed: () => Navigator.of(context).pop(),
-              )
-            ],
-          );
-        });
+  Future<List<Recipe>> recipelist;
+
+  @override
+  void initState() {
+    super.initState();
+    recipelist = ApiWrapper().getRecipeList();
   }
 
   Future<T> _pushPage<T>(BuildContext context) {
     return Navigator.of(context)
         .push<T>(MaterialPageRoute(builder: (context) => AddNewRecipeScreen()));
+  }
+
+  Widget _getOwnRecipes() {
+    return FutureBuilder(
+      builder: (context, recipeSnap) {
+        if (recipeSnap.connectionState == ConnectionState.none &&
+            recipeSnap.hasData == null) {
+          return Container(); // Do not show anything
+        }
+        return ListView.builder(
+          padding: EdgeInsets.all(10),
+          itemCount: recipeSnap?.data?.length ?? 0,
+          itemBuilder: (BuildContext context, int index) {
+            Recipe newRecipe = recipeSnap.data[index];
+            return RecipeCard(
+              recipe: newRecipe,
+            );
+          },
+        );
+      },
+      future: recipelist,
+    );
   }
 
   @override
@@ -48,11 +58,7 @@ class _RecetearioScreenState extends State<RecetearioScreen> {
           )
         ],
       ),
-      body: Container(
-        child: Center(
-          child: Text('No hay ninguna receta creada'),
-        ),
-      ),
+      body: _getOwnRecipes(),
     );
   }
 }

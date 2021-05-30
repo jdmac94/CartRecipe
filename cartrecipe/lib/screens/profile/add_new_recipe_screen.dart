@@ -253,6 +253,8 @@ class AddNewRecipeScreenState extends State<AddNewRecipeScreen> {
       tags: ['Arroces', 'Asiático'],
     );
 
+    print(receta.ingredientes.toString());
+
     ApiWrapper().createOwnRecipe(receta);
     //Titulo
     //Dificultad

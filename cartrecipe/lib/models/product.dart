@@ -99,7 +99,7 @@ class Product {
     Map<String, dynamic> _listNutriments = json['nutriments'];
 
     return Product(
-      id: json['_id'],
+      id: json['id'],
       name: _name,
       image: _image == null ? _image : _image[0],
       //image: _image[0],

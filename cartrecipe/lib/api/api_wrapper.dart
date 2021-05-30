@@ -272,6 +272,8 @@ class ApiWrapper {
   Future<void> deleteAndreh(List<String> barcode) async {
     var api = 'api/v1/nevera/product';
 
+    print('Estoy en la API y quiero borrar el producto con este id $barcode');
+
     http.Response response = await http.delete(
       Uri.http(endpoint, api),
       headers: <String, String>{
@@ -312,7 +314,7 @@ class ApiWrapper {
   }
 
   Future<List<Recipe>> getRecipeList() async {
-    const String api = "api/v1/receta/getAllRecetas";
+    const String api = "api/v1/receta/getAllRecetas3";
     //Currently using  generated auth token
 
     List<Recipe> recipeList = [];
@@ -481,7 +483,7 @@ class ApiWrapper {
   }
 
   Future<void> modTags(List<String> tags) async {
-    var api = 'api/v1/accSettings/modNivel';
+    var api = 'api/v1/accSettings/modTags';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -503,7 +505,7 @@ class ApiWrapper {
   }
 
   Future<void> modBanned(List<String> ban) async {
-    var api = 'api/v1/accSettings/modNivel';
+    var api = 'api/v1/accSettings/modBanned';
 
     http.Response response = await http.post(
       Uri.http(endpoint, api),
@@ -564,23 +566,23 @@ class ApiWrapper {
   Future<void> createOwnRecipe(Recipe receta) async {
     const String api = "api/v1/receta/addReceta";
 
-    print(receta.dificultad.toString());
+    //print(receta.ingredientes.toString());
 
     http.Response response = await http.post(Uri.http(endpoint, api),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': authToken,
         },
-        body: jsonEncode(<String, String>{
+        body: jsonEncode(<String, dynamic>{
           'titulo': receta.titulo,
           'dificultad': receta.dificultad.toString(),
           'tiempo': receta.tiempo,
-          'ingredientes': receta.ingredientes.toString(),
-          'pasos': receta.pasos.toString(),
-          'consejos': receta.consejos.toString(),
-          'imagenes': receta.imagenes.toString(),
+          'ingredientes': receta.ingredientes,
+          'pasos': receta.pasos,
+          'consejos': receta.consejos,
+          'imagenes': receta.imagenes,
           'comensales': receta.comensales.toString(),
-          'tags': receta.tags.toString(),
+          'tags': receta.tags,
         }));
 
     if (response.statusCode == 200) {
@@ -591,25 +593,6 @@ class ApiWrapper {
     }
   }
 
-  /*  Future<void> modificaSistemaUnidades(bool metricUnit) async {
-    var api = "api/v1/accSettings/modSistemaMedida";
-    http.Response response = await http.post(Uri.http(endpoint, api),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': authToken,
-        },
-        body: jsonEncode(<String, String>{
-          'sistema_unidades': metricUnit.toString(),
-        }));
-    print(response.body);
-    authToken = response.body.toString();
-    print('Received response ' + '${response.statusCode}');
-    if (response.statusCode == 200) {
-      print('Received correctly');
-    } else {
-      print('Found a status code different than 200');
-    }
-  } */
   Future<Map<String, dynamic>> getPreferences() async {
     const String api = "api/v1/accSettings/getPreferences";
     Map<String, dynamic> preferences = {};
@@ -627,5 +610,25 @@ class ApiWrapper {
       print(response.statusCode);
     }
     return preferences;
+  }
+
+  Future<Product> addFav(String _id) async {
+    var api = '/api/v1/accSettings/toggleInRecetario/$_id';
+
+    print('Receta es $_id');
+
+    print("Token al añadir producto $authToken");
+    //var uri = Uri.http(endpoint, api);
+
+    http.Response response = await http.get(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        //'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      // body: jsonEncode(<String, String>{
+      //   'barcode': barcode,
+      // },
+    );
   }
 }

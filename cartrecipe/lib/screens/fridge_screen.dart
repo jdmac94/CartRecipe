@@ -195,6 +195,7 @@ class _FridgeScreenState extends State<FridgeScreen> {
               // }
               selectedProducts.clear();
             });
+            print('El producto completo es $productItem');
             proveedor.deleteProduct([productItem.id]);
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
