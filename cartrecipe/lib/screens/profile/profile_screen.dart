@@ -1,4 +1,5 @@
 import 'package:cartrecipe/screens/profile/edit_units_screen.dart';
+import 'package:cartrecipe/screens/profile/recetario_screen.dart';
 import 'package:cartrecipe/widgets/fridge/delete_alert.dart';
 import 'package:cartrecipe/widgets/perfil/close_session.dart';
 import 'package:cartrecipe/widgets/perfil/remove_account.dart';
@@ -62,6 +63,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ])),
             ),
             ListTile(
+              leading: Icon(Icons.local_dining),
+              title: RichText(
+                  text: TextSpan(children: <TextSpan>[
+                TextSpan(
+                    text: 'Recetario',
+                    style: TextStyle(color: Colors.black),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RecetearioScreen()));
+                      })
+              ])),
+            ),
+            ListTile(
               leading: Icon(Icons.food_bank),
               title: RichText(
                   text: TextSpan(children: <TextSpan>[
@@ -78,26 +95,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ])),
             ),
             ListTile(
-              leading: Icon(Icons.square_foot),
-              title: RichText(
-                text: TextSpan(children: <TextSpan>[
+                leading: Icon(Icons.square_foot),
+                title: RichText(
+                    text: TextSpan(children: <TextSpan>[
                   TextSpan(
-                    text: 'Sistema de unidades',
-                    style: TextStyle(color: Colors.black),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EditUnitsScreen()
-                          )
-                        );
-                      }
-                  )
-                ])
-              )
-            )
-            ,
+                      text: 'Sistema de unidades',
+                      style: TextStyle(color: Colors.black),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditUnitsScreen()));
+                        })
+                ]))),
             ListTile(
               leading: Icon(Icons.call),
               title: RichText(
