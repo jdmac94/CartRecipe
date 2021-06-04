@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "294072647128",
+    "project_id": "cartrecipe1",
+    "storage_bucket": "cartrecipe1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294072647128:android:f09d2710e8297b57f086ad",
+        "android_client_info": {
+          "package_name": "com.example.cartrecipe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "294072647128-sr38382pfdk8b93105m2pk8ptb39kv7o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cartrecipe",
+            "certificate_hash": "90fa6ccd19c498fd8f9f432b12323cc3dc67f65e"
+          }
+        },
+        {
+          "client_id": "294072647128-drjpojeh42vj1sekq1hgdia57ll9dpav.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbngk_nbkgnYrYSn5q566AjCQma7h_Bfo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "294072647128-drjpojeh42vj1sekq1hgdia57ll9dpav.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

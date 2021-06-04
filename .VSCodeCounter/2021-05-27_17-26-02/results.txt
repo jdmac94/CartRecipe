@@ -1,0 +1,136 @@
+Date : 2021-05-27 17:26:02
+Directory : c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe
+Total : 66 files,  5200 codes, 454 comments, 529 blanks, all 6183 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| Dart       |         41 |      4,676 |        342 |        459 |      5,477 |
+| JSON       |          4 |        215 |          0 |          3 |        218 |
+| XML        |          9 |        127 |         51 |         15 |        193 |
+| Groovy     |          3 |         85 |          3 |         21 |        109 |
+| YAML       |          1 |         35 |         42 |         11 |         88 |
+| HTML       |          1 |         26 |         15 |          5 |         46 |
+| Markdown   |          3 |         15 |          0 |         10 |         25 |
+| Swift      |          1 |         12 |          0 |          2 |         14 |
+| Properties |          2 |          8 |          1 |          2 |         11 |
+| C++        |          1 |          1 |          0 |          1 |          2 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                                           | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                                              |         66 |      5,200 |        454 |        529 |      6,183 |
+| cartrecipe                                                                                                                                     |         65 |      5,198 |        454 |        528 |      6,180 |
+| cartrecipe\android                                                                                                                             |         13 |        206 |         53 |         36 |        295 |
+| cartrecipe\android\app                                                                                                                         |          9 |        162 |         52 |         24 |        238 |
+| cartrecipe\android\app\src                                                                                                                     |          7 |         66 |         49 |         13 |        128 |
+| cartrecipe\android\app\src\debug                                                                                                               |          1 |          4 |          3 |          1 |          8 |
+| cartrecipe\android\app\src\main                                                                                                                |          5 |         58 |         43 |         11 |        112 |
+| cartrecipe\android\app\src\main\res                                                                                                            |          4 |         26 |         32 |          6 |         64 |
+| cartrecipe\android\app\src\main\res\drawable                                                                                                   |          1 |          4 |          7 |          2 |         13 |
+| cartrecipe\android\app\src\main\res\drawable-v21                                                                                               |          1 |          4 |          7 |          2 |         13 |
+| cartrecipe\android\app\src\main\res\values                                                                                                     |          1 |          9 |          9 |          1 |         19 |
+| cartrecipe\android\app\src\main\res\values-night                                                                                               |          1 |          9 |          9 |          1 |         19 |
+| cartrecipe\android\app\src\profile                                                                                                             |          1 |          4 |          3 |          1 |          8 |
+| cartrecipe\android\gradle                                                                                                                      |          1 |          5 |          1 |          1 |          7 |
+| cartrecipe\android\gradle\wrapper                                                                                                              |          1 |          5 |          1 |          1 |          7 |
+| cartrecipe\ios                                                                                                                                 |          7 |        222 |          2 |          9 |        233 |
+| cartrecipe\ios\Runner                                                                                                                          |          7 |        222 |          2 |          9 |        233 |
+| cartrecipe\ios\Runner\Assets.xcassets                                                                                                          |          3 |        148 |          0 |          4 |        152 |
+| cartrecipe\ios\Runner\Assets.xcassets\AppIcon.appiconset                                                                                       |          1 |        122 |          0 |          1 |        123 |
+| cartrecipe\ios\Runner\Assets.xcassets\LaunchImage.imageset                                                                                     |          2 |         26 |          0 |          3 |         29 |
+| cartrecipe\ios\Runner\Base.lproj                                                                                                               |          2 |         61 |          2 |          2 |         65 |
+| cartrecipe\lib                                                                                                                                 |         40 |      4,663 |        331 |        452 |      5,446 |
+| cartrecipe\lib\api                                                                                                                             |          1 |        425 |         36 |         80 |        541 |
+| cartrecipe\lib\data                                                                                                                            |          1 |          0 |         16 |          3 |         19 |
+| cartrecipe\lib\desperate                                                                                                                       |          2 |        266 |         39 |         28 |        333 |
+| cartrecipe\lib\models                                                                                                                          |          4 |        234 |          2 |         30 |        266 |
+| cartrecipe\lib\providers                                                                                                                       |          1 |         62 |          4 |         17 |         83 |
+| cartrecipe\lib\screens                                                                                                                         |         20 |      2,852 |        177 |        216 |      3,245 |
+| cartrecipe\lib\screens\login                                                                                                                   |          3 |        625 |         29 |         44 |        698 |
+| cartrecipe\lib\screens\profile                                                                                                                 |          7 |        507 |          5 |         38 |        550 |
+| cartrecipe\lib\screens\recipes                                                                                                                 |          3 |        628 |         82 |         44 |        754 |
+| cartrecipe\lib\screens\tutorial                                                                                                                |          1 |        117 |          2 |          7 |        126 |
+| cartrecipe\lib\widgets                                                                                                                         |         10 |        776 |         55 |         70 |        901 |
+| cartrecipe\lib\widgets\fridge                                                                                                                  |          6 |        472 |         40 |         48 |        560 |
+| cartrecipe\lib\widgets\perfil                                                                                                                  |          3 |        165 |          7 |         18 |        190 |
+| cartrecipe\lib\widgets\recipes                                                                                                                 |          1 |        139 |          8 |          4 |        151 |
+| cartrecipe\test                                                                                                                                |          1 |         13 |         11 |          7 |         31 |
+| cartrecipe\web                                                                                                                                 |          2 |         49 |         15 |          6 |         70 |
++------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                                                       | language   | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\README.md                                                                | Markdown   |          2 |          0 |          1 |          3 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\README.md                                                     | Markdown   |         10 |          0 |          7 |         17 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\app\build.gradle                                      | Groovy     |         49 |          3 |         11 |         63 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\app\google-services.json                              | JSON       |         47 |          0 |          0 |         47 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\app\src\debug\AndroidManifest.xml                     | XML        |          4 |          3 |          1 |          8 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\app\src\main\AndroidManifest.xml                      | XML        |         32 |         11 |          5 |         48 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\app\src\main\res\drawable-v21\launch_background.xml   | XML        |          4 |          7 |          2 |         13 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\app\src\main\res\drawable\launch_background.xml       | XML        |          4 |          7 |          2 |         13 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\app\src\main\res\values-night\styles.xml              | XML        |          9 |          9 |          1 |         19 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\app\src\main\res\values\styles.xml                    | XML        |          9 |          9 |          1 |         19 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\app\src\profile\AndroidManifest.xml                   | XML        |          4 |          3 |          1 |          8 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\build.gradle                                          | Groovy     |         28 |          0 |          6 |         34 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\gradle.properties                                     | Properties |          3 |          0 |          1 |          4 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\gradle\wrapper\gradle-wrapper.properties              | Properties |          5 |          1 |          1 |          7 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\android\settings.gradle                                       | Groovy     |          8 |          0 |          4 |         12 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\ios\Runner\AppDelegate.swift                                  | Swift      |         12 |          0 |          2 |         14 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\ios\Runner\Assets.xcassets\AppIcon.appiconset\Contents.json   | JSON       |        122 |          0 |          1 |        123 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\ios\Runner\Assets.xcassets\LaunchImage.imageset\Contents.json | JSON       |         23 |          0 |          1 |         24 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\ios\Runner\Assets.xcassets\LaunchImage.imageset\README.md     | Markdown   |          3 |          0 |          2 |          5 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\ios\Runner\Base.lproj\LaunchScreen.storyboard                 | XML        |         36 |          1 |          1 |         38 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\ios\Runner\Base.lproj\Main.storyboard                         | XML        |         25 |          1 |          1 |         27 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\ios\Runner\Runner-Bridging-Header.h                           | C++        |          1 |          0 |          1 |          2 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\api\api_wrapper.dart                                      | Dart       |        425 |         36 |         80 |        541 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\data\dummy_data.dart                                      | Dart       |          0 |         16 |          3 |         19 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\desperate\desperate_fridge.dart                           | Dart       |        266 |         39 |         27 |        332 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\desperate\test.dart                                       | Dart       |          0 |          0 |          1 |          1 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\main.dart                                                 | Dart       |         48 |          2 |          8 |         58 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\models\preferences_list_pages.dart                        | Dart       |         22 |          0 |          3 |         25 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\models\product.dart                                       | Dart       |        107 |          2 |         17 |        126 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\models\recipe.dart                                        | Dart       |         76 |          0 |          7 |         83 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\models\tutorial_list_pages.dart                           | Dart       |         29 |          0 |          3 |         32 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\providers\products_data_provider.dart                     | Dart       |         62 |          4 |         17 |         83 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\fridge_screen.dart                                | Dart       |        230 |         10 |         26 |        266 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\login\log_in.dart                                 | Dart       |        146 |          8 |         13 |        167 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\login\sign_in.dart                                | Dart       |        227 |          8 |         15 |        250 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\login\sign_in_with_google.dart                    | Dart       |        252 |         13 |         16 |        281 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\preferences_screen.dart                           | Dart       |        405 |          2 |         14 |        421 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\profile\about_us_screen.dart                      | Dart       |         19 |          0 |          2 |         21 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\profile\contact_screen.dart                       | Dart       |         19 |          0 |          2 |         21 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\profile\edit_preferences_screen.dart              | Dart       |         29 |          0 |          2 |         31 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\profile\edit_profile_screen.dart                  | Dart       |        206 |          5 |         19 |        230 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\profile\edit_units_screen.dart                    | Dart       |         28 |          0 |          1 |         29 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\profile\legal_screen.dart                         | Dart       |         29 |          0 |          2 |         31 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\profile\profile_screen.dart                       | Dart       |        177 |          0 |         10 |        187 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\recipes\add_recipe_form.dart                      | Dart       |        144 |         17 |         10 |        171 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\recipes\recipe_detail_screen.dart                 | Dart       |        440 |         65 |         28 |        533 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\recipes\recipes_screen.dart                       | Dart       |         44 |          0 |          6 |         50 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\scanner_screen.dart                               | Dart       |         80 |         33 |         19 |        132 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\search_screen.dart                                | Dart       |         90 |          0 |          7 |         97 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\tabs_screens.dart                                 | Dart       |         98 |         12 |         13 |        123 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\tutorial\tutorial_screen.dart                     | Dart       |        117 |          2 |          7 |        126 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\screens\welcome.dart                                      | Dart       |         72 |          2 |          4 |         78 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\widgets\fridge\add_product_form.dart                      | Dart       |         69 |         29 |          8 |        106 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\widgets\fridge\delete_alert.dart                          | Dart       |         45 |          2 |          8 |         55 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\widgets\fridge\delete_all_alert.dart                      | Dart       |         42 |          4 |          5 |         51 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\widgets\fridge\detail_view_product.dart                   | Dart       |        176 |          3 |          8 |        187 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\widgets\fridge\fridge_speedial.dart                       | Dart       |         72 |          1 |          8 |         81 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\widgets\fridge\visibility_multiple_delete.dart            | Dart       |         68 |          1 |         11 |         80 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\widgets\perfil\close_session.dart                         | Dart       |         41 |          3 |          5 |         49 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\widgets\perfil\remove_account.dart                        | Dart       |         78 |          2 |          5 |         85 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\widgets\perfil\sure_remove.dart                           | Dart       |         46 |          2 |          8 |         56 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\lib\widgets\recipes\recipe_card.dart                          | Dart       |        139 |          8 |          4 |        151 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\pubspec.yaml                                                  | YAML       |         35 |         42 |         11 |         88 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\test\widget_test.dart                                         | Dart       |         13 |         11 |          7 |         31 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\web\index.html                                                | HTML       |         26 |         15 |          5 |         46 |
+| c:\Users\cadyj\Google Drive\UAB\Ano 3\Cuatri 2\LIS\Flutter\CartRecipe\cartrecipe\web\manifest.json                                             | JSON       |         23 |          0 |          1 |         24 |
+| Total                                                                                                                                          |            |      5,200 |        454 |        529 |      6,183 |
++------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

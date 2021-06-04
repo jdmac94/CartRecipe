@@ -1,167 +1,705 @@
 import 'package:http/http.dart' as http;
+import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'dart:async';
 
 import 'package:cartrecipe/models/product.dart';
+import 'package:cartrecipe/models/recipe.dart';
 
 class ApiWrapper {
+  static ApiWrapper _instance;
+
+  ApiWrapper._internal() {
+    _instance = this;
+  }
+
+  factory ApiWrapper() => _instance ?? ApiWrapper._internal();
+
   final String endpoint = "158.109.74.46:55005";
+  //"3587b861185a.ngrok.io";
+
+  String authToken;
+
+  Future<List<Product>> getBusqueda(search) async {
+    String api = "api/v2/search/products/" + search.toString();
+
+    http.Response response =
+        await http.get(Uri.http(endpoint, api), headers: <String, String>{
+      'x-auth-token': authToken,
+    });
+
+    if (response.statusCode == 200) {
+      print("Received correctly product list.");
+      print(response.body);
+      List<Product> prods = [];
+
+      Iterable l = json.decode(response.body);
+      prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
+      print(prods.toString());
+      return prods;
+    } else if (response.statusCode == 404) {
+      print('Not found 404');
+      return null;
+    } else {
+      print('F busqueda');
+      return null;
+    }
+  }
 
   Future<List<Product>> getFridgeProducts() async {
-    const String api = "api/v1/nevera/getNeveraList";
-    final response = await http.get(Uri.http(endpoint, api));
+    const String api = "api/v1/nevera";
+    final response = await http.get(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'x-auth-token': authToken,
+      },
+    );
+
+    String temp = getAuthToken();
+
+    print('El token recuperdao con el get en la API es $temp');
+
+    print("Pido por nevera y miramos si el token está bien: $authToken");
+
     if (response.statusCode == 200) {
-      print('Recibida la respuesta de la petición');
+      print('StatusCode 200 - Todo OK');
 
       List<Product> prods = [];
 
       Iterable l = json.decode(response.body);
       prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
 
-      //print(prods);
+      print('Esto lleva el primer producto Juanda: ');
+      print(prods.toString());
 
       return prods;
     } else {
-      print('Petición de respuesta');
+      print('La petición de los productos la nevera ha sido rechazada');
+      //TODO CONTROLAR DUMMY
+      //return DUMMY_PRODUCTS;
       //throw Exception('Failed to load product');
     }
   }
 
-  //TODO! REVISAR PORQUE PETA MUY FUERTE (undefined al recibirlo en back)
-  void deleteProduct(List<String> productsToBeDeleted) async {
-    const String api = "api/v1/nevera/deleteNeveraInt";
+  void setAuthToken(token) {
+    authToken = token;
+    print('Token creado el api wrapper:  $authToken');
+  }
 
-    // print("Estamos en el deleteProduct de la API");
-    // productsToBeDeleted.forEach((element) {
-    //   element = '\"' + element + '\"';
-    //   print(element);
-    // });
-    //
-    //String allProducts = productsToBeDeleted[0];
+  String getAuthToken() {
+    return authToken;
+  }
 
-    //print('Todo en uno: $allProducts');
+  Future<String> logInUsuario(String email, String password) async {
+    var api = '/api/v1/auth/login';
+    var bytes = utf8.encode(password);
+    var hashpassword = sha256.convert(bytes);
 
-    // for (int i = 1; i < productsToBeDeleted.length; i++) {
-    //   allProducts += ',' + productsToBeDeleted[i];
-    // }
-
-    //print('Todo en uno: $allProducts');
-
-    //print('test con comillas $productsToBeDeleted');
-    //
-    //
-    // List<int> integers = [];
-    // productsToBeDeleted.forEach((element) {
-    //   //element = '\"' + element + '\"';
-    //   integers.add(int.parse(element));
-    // });
-
-    // Map<String, List<String>> parameters = Map<String, List<String>>();
-    // parameters['toDeleteArr'] = productsToBeDeleted;
-    //
-    Map<String, List<String>> parameters = Map<String, List<String>>();
-    parameters['toDeleteArr'] = productsToBeDeleted;
-
-    print(parameters is Map<String, List<String>>);
-    //print(parameters);
-    print([productsToBeDeleted] is List<String>);
-
-    print('Parámetros: $parameters');
-
-    var encodedBody = json.encode(parameters);
-    print('Encoded json: -- $encodedBody');
-
-    http.Response request = await http.post(
+    print('Email $email');
+    print('Password Hash $hashpassword');
+    print('Password  $password');
+    http.Response response = await http.post(
       Uri.http(endpoint, api),
-      body: encodedBody,
-      encoding: Encoding.getByName("application/json"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'correo': email,
+        'password': hashpassword.toString(),
+      }),
     );
-
-    print(request.body);
-    //print([barcode]);
-    if (request.statusCode == 200) {
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
-      List<Product> prods = [];
-
-      Iterable l = json.decode(request.body);
-      prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
-
-      print('Entro aquí si es bien $prods');
-    } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      //throw Exception('Failed to load product');
-    }
-  }
-
-  void addProduct(String barcode) async {
-    const String api = "api/v1/nevera/addToNevera";
-    var uri = Uri.http(endpoint, api);
-
-    String parameters = barcode;
-
-    print('URI: $uri');
-    print('Parámetros añadir: $parameters');
-
-    var encodedBody = json.encode(parameters);
-    print('Encoded json: -- $encodedBody');
-
-    http.Response response = await http.post(
-      uri,
-      body: encodedBody,
-      encoding: Encoding.getByName('application/json'),
-    );
-
-    print('Response');
-
-    print(response.body.toString());
 
     if (response.statusCode == 200) {
-      print('Recibido bien');
+      print("todo bien");
+      print(response.body.toString());
+      var token = response.body.toString();
+      print('token:$token');
+      return token;
+    } else if (response.statusCode == 404) {
+      print('Error 404 No existe Usuario');
+      return "404";
+    } else if (response.statusCode == 460) {
+      print('Error 460 Contraseña mal');
+      return "460";
     } else {
-      print('Status code: ${response.statusCode}');
-      print('Recibido mal');
+      print(response.statusCode.toString());
+      print(response.body.toString());
+      return "Error";
     }
   }
 
-  void deleteSingleProduct(String barcode) async {
-    //TODO CAMBIAR
-    var api = 'api/v1/nevera/deleteNeveraSingle';
-    var uri = Uri.http(endpoint, api);
-    Map<String, String> parameters = Map<String, String>();
-    parameters["toDeleteArr"] = barcode;
-
-    print('URI: $uri');
-    print('Parámetros single: $parameters');
-
-    var encodedBody = json.encode(parameters);
-
-    print('Encoded json: -- $encodedBody');
-
+  Future<String> registrarUsuario(
+      String nombre, String apellido, String email, String password) async {
+    var api = '/api/v1/auth/register';
+    var bytes = utf8.encode(password);
+    var hashpassword = sha256.convert(bytes);
+    print('Name + App $nombre$apellido');
+    print('Email $email');
+    print('Password Hash $hashpassword');
+    print('Password  $password');
     http.Response response = await http.post(
-      uri,
-      body: encodedBody,
-      encoding: Encoding.getByName('application/json'),
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'nombre': nombre,
+        'apellido': apellido,
+        'correo': email,
+        'password': hashpassword.toString(),
+      }),
     );
 
-    print('TODO response');
-
-    print(response.body.toString());
-
     if (response.statusCode == 200) {
-      print('Recibido bien');
+      print("usuario registrado");
+      print(response.body.toString());
+      var token = response.body.toString();
+      print('token:$token');
+      return token;
+    } else if (response.statusCode == 461) {
+      print('Error 461 email ya existe');
+      return "461";
+    } else if (response.statusCode == 462) {
+      print('Error 462 email mal formateado');
+      return "462";
+    } else if (response.statusCode == 463) {
+      print('Error 463 password mal formateado');
+      return "463";
+    } else if (response.statusCode == 464) {
+      print('Error 464 enombre y apellido mal formateado');
+      return "464";
     } else {
-      print('Status code: ${response.statusCode}');
-      print('Recibido mal');
+      print(response.statusCode.toString());
+      print(response.body.toString());
+      return "Error";
     }
   }
 
-  void printJson(String input) {
-    const JsonDecoder decoder = JsonDecoder();
-    const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-    final dynamic object = decoder.convert(input);
-    final dynamic prettyString = encoder.convert(object);
-    prettyString.split('\n').forEach((dynamic element) => print(element));
+  Future<Product> addProduct(String barcode) async {
+    var api = '/api/v1/nevera/product/$barcode';
+
+    print('Codigo es $barcode');
+    print('Barcode es string $barcode' is String);
+
+    print("Token al añadir producto $authToken");
+    //var uri = Uri.http(endpoint, api);
+
+    http.Response response = await http.put(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        //'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      // body: jsonEncode(<String, String>{
+      //   'barcode': barcode,
+      // },
+    );
+
+    // print('Esto obtengo al añadir');
+    // print(json.decode(response.body));
+
+    // print(jsonEncode(<String, String>{
+    //   'barcode': barcode,
+    // }));
+
+    print('Body: ${response.body.toString()}');
+
+    if (response.statusCode == 200) {
+      print('Recibido bien al añadir');
+      print('Esto obtengo al añadir');
+      print(json.decode(response.body));
+
+      Map<String, dynamic> map = json.decode(response.body);
+
+      print("Imprimo MAP de añadir:  $map");
+
+      Product prod = Product.fromJson(map);
+
+      //Iterable l = json.decode(response.body);
+      //prods = List<Product>.from(l.map((model) => Product.fromJson(model)));
+
+      print('Producto generado es: ${prod}');
+
+      return prod;
+    } else
+      print('F');
+  }
+
+  Future<void> deleteUser() async {
+    var api = "/api/v1/accSettings/deleteAccount/";
+
+    http.Response response = await http.delete(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print('Eliminado correctamente');
+      return "Eliminado";
+    } else if (response.statusCode == 400) {
+      print('Error 400 del Delete');
+      return "Error";
+    } else if (response.statusCode == 404) {
+      print('Error 404 del Delete');
+      return "Error";
+    }
+  }
+
+  Future<void> saveReason(String reason) async {
+    var api = "/api/v1/accSettings/deleteAccountMotive/";
+
+    http.Response response = await http.post(Uri.http(endpoint, api),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+          <String, String>{
+            'motivo': reason,
+          },
+        ));
+    if (response.statusCode == 200) {
+      print('Guardado correctamente');
+      return "Guardado";
+    } else if (response.statusCode == 400) {
+      return "Error";
+    }
+  }
+
+  //TODO! TRY CATCH TO GUAPO
+  Future<void> deleteAndreh(List<String> barcode) async {
+    var api = 'api/v1/nevera/product';
+
+    print('Estoy en la API y quiero borrar el producto con este id $barcode');
+
+    http.Response response = await http.delete(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, List<String>>{
+        'toDeleteArr': barcode,
+      }),
+    );
+
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> clearNevera() async {
+    const String api = "api/v1/nevera";
+
+    http.Response response = await http.delete(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'x-auth-token': authToken,
+      },
+    );
+
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print("Se ha vaciado la nevera");
+      print(response.body.toString());
+    } else {
+      print('Peta borrar todo ${response.statusCode}');
+      throw Exception('Failed to empty fridge');
+    }
+  }
+
+  Future<List<Recipe>> getRecipeList() async {
+    const String api = "api/v1/receta/getAllRecetas3";
+    //Currently using  generated auth token
+
+    List<Recipe> recipeList = [];
+    //TODO: Recipe filtering - later
+    http.Response response =
+        await http.get(Uri.http(endpoint, api), headers: <String, String>{
+      'x-auth-token': authToken,
+    });
+
+    if (response.statusCode == 200) {
+      print("Received correctly recipe list.");
+
+      recipeList = await List<Recipe>.from(
+          json.decode(response.body).map((x) => Recipe.fromJson(x)));
+      //Iterable i = json.decode(response.body);
+      //recipeList = List<Recipe>.from(i.map((model) => Recipe.fromJson(model)));
+    } else {
+      print("Did not receive correctly recipe list");
+    }
+
+    if (recipeList.isEmpty) {
+      print('No he recibido nada');
+    }
+    return recipeList;
+  }
+
+  Future<String> modifyProfile(String nombre, String apellido,
+      String oldPassword, String newPassword) async {
+    var api = "/api/v1/accSettings/modIdFields/";
+
+    var bytesOldPass = utf8.encode(oldPassword);
+    var hashOldPass = sha256.convert(bytesOldPass);
+
+    var bytesNewPass = utf8.encode(newPassword);
+    var hashNewPass = sha256.convert(bytesNewPass);
+
+    print('Name + App $nombre$apellido');
+    print('Password Hash $hashOldPass');
+    print('Old Password  $oldPassword');
+    print('New Password  $newPassword');
+
+    http.Response response = await http.put(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, String>{
+        'nombre': nombre,
+        'apellido': apellido,
+        'old_password': hashOldPass.toString(),
+        'password': hashNewPass.toString(),
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("Mofificación de datos completada");
+      print(response.body.toString());
+      return '200';
+    } else if (response.statusCode == 460) {
+      print('Error 460 contraseña errónea');
+      return "460";
+    } else {
+      print(response.statusCode.toString());
+      print(response.body.toString());
+      return "Error";
+    }
+  }
+
+  Future<void> fillPreferences(
+      bool is_vegan,
+      bool is_vegetarian,
+      List<String> allergenArray,
+      int level,
+      List<String> tags,
+      List<String> ban) async {
+    var api = 'api/v1/accSettings/fillPreferences';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, dynamic>{
+        'is_vegan': is_vegan,
+        'is_vegetarian': is_vegetarian,
+        'allergenArray': allergenArray,
+        'level': level,
+        'tagArray': tags,
+        'banArray': ban
+      }),
+    );
+
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('No he recibido preferencias');
+  }
+
+  Future<void> modAlergias(List<String> allergenArray) async {
+    var api = 'api/v1/accSettings/modAlergias';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, List<String>>{
+        'allergenArray': allergenArray,
+      }),
+    );
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> modDieta(bool isVegan, bool isVegetarian) async {
+    var api = 'api/v1/accSettings/modDieta';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, bool>{
+        'is_vegan': isVegan,
+        'is_vegetarian': isVegetarian,
+      }),
+    );
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> modNivel(int level) async {
+    var api = 'api/v1/accSettings/modNivel';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, int>{
+        'level': level,
+      }),
+    );
+    print("${response}");
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> modTags(List<String> tags) async {
+    var api = 'api/v1/accSettings/modTags';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, List<String>>{
+        'tagArray': tags,
+      }),
+    );
+    print("${response}");
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> modBanned(List<String> ban) async {
+    var api = 'api/v1/accSettings/modBanned';
+
+    http.Response response = await http.post(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      body: jsonEncode(<String, List<String>>{'banArray': ban}),
+    );
+    print("${response}");
+    print('Body: ${response.statusCode}');
+
+    if (response.statusCode == 200)
+      print('Recibido bien');
+    else
+      print('F');
+  }
+
+  Future<void> modificaSistemaUnidades(bool metricUnit) async {
+    var api = "api/v1/accSettings/modSistemaMedida";
+    http.Response response = await http.post(Uri.http(endpoint, api),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': authToken,
+        },
+        body: jsonEncode(<String, String>{
+          'sistema_unidades': metricUnit.toString(),
+        }));
+    print(response.body);
+    authToken = response.body.toString();
+    print('Received response ' + '${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('Received correctly');
+    } else {
+      print('Found a status code different than 200');
+    }
+  }
+
+  Future<List<String>> getGenericIngredients() async {
+    const String api = "api/v1/accSettings/getGenericIngredients";
+    List<String> prods = [];
+    final response = await http.get(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'x-auth-token': authToken,
+      },
+    );
+    if (response.statusCode == 200) {
+      print('ha llegado!!!!');
+      prods = List<String>.from(json.decode(response.body));
+    } else {
+      print(response.body);
+      print(response.statusCode);
+    }
+    return prods;
+  }
+
+  Future<void> createOwnRecipe(Recipe receta) async {
+    const String api = "api/v1/receta/addReceta";
+
+    //print(receta.ingredientes.toString());
+
+    http.Response response = await http.post(Uri.http(endpoint, api),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': authToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          'titulo': receta.titulo,
+          'dificultad': receta.dificultad.toString(),
+          'tiempo': receta.tiempo,
+          'ingredientes': receta.ingredientes,
+          'pasos': receta.pasos,
+          'consejos': receta.consejos,
+          'imagenes': receta.imagenes,
+          'comensales': receta.comensales.toString(),
+          'tags': receta.tags,
+        }));
+
+    if (response.statusCode == 200) {
+      print('Receta enviada correctamente');
+    } else {
+      print(response.statusCode);
+      print(response.body);
+    }
+  }
+
+  Future<Map<String, dynamic>> getPreferences() async {
+    const String api = "api/v1/accSettings/getPreferences";
+    Map<String, dynamic> preferences = {};
+    final response = await http.get(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'x-auth-token': authToken,
+      },
+    );
+    if (response.statusCode == 200) {
+      print('ha llegado!!!!');
+      preferences = Map<String, dynamic>.from(json.decode(response.body));
+    } else {
+      print(response.body);
+      print(response.statusCode);
+    }
+    return preferences;
+  }
+
+  Future<Product> addFav(String _id) async {
+    var api = '/api/v1/accSettings/toggleInRecetario/$_id';
+
+    print('Receta es $_id');
+
+    print("Token al añadir producto $authToken");
+    //var uri = Uri.http(endpoint, api);
+
+    http.Response response = await http.get(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        //'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+      // body: jsonEncode(<String, String>{
+      //   'barcode': barcode,
+      // },
+    );
+  }
+
+  Future<List<Recipe>> getBusquedaRecetas(search) async {
+    String api = "api/v2/search/recetas/" + search.toString();
+
+    http.Response response =
+        await http.get(Uri.http(endpoint, api), headers: <String, String>{
+      'x-auth-token': authToken,
+    });
+
+    if (response.statusCode == 200) {
+      print("Received correctly recipe list.");
+      print(response.body);
+      List<Recipe> recipes = [];
+
+      Iterable l = json.decode(response.body);
+      recipes = List<Recipe>.from(l.map((model) => Recipe.fromJson(model)));
+      print(recipes.toString());
+      return recipes;
+    } else if (response.statusCode == 404) {
+      print('Not found 404');
+      return null;
+    } else {
+      print('F busqueda');
+      return null;
+    }
+  }
+
+  Future<Product> delReceipt(String _id) async {
+    var api = '/api/v1/receta/$_id';
+
+    print('Receta eliminada es $_id');
+
+    print("Token al eliminar producto $authToken");
+    //var uri = Uri.http(endpoint, api);
+
+    http.Response response = await http.delete(
+      Uri.http(endpoint, api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken,
+      },
+    );
+  }
+
+  Future<List<Recipe>> getUserReceiptList() async {
+    const String api = "api/v1/receta/getUserRecetas/";
+    //Currently using  generated auth token
+
+    List<Recipe> recipeList = [];
+    //TODO: Recipe filtering - later
+    http.Response response =
+        await http.get(Uri.http(endpoint, api), headers: <String, String>{
+      'x-auth-token': authToken,
+    });
+
+    if (response.statusCode == 200) {
+      print("Received correctly recipe list.");
+
+      recipeList = await List<Recipe>.from(
+          json.decode(response.body).map((x) => Recipe.fromJson(x)));
+      //Iterable i = json.decode(response.body);
+      //recipeList = List<Recipe>.from(i.map((model) => Recipe.fromJson(model)));
+    } else {
+      print("Did not receive correctly recipe list");
+    }
+
+    if (recipeList.isEmpty) {
+      print('No he recibido nada');
+    }
+    return recipeList;
   }
 }
