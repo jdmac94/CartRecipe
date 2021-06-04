@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+    crossorigin="anonymous"/>
+    <!--
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css; script-src 'self' 'unsafe-inline' 'unsafe-eval', connect-src * ">
+        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+    -->
+    <script src="../public/scripts.js"></script>
+    <title>Formulari de Registre</title>
+</head>
+<body style="background-color: #8AE1FC;">
+
+    <div id="main_container" style="text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px;
+    ">
+    <h1>RECUPERACIÓN DE CONTRASEÑA</h1>
+    <form id="passform" method="POST">
+        <div id="regPass">
+            <label for="RPassword">Introduce tu contraseña (mínimo 8 caracteres y uno de ellos alfanumérico):</label>
+            <br>
+            <input type="password"  class="form-control" id="RPassword" name="RPassword" required  title="Introduce la contraseña">
+        </div>
+        <div id="regPass">
+            <br>
+            <label for="CPassword">Repite la contraseña:</label>
+            <br>
+            <input type="password"  class="form-control" id="CPassword" name="CPassword" required title="Confirma la contraseña">
+            
+            <p id="warning"></p>
+            
+        </div>
+        <input id="sub" type="submit" class="btn btn-primary btn-block" value="Enviar">
+    </form>
+
+</div>
+</body>
+</html>

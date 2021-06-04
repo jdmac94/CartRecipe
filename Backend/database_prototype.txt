@@ -1,0 +1,965 @@
+Galletas sin gluten,en:Gluten-free-biscuits
+Galletas de avena,en:Oatmeal-cookies
+Galletas de cacao rellenas de crema,en:Chocolate-sandwich-cookies
+Galletas de chocolate,en:Chocolate-biscuits
+Galletas de chocolate blanco,en:White-chocolate-biscuits
+Galletas de chocolate con leche,en:Milk-chocolate-biscuits
+Galletas de chocolate negro,en:Dark-chocolate-biscuits
+Galletas con tableta de chocolate,en:Biscuit-with-a-chocolate-bar-covering
+Galletas con tableta de chocolate negro,en:Dark-chocolate-biscuits
+Galletas con tableta de chocolate con leche,en:Milk-chocolate-biscuits
+Galletas secas,en:Dry-biscuits
+Galletas de mantequilla,en:Shortbread-cookies
+Galletas maría,en:Biscuits
+Panes,en:Breads
+Pan rallado de trigo,en:bread-crumbs
+Pan rallado de trigo,en:Wheat-crumbs
+Panko,en:Panko
+Panes integrales,en:Wholemeal-breads
+Panes sin gluten,en:Gluten-free-breads
+Panes planos,en:Flatbreads
+Panes de centeno,en:Rye-breads
+Panes de trigo,en:Wheat-breads
+Panes de molde,en:Sliced-breads
+Pan inglés sin corteza,en:Sliced-breads-without-crust
+Panes de molde con cereales,en:Multigrain-sliced-breads
+Panes de molde integrales,en:Wholemeal-sliced-breads
+Panes de molde sin gluten,en:Gluten-free-sliced-breads
+Pan tostado,en:Toasts
+Panecillos tostados,en:Toasted-bread-rolls
+Panes ácimos,en:Unleavened-breads
+Panes blancos,en:White-breads
+Panes precocidos,en:Pre-baked-breads
+Panes especiales,en:Special-breads
+Panes para hamburguesas,en:Hamburger-buns
+Panecillos para perritos calientes,en:Hot-dog-buns
+Pitas,en:Pitas
+Arroz con leche,en:Rice-puddings
+Frutas confitadas,en:Candied-fruits
+Chocolate con leche y avellanas,en:Milk-chocolate-with-hazelnuts
+Bombones de chocolate rellenos de cereza y licor,en:Liquor-filled-chocolate-covered-cherries
+Frutas recubiertas de chocolate,en:Chocolate-covered-fruits
+Pasas recubiertas de chocolate,en:Chocolate-covered-raisins
+Cerezas recubiertas de chocolate,en:Chocolate-covered-cherries
+Cacahuetes recubiertos de chocolate,en:Chocolate-covered-peanuts
+Almendras recubiertas de chocolate,en:Chocolate-covered-almonds
+Huevos de Pascua de chocolate,en:Easter-eggs
+Almendras rellenas de turrón,en:Almond-creme-filled-wafers
+Panes de higos,en:Dried-fig-cakes
+Pasta de almendras,en:Almond-paste
+Pan de Cádiz,en:Pan-de-Cádiz
+Dulces de frutas,en:Fruit-pastes
+Dulces de manzana,en:Apple-pastes
+Dulces de guayaba,en:Guava-pastes
+Dulces multifruta,en:Multifruit-pastes
+Dulces de melocotón,en:Peach-pastes
+Dulces de ciruela,en:Plum-pastes
+Dulces de membrillo,en:Quince-cheeses
+Cereales y patatas,en:Cereals-and-potatoes
+Cereales en grano,en:Cereal-grains
+Arroces,en:Rices
+Arroces Arborio,en:Arborio-rices
+Arroces Bahía,en:Bahía-rices
+Arroces Balilla x Sollana,en:Balilla-x-Sollana-rices
+Arroces Basmati,en:Basmati-rices
+Sésamo,en:Sesame
+Arroz salvaje,en:Wild-rice
+Cereales en conserva,en:Canned-cereals
+Patatas fritas,en:Chips-and-fries
+Patatas fritas de maíz,en:Corn-chips
+Patatas fritas,en:Fries
+Quesos sin lactosa,en:Lactose-free-cheeses
+Quesos en lonchas,en:Sliced-cheeses
+Quesos,en:Cheeses
+Quesos artesanales,en:Artisan-cheeses
+Queso azul,en:Blue-veined-cheeses
+Queso azul francés,en:French-blue-veined-cheeses
+Queso roquefort,en:Roquefort-cheeses
+Quesos de vaca,en:Cow-cheeses
+Queso Cheddar,en:Cheddar-cheese
+Quesos griegos,en:Greek-cheeses
+Quesos de Bélgica,en:Belgian-cheeses
+Quesos daneses,en:Danish-cheeses
+Queso Danbo,en:Danish-cheeses
+Quesos Franceses,en:French-cheeses
+Queso procesado,en:Processed-cheese
+Quesos cremosos,en:Cream-cheeses
+Queso fresco,en:Fresh-cheeses
+Quesos blandos con corteza florecida,en:Soft-cheeses-with-bloomy-rind
+Quesos cocidos prensados,en:Cooked-pressed-cheeses
+Quesos prensados sin cocer,en:Uncooked-pressed-cheeses
+Maasdam,en:Maasdam
+Quesos sin pasteurizar,en:Unpasteurised-cheeses
+Queso de leche de búfalo,en:Buffalo-cheeses
+Quesos con nuez,en:Cheeses-with-walnuts
+Quesos de leche de oveja,en:sheep's-milk-cheeses
+Queso oveja viejo,en:Old-sheep-cheese
+Queso de cabra,en:Goat-cheeses
+Queso procesado,en:Processed-cheese
+Mozzarella,en:Mozzarella
+Quesos españoles,en:Spanish-cheeses
+Queso Majorero,en:Spanish-cheeses
+Queso Tetilla,en:Tetilla-cheese
+Queso Nata de Cantabria,en:Cow-cheeses
+Queso de La Serena,en:Sheep's-milk-cheeses
+Queso Zamorano,en:Sheep's-milk-cheeses
+Queso Roncal,en:Sheep's-milk-cheeses
+Queso Casín,en:Cow-cheeses
+Queso Ibores,en:Goat-cheeses
+Quesos pasteurizados,en:Pasteurized-cheeses
+Queso rallado,en:Grated-cheese
+Queso Raclette,en:Raclette
+Sardo,en:Sardo
+Queso Chubut,en:Chubut-Cheese
+Nata,en:Creams
+Nata sin lactosa,en:Lactose-free-creams
+Nata montada,en:Whipped-creams
+Natas vegetales,en:Plant-based-creams
+Natas vegetales para cocinar,en:Plant-based-creams-for-cooking
+Natas vegetales a base de almendra para cocinar,en:Almond-based-creams-for-cooking
+Natas vegetales a base de coco para cocinar,en:Coconut-based-creams-for-cooking
+Natas vegetales a base de mijo para cocinar,en:Millet-based-creams-for-cooking
+Natas vegetales a base de avena para cocinar,en:Oat-based-creams-for-cooking
+Natas vegetales a base de arroz para cocinar,en:Rice-based-creams-for-cooking
+Natas vegetales a base de soja para cocinar,en:Soy-based-creams-for-cooking
+Natas vegetales a base de espelta para cocinar,en:Spelt-based-creams-for-cooking
+Mantequillas,en:Butters
+Mantequilla pasteurizada,en:Pasteurized-butters
+Mantequilla con sal,en:Salted-butters
+Queso quark,en:Quark
+Leches,en:Milks
+Leche certificada de Granja,en:Spanish-milks
+Leches aromatizadas,en:Flavoured-milks
+Leches de chocolate,en:Chocolate-milks
+Leche semidesnatada,en:Semi-skimmed-milks
+Leche de vaca,en:Cow-milks
+Leche de cabra,en:Goat-milks
+Leche de oveja,en:Sheep-milks
+Leche desnatada,en:Skimmed-milks
+Leche en polvo,en:Milk-powders
+Leche entera,en:Whole-milks
+Leches homogeneizadas,en:Homogenized-milks
+Leche cruda,en:Raw-milks
+Leches frescas,en:Fresh-milks
+Leches evaporadas,en:Evaporated-milks
+Leche condensada,en:Condensed-milks
+Leches pasteurizadas,en:Pasteurised-milks
+Leche sin lactosa,en:lactose-free-milk
+Bebidas vegetales,en:Plant-milks
+Bebidas de cereales,en:Cereal-milks
+Bebidas de amaranto,en:Amaranth-milks
+Bebidas de cebada,en:Barley-milks
+Bebidas de trigo sarraceno,en:Buckwheat-milks
+Bebidas de alpiste,en:Canary-grass-milks
+Bebidas de maíz,en:Maize-milks
+Bebidas de mijo,en:Millet-milks
+Bebidas de avena,en:Oat-milks
+Bebidas de quinoa,en:Quinoa-milks
+Bebidas de arroz,en:Rice-milks
+Bebidas de arroz naturales,en:Natural-rice-milks
+Bebidas de arroz con vainilla,en:Vanilla-rice-milks
+Bebidas de arroz con cacao,en:Cocoa-rice-milks
+Bebidas de sésamo,en:Sesame-milks
+Bebidas de teff,en:Teff-milks
+Bebidas de trigo,en:Wheat-milks
+Bebidas de espelta,en:Spelt-milks
+Leches de coco,en:Coconut-milks
+Bebidas de cáñamo,en:Hemp-milks
+Leches de leguminosas,en:Legume-milks
+Bebidas de soja,en:Soy-milks
+Bebidas de soja natural sin azúcar,en:Unsweetened-natural-soy-milks
+Bebidas de soja natural endulzadas,en:Sweetened-natural-soy-milks
+Bebidas de soja con vainilla,en:Vanilla-soy-milks
+Bebidas de soja con cacao,en:Chocolate-soy-milks
+Bebidas de soja con café,en:Coffee-soy-milks
+Leches de frutos de cáscara,en:Nut-milks
+Leches de almendras,en:Almond-milks
+Leche de almendras natural sin edulcorar,en:Unsweetened-natural-almond-milks
+Leches de castañas,en:Chestnut-milks
+Leches de avellanas,en:Hazelnut-milks
+Leches de nueces de macadamia,en:Macadamia-nut-milks
+Leches de nueces,en:Walnut-milks
+Leches de chufa,en:Tigernut-milks
+Leches vegetales en polvo,en:Powdered-plant-milks
+Leches de cereales en polvo,en:Powdered-cereal-milks
+Leches de amaranto en polvo,en:Powdered-amaranth-milks
+Leches de quinoa en polvo,en:Powdered-quinoa-milks
+Leches de mijo en polvo,en:Powdered-millet-milks
+Leches de avena en polvo,en:Powdered-oat-milks
+Leches de arroz en polvo,en:Powdered-rice-milks
+Leches de sésamo en polvo,en:Powdered-sesame-milks
+Leches de teff en polvo,en:Powdered-teff-milks
+Leches de trigo en polvo,en:Powdered-wheat-milks
+Leches de trigo de Jorasán en polvo,en:Powdered-Khorasan-wheat-milks
+Leches de espelta en polvo,en:Powdered-spelt-milks
+Leches de leguminosas en polvo,en:Powdered-legume-milks
+Leches de soja en polvo,en:Powdered-soy-milks
+Leches de frutos de cáscara en polvo,en:Powdered-nut-milks
+Leches de almendra en polvo,en:Powdered-almond-milks
+Leches de castaña en polvo,en:Powdered-chestnut-milks
+Leches de avellana en polvo,en:Powdered-hazelnut-milks
+Leches de nueces de macadamia en polvo,en:Powdered-macadamia-nut-milks
+Leches de nueces en polvo,en:Powdered-walnut-milks
+Quesos para untar,en:Cheese-spreads
+Yogures,en:Yogurts
+Yogures sin lactosa,en:Lactose-free-yogurts
+Yogures para beber,en:Drinkable-yogurts
+Yogures bifidus,en:Bifidus-yogurts
+Yogures de sabores,en:Flavoured-yogurts
+Yogures de frutas,en:Fruit-yogurts
+Yogures de fruta con trozos de fruta,en:Fruit-yogurts-with-fruit-chunks
+Yogures con limón,en:Lemon-yogurts
+Yogures con fresa,en:Strawberry-yogurts
+Yogures con arándanos,en:Blueberry-yogurts
+Yogures con mora,en:Blackberry-yogurts
+Yogures con mango,en:Mango-yogurts
+Yogures con melocotón,en:Peach-yogurts
+Yogures con piña,en:Pineapple-yogurts
+Yogures con frambuesa,en:Raspberry-yogurts
+Yogures con albaricoque,en:Apricot-yogurts
+Yogures con pera,en:Pear-yogurts
+Yogures con manzana,en:Apple-yogurts
+Yogures con ciruela,en:Plum-yogurts
+Yogures con ciruela pasa,en:Prune-yogurts
+Yogures con plátano,en:Banana-yogurts
+Yogures de kiwi,en:Kiwi-yogurts
+Yogures de coco,en:Coconut-yogurts
+Yogures de castaña,en:Chestnut-yogurts
+Yogures con trozos de chocolate,en:Chocolate-chunks-yogurts
+Yogures de caramelo,en:Caramel-yogurts
+Yogures estilo griego,en:Greek-style-yogurts
+Yogures bajos en grasa,en:Low-fat-yogurts
+Yogur de leche de vaca,en:Cow-milk-yogurts
+Yogures de leche de oveja,en:Sheep-milk-yogurts
+Yogures de leche de cabra,en:Goat-milk-yogurts
+Yogures endulzados,en:Sweetened-yogurts
+Yogures de vainilla,en:Vanilla-yogurt
+Yogures de leche entera,en:Whole-milk-yogurts
+Yogures naturales,en:Plain-yogurts
+Postres,en:Desserts
+Postres de chocolate,en:Chocolate-desserts
+Postres de cremas,en:Dessert-creams
+Postres vegetales,en:Non-dairy-desserts
+Postres lácteos,en:Dairy-desserts
+Pannacotta con maracuya,en:Panna-cottas-with-fruit-coulis
+Cuajada,en:Cuajada
+Postres lácteos con chocolate,en:Dairy-chocolate-desserts
+Ensaladas de frutas,en:Fruit-salads
+Flanes,en:Flans
+Postres de arroz,en:Rice-desserts
+Postres de arroz con cacao,en:Cocoa-rice-desserts
+Postres de soja,en:Soy-desserts
+Postres de soja con cacao,en:Chocolate-soy-desserts
+Postres de soja con vainilla,en:Vanilla-soy-desserts
+Yogures vegetales,en:Non-dairy-yogurts
+Yogures de leche de almendras,en:Almond-milk-yogurts
+Yogures de soja,en:Soy-milk-yogurts
+Yogures de soja naturales,en:Plain-soy-yogurts
+Yogures de soja con frutas,en:Fruit-soy-yogurts
+Yogures de soja con fresa,en:Strawberry-soy-yogurts
+Yogures de soja con frambuesa,en:Raspberry-soy-yogurts
+Yogures de soja con limón,en:Lemon-soy-yogurts
+Yogures de soja con plátano,en:Banana-soy-yogurts
+Yogures de soja con cerezas,en:Cherry-soy-yogurts
+Yogures de soja con melocotón,en:Peach-soy-yogurts
+Yogures de soja con albaricoque,en:Apricot-soy-yogurts
+Yogures de soja con arándanos,en:Blueberry-soy-yogurts
+Yogures de soja con frutas variadas,en:Mixed-fruit-soy-yogurts
+Yogures de soja con frutas del bosque,en:Berries-soy-yogurts
+Yogures de soja con frutas tropicales,en:Tropical-fruits-soy-yogurts
+Almendras,en:Almonds
+Almendras sin cáscara,en:Shelled-almonds
+Castañas,en:Chestnuts
+Castañas sin cáscara,en:Shelled-chestnuts
+Castañas en almíbar,en:Chestnuts-in-syrup
+Avellanas,en:Hazelnuts
+Avellanas sin cáscara,en:Shelled-hazelnuts
+Avellanas sin cáscara crudas con piel,en:Shelled-hazelnuts-with-skin
+Avellanas sin cáscara crudas sin piel,en:Blanched-shelled-hazelnuts
+Avellanas tostadas,en:Roasted-hazelnuts
+Avellanas tostadas con piel,en:Roasted-hazelnuts-with-skin
+Avellanas tostadas sin piel,en:Blanched-roasted-hazelnuts
+Nueces de macadamia,en:Macadamia-nuts
+Cacahuetes,en:Peanuts
+Cacahuetes sin cascara,en:Unshelled-peanuts
+Cacahuetes tostados,en:Roasted-peanuts
+Pistachos,en:Pistachios
+Pistachos sin cáscara,en:Shelled-pistachios
+Pistachos tostados,en:Roasted-pistachios
+Harinas de frutos de cáscara,en:Nut-flours
+Harinas de almendra,en:Almond-meal
+Harinas de castañas,en:Chestnut-flours
+Harinas de castañas T110,en:Chestnut-flours-T110
+Cremas de castañas,en:Chestnut-spreads
+Almendras caramelizadas,en:Caramelized-almonds
+Cacahuetes garrapiñados,en:Caramelized-peanuts
+Castañas confitadas,en:Marrons-glacés
+Almendras garrapiñadas,en:Nut-confectioneries
+Avellanas garrapiñadas,en:Caramelized-hazelnuts
+Mieles,en:Honeys
+Mieles de azahar,en:Orange-blossom-honeys
+Mieles de eucaliptus,en:Eucalyptus-honeys
+Mieles de manuka,en:Manuka-honeys
+Mieles de brezo,en:Heather-honeys
+Mieles de castaño,en:Chestnut-honey
+Mieles de flores,en:Flower-honeys
+Miel de lavanda,en:Lavender-honeys
+Mieles de tomillo,en:Thyme-honeys
+Mieles liquidas,en:Liquid-honeys
+Mieles de romero,en:Rosemary-honeys
+Huevos,en:Eggs
+Huevos frescos,en:Fresh-eggs
+Huevos cocidos,en:Boiled-eggs
+Aceites y grasas,en:Fats
+Grasas animales,en:Animal-fats
+Margarinas liquidas,en:Liquid-margarines
+Margarinas,en:Margarines
+Margarinas sin sal,en:Unsalted-margarines
+Margarinas con sal,en:Salted-margarines
+Margarinas ligeras,en:Light-margarines
+Aceites vegetales,en:Vegetable-oils
+Aceites de argán,en:Argan-oils
+Aceites de borraja,en:Borage-seed-oils
+Aceites de cereales,en:Cereal-oils
+Aceites de amaranto,en:Amaranth-oils
+Aceites de maíz,en:Corn-oils
+Aceites de lino,en:Linseed-oils
+Aceites de arroz,en:Rice-bran-oils
+Aceites de sésamo,en:Sesame-oils
+Aceites de germen de trigo,en:Wheat-germ-oils
+Aceites de semillas de algodón,en:Cottonseed-oils
+Aceites de frutas y semillas de frutas,en:Fruit-and-fruit-seed-oils
+Aceites de aguacate,en:Avocado-oils
+Aceites de coco,en:Coconut-oils
+Aceite de coco refinado,en:Refined-coco-oils
+Aceites de pepitas de uva,en:Grape-seed-oils
+Aceites de semillas sandía,en:Watermelon-seed-oils
+Aceites de cáñamo,en:Hemp-oils
+Aceites de leguminosas,en:Legume-oils
+Aceites de cacahuete,en:Peanut-oils
+Aceites de soja,en:Soybean-oils
+Aceites de mostaza,en:Mustard-oils
+Aceites de frutos de cáscara,en:Nut-oils
+Aceites de almendras,en:Almond-oils
+Aceites de avellanas,en:Hazelnut-oils
+Aceites de macadamia,en:Macadamia-oils
+Aceites de nuez pecana,en:Pecan-oils
+Aceites de piñones,en:Pine-nut-oils
+Aceites de pistacho,en:Pistachio-oils
+Aceites de nueces,en:Walnut-oils
+Aceites de palma,en:Palm-oils
+Aceites de amapola,en:Poppyseed-oils
+Aceites de semillas de calabaza,en:Pumpkin-seed-oils
+Aceites de colza,en:Rapeseed-oils
+Aceites de canola,en:Canola-oils
+Aceites de cártamo,en:Safflower-oils
+Aceites de girasol,en:Sunflower-oils
+Aceites de camelia,en:Tea-seed-oils
+Harinas de origen vegetal,en:Flours
+Salvado,en:Bran
+Salvados de cereales,en:Cereal-brans
+Salvados de avena,en:Oat-brans
+Salvados de arroz,en:Rice-brans
+Salvados de centeno,en:Rye-brans
+Salvados de trigo,en:Wheat-brans
+Salvados de trigo de Jorasán,en:Khorasan-wheat-brans
+Salvados de espelta,en:Spelt-brans
+Cereales para el desayuno,en:Breakfast-cereals
+Cereales con frutas,en:Cereals-with-fruits
+Cereales de chocolate,en:Chocolate-cereals
+Copos de cereales con chocolate,en:Cereal-flakes-with-chocolate
+Cereales con miel,en:Cereals-with-honey
+Cereales rellenos,en:Filled-cereals
+Cereales inflados,en:Puffed-cereals
+Arroz inflado,en:Puffed-rice
+Harinas de cereales,en:Cereal-flours
+Harinas de cebada,en:Barley-flours
+Harinas de maíz,en:Cornmeal
+Harinas de lino,en:Flax-seed-flours
+Harinas de gluten,en:Gluten-flours
+Harinas de mijo,en:Millet-flours
+Harinas de matzá,en:Matza-flours
+Harinas de avena,en:Oat-flours
+Harinas de quinoa,en:Quinoa-flours
+Harinas de arroz,en:Rice-flours
+Harinas de centeno,en:Rye-flours
+Harinas de teff,en:Teff-flours
+Harinas de trigo,en:Wheat-flours
+Harinas de trigo blancas,en:Wheat-flour-type-55-for-bread
+Harinas de trigo semi-integrales,en:Semi-polished-wheat-flours
+Harinas de trigo común semi-integrales,en:Semi-polished-common-wheat-flours
+Harinas de trigo blando,en:Common-wheat-flours
+Harina de trigo integral,en:Whole-wheat-flours
+Harinas de trigo integrales,en:Wheat-flour-type-150
+Harinas de trigo duro,en:Durum-wheat-flours
+Harinas de escandas,en:Emmer-wheat-flours
+Harinas de espelta,en:Spelt-flours
+Harinas de espelta blancas,en:White-spelt-flours
+Harinas de espelta integrales,en:Whole-spelt-flours
+Harinas de trigo malteadas,en:Wheat-malt-flours
+Sémolas de maíz,en:Corn-semolinas
+Patatas fritas congeladas,en:Frozen-fried-potatoes
+Patatas fritas congeladas,en:Frozen-fries
+Helados y sorbetes,en:Ice-creams-and-sorbets
+Helados de palo,en:Ice-cream-bars
+Helados de palo de vainilla,en:Vanilla-ice-cream-bars
+Helados de palo de chocolate,en:Chocolate-ice-cream-bars
+Tarrinas y bloques de helado de vainilla,en:Vanilla-ice-cream-tubs
+Helados con leche vegetal,en:Plant-based-ice-creams
+Polos con leche vegetal,en:Plant-based-ice-cream-bars
+Polos de leche de soja con chocolate,en:Plant-based-ice-cream-bars
+Polos de leche de soja recubiertos con chocolate,en:Plant-based-ice-cream-bars
+Polos de horchata de chufa,en:Plant-based-ice-cream-bars
+Helados de hielo,en:Ice-pops
+Yogures helados,en:Frozen-yogurts
+Helado de mochi,en:Mochi-ice-cream
+Pizza y tartas congeladas,en:Frozen-pizzas-and-pies
+Pizzas congeladas,en:Frozen-pizzas
+Pescado congelado,en:Frozen-fishes
+Carnes congeladas,en:Frozen-meats
+Frutas y verduras y sus productos,en:Fruits-and-vegetables-based-foods
+Frutas y sus productos,en:Fruits-based-foods
+Frutas,en:Fruits
+Frutas frescas,en:Fresh-fruits
+Manzanas,en:Apples
+Manzanas frescas,en:Fresh-apples
+Manzanas Fuji,en:Fuji-apples
+Manzanas Gala,en:Gala-apples
+Manzanas Golden Delicious,en:Golden-Delicious-apples
+Manzanas Granny Smith,en:Granny-Smith-apples
+Manzanas Red Delicious,en:Red-Delicious-apples
+Manzanas reineta,en:Russet-apples
+Albaricoques,en:Apricots
+Frutas del bosque,en:Berries
+Arándanos comunes,en:Common-bilberries
+Arándanos negros,en:Bog-bilberries
+Moras,en:Blackberries
+Arándanos,en:Blueberries
+Arándanos azules,en:Northern-Highbush-Blueberries
+Arándanos rojos,en:Cranberries
+Arándanos rojos,en:Lingonberries
+Frambuesas,en:Raspberries
+Frambuesas frescas,en:Fresh-raspberries
+Grosellas,en:Redcurrants
+Fresas,en:Strawberries
+Fresas frescas,en:Fresh-strawberries
+Cerezas,en:Cherries
+Pomelos,en:Grapefruits
+Mandarinas,en:Mandarin-oranges
+Naranjas,en:Oranges
+Pomelos chinos,en:Pomelos
+Higos,en:Figs
+Uvas,en:Grapes
+Uvas blancas,en:Green-grapes
+Uvas frescas,en:Fresh-grapes
+Uvas negras,en:Black-grapes
+Uvas sin semillas,en:Seedless-grapes
+Uvas blancas sin semillas,en:Green-seedless-grapes
+Uvas negras sin semillas,en:Black-seedless-grapes
+Caquis,en:Kakis
+Kiwi fresco,en:Fresh-kiwifruits
+Nectarinas,en:Nectarines
+Nísperos,en:Medlars
+Melones,en:Muskmelons
+Peras,en:Pears
+Peras frescas,en:Fresh-pears
+Ciruelas,en:Plums
+Granadas,en:Pomegranates
+Membrillos,en:Quinces
+Frutas tropicales,en:Tropical-fruits
+Aguacates,en:Avocados
+Plátanos,en:Bananas
+Mangos,en:Mangoes
+Papayas,en:Papayas
+Maracuyás,en:Passion-fruits
+Piñas,en:Pineapple
+Frutas congeladas,en:Frozen-fruits
+Frutas del bosque congeladas,en:Frozen-berries
+Moras congeladas,en:Frozen-blackberries
+Arándanos congelados,en:Frozen-blueberries
+Frambuesas congeladas,en:Frozen-raspberries
+Grosellas congeladas,en:Frozen-redcurrants
+Fresas congeladas,en:Frozen-strawberries
+Granadas congeladas,en:Frozen-pomegranates
+Frutas tropicales congeladas,en:Frozen-tropical-fruits
+Aguacates congelados,en:Frozen-avocados
+Piñas congeladas,en:Frozen-pineapples
+Frutas deshidratadas,en:Dried-fruits
+Dátiles sin hueso,en:Pitted-dates
+Dátiles con hueso,en:Whole-dates
+Manzanas deshidratadas,en:Dried-apples
+Albaricoques deshidratados,en:Dried-apricots
+Plátanos deshidratados,en:Dried-bananas
+Arándanos deshidratados,en:Dried-bilberries
+Arándanos secos,en:Dried-cranberries
+Harina de coco,en:Dried-coconut-flour
+Higos secos,en:Dried-figs
+Mangos deshidratados,en:Dried-mangoes
+Papaya deshidratada,en:Dried-papayas
+Piña deshidratada,en:Dried-pineapple
+Ciruelas pasas,en:Dried-prunes
+Uvas pasas,en:Raisins
+Uvas pasas de Corinto,en:Raisins-of-Corinth
+Uvas pasas sultanas,en:Sultana-raisins
+Frutas en conserva,en:Canned-fruits
+Piña enlatada,en:Canned-pineapples
+Frutas en almíbar,en:Fruits-in-syrup
+Albaricoques en almíbar,en:Apricots-in-syrup
+Cerezas en almíbar,en:Cherries-in-syrup
+Mangos en almíbar,en:Mangoes-in-syrup
+Piña en almíbar,en:Pineapple-in-syrup
+Peras en almíbar,en:Pears-in-syrup
+Pomelos en almíbar,en:Grapefruits-in-syrup
+Piña en conserva en zumo,en:Pineapple-in-juice
+Orégano,en:Oregano
+Orégano fresco,en:Fresh-oregano
+Orégano seco molido,en:Ground-dried-oregano
+Macetas de orégano,en:Potted-oregano
+Perejil,en:Parsley
+Perejil fresco,en:Fresh-parsley
+Perejil congelado,en:Frozen-parsley
+Perejil seco molido,en:Ground-dried-parsley
+Perejil liofilizado,en:Lyophilized-parsley
+Macetas de perejil,en:Potted-parsley
+Salvia,en:Sage
+Salvia seca molida,en:Ground-dried-sage
+Sales,en:Salts
+Sales liquidas,en:Liquid-salts
+Sal del himalaya,en:Himalaya-salts
+Sales marinas,en:Sea-salts
+Sales sin refinar,en:Unrefined-salts
+Sales de Guerande,en:Guerande-salts
+Sales de mesa,en:Table-salts
+Nuez moscada,en:Nutmeg
+Nuez moscada molida,en:Ground-nutmeg
+Nuez moscada entera,en:Whole-nutmeg
+Pimentón,en:Paprika
+Pimienta negra,en:Black-peppers
+Pimienta negra en grano,en:Black-peppercorns
+Pimienta negra en polvo,en:Ground-black-peppers
+Pimentón de la Vera,en:Spanish-spices
+Pimentón de Murcia,en:Spanish-spices
+Salsas,en:Sauces
+Salsa kebab,en:Kebab-sauces
+Salsa de mostaza,en:Mustard-sauce
+Salsa barbacoa,en:Barbecue-sauces
+Salsas de curry,en:Curry-sauces
+Salsa de ostras,en:Oyster-sauces
+Salsa Samourai,en:Samourai-sauces
+Salsas Teriyaki,en:Teriyaki-sauces
+Salsa bearnesa,en:Béarnaise-sauce
+Aliolis,en:Aiolis
+Salsas bechamel,en:Béchamel-sauces
+Salsas con queso,en:Cheese-sauces
+Salsas con Roquefort,en:Roquefort-sauces
+Salsas verdes,en:Green-sauces
+Salsas picadas,en:Pimented-sauces
+Salsas de chiles,en:Hot-sauces
+Mayonesas,en:Mayonnaises
+Mayonesas ligeras,en:Light-mayonnaises
+Salsas de mostaza,en:Mustards
+Salsas para pastas,en:Pasta-sauces
+Salsas Arrabbiata,en:Arrabbiata-sauces
+Salsas para pasta a base de carne,en:Meat-based-pasta-sauces
+Salsas boloñesas,en:Bolognese-sauces
+Carne de Ávila,en:Spanish-meat-products
+Carne de Salamanca,en:Spanish-meat-products
+Carne de Vacuno del País Vasco,en:Spanish-meat-products
+Carne de Cantabria,en:Spanish-meat-products
+Carne de la Sierra de Guadarrama,en:Spanish-meat-products
+Pollo y Capón del Prat,en:Spanish-meat-products
+Jamón Serrano,en:Serrano-ham
+Jamón de Serón,en:Spanish-meat-products
+Salsas con carne,en:Meat-based-sauces
+Pestos,en:Pestos
+Vinagretas,en:Vinaigrettes
+Salsas de soja,en:Soy-sauces
+Salsas agridulces,en:Sweet-and-sour-sauces
+Salsas de tomate,en:Tomato-sauces
+Salsas bravas,en:Brava-sauce
+Salsas napolitanas,en:Neapolitan-sauces
+Salsas de tomate frito,en:Fried-tomato-sauces
+Tomate natural rallado,en:Natural-grated-tomato
+Tomate natural triturado,en:Tomato-purées
+Pastas de tomate,en:Tomato-pastes
+Pastas de wasabi,en:Wasabi-pastes
+Pasta de curry,en:Curry-pastes
+Brandade De Bacalao,en:Cod-brandade
+Ajoblanco,en:Ajoblanco
+Salmorejos,en:Salmorejo
+Sopas de tipo crema,en:Cream-soups
+Arroz frito,en:Fried-rice
+Ensalada de col,en:Coleslaw
+Zanahorias ralladas,en:Grated-carrots
+Lentejas preparadas,en:Prepared-lentils
+Pasta instantánea,en:Instant-pasta
+Ensaladas preparadas,en:Prepared-salads
+Ensalada de atún,en:Tuna-salad
+Ensalada césar,en:Caesar-salads
+Pasta de verduras,en:Vegetable-pasta
+Ensaladas de arroz,en:Rice-salads
+Carnes,en:Meats
+Carnes secas,en:Dried-meats
+Caracoles,en:Snails
+Caracoles de borgoña,en:Snails-from-Burgundy
+Caracoles enlatados,en:Canned-snails
+Carne de vaca,en:Beef
+Carne de conejo,en:Rabbit-meat
+Filetes,en:Steaks
+Filetes picado,en:Ground-steaks
+Filetes de ternera,en:Beef-steaks
+Filetes de carne picada,en:Ground-beef-steaks
+Carnes frías,en:Fresh-meats
+Carne de cerdo,en:Pork
+Costillas de cerdo,en:Pork-ribs
+Pato,en:Ducks
+Salchichas de pato,en:Duck-sausages
+Pavo,en:Turkeys
+Pollo Preparado,en:Cooked-chicken
+Embutidos,en:Prepared-meats
+Jamón Curado,en:Hams
+Jamón de Bayona,en:Bayonne-ham
+Carnes preparadas con menos sal,en:Prepared-meats-with-less-salt
+Carnes en maceta,en:Potted-meats
+Salchichas,en:Sausages
+Salchichas de aves,en:Poultry-sausages
+Salchichas de Ternera,en:Veal-sausages
+Salchichas alemanas,en:German-sausages
+Salchichas ahumadas,en:Smoked-sausages
+Mortadela,en:Mortadella
+Patés de cerdo,en:Pork-Pâtés
+Patés de hígado de cerdo,en:Pork-liver-Pâtés
+Paté de pato,en:Duck-Pâtés
+Embutidos curados,en:Cured-sausages
+Salami,en:Salami
+Carne de cordero,en:Lamb-meat
+Carne de ternera,en:Veal-meat
+Setas y sus productos,en:Mushrooms-and-their-products
+Setas,en:Mushrooms
+Setas frescas,en:Fresh-mushrooms
+Setas trompeta de los muertos,en:Horn-of-plenty-mushrooms
+Setas babosa negra,en:Hygrophorus-latitabundus
+Setas orejas de Judas,en:Jew's-ear-mushrooms
+Setas de cardo,en:King-trumpet-mushrooms
+Setas nameko,en:Nameko-mushrooms
+Setas de ostra,en:Oyster-mushrooms
+Setas de ostra laminadas,en:Chopped-oyster-mushrooms
+Setas de ostra enteras,en:Whole-oyster-mushrooms
+Champiñones de Straw,en:Paddy-straw-mushrooms
+Boletos comestibles,en:Porcini-mushrooms
+Setas senderilla,en:Scotch-bonnet-mushrooms
+Setas shiitake,en:Shiitake-mushrooms
+Setas en conserva,en:Canned-mushrooms
+Setas babosa negra en conserva,en:Canned-Hygrophorus-latitabundus
+Setas de cardo en conserva,en:Canned-king-trumpet-mushrooms
+Setas nameko en conserva,en:Canned-nameko-mushrooms
+Setas de ostra en conserva,en:Canned-oyster-mushrooms
+Champiñones de Straw en conserva,en:Canned-paddy-straw-mushrooms
+Boletos comestibles en conserva,en:Canned-porcini-mushrooms
+Setas shiitake en conserva,en:Canned-shiitake-mushrooms
+Mezclas de setas en conserva,en:Canned-mixed-mushrooms
+Setas congeladas,en:Frozen-mushrooms
+Rebozuelos congelados,en:Frozen-chanterelle-mushrooms
+Setas de ostra congeladas,en:Frozen-oyster-mushrooms
+Boletos comestibles congelados,en:Frozen-porcini-mushrooms
+Boletos comestibles troceados congelados,en:Frozen-chopped-porcini-mushrooms
+Boletos comestibles enteros congelados,en:Frozen-whole-porcini-mushrooms
+Setas deshidratadas,en:Dried-mushrooms
+Setas trompeta de los muertos deshidratadas,en:Dried-horn-of-plenty-mushrooms
+Setas orejas de Judas deshidratadas,en:Dried-jew's-ear-mushrooms
+Mezclas de setas deshidratadas,en:Dried-mixed-mushrooms
+Setas de ostra deshidratadas,en:Dried-oyster-mushrooms
+Boletos comestibles deshidratados,en:Dried-porcini-mushrooms
+Setas senderilla deshidratadas,en:Dried-scotch-bonnet-mushrooms
+Setas shiitake deshidratadas,en:Dried-shiitake-mushrooms
+Harinas de setas,en:Mushroom-powders
+Pastas alimenticias,en:Pastas
+Pasta de huevo,en:Egg-pastas
+Pasta sin gluten,en:Gluten-free-pasta
+Pastas rellenas,en:Stuffed-pastas
+Pastas de avena,en:Oat-pasta
+Pastas de cebada,en:Barley-Pasta
+Pastas de centeno,en:Rye-Pasta
+Pastas de espelta,en:Spelt-pastas
+Pastas de espelta integrales o semi-integrales,en:Spelt-pastas
+Pastas de trigo de Jorasán,en:Khorasan-pasta
+Pastas de maíz,en:Corn-pasta
+Pasta de trigo duro,en:Durum-wheat-pasta
+Pastas de trigo duro integrales,en:Whole-durum-wheat-pasta
+Pastas de trigo duro semi-integrales,en:Durum-wheat-pasta
+Macarrones de trigo duro,en:Durum-wheat-macaroni
+Pastas de trigo duro integrales o semi-integrales,en:Whole-or-semi-whole-durum-wheat-pasta
+Macarrones de trigo duro integrales o semi-integrales,en:Whole-or-semi-whole-durum-wheat-pasta
+Pastas de trigo duro con huevo,en:Durum-wheat-pasta-with-egg
+Pastas de arroz,en:Rice-pasta
+Pastas de trigo sarraceno,en:Buckwheat-pasta
+Pasta fresca,en:Fresh-pasta
+Pasta seca,en:Dry-pastas
+Sopas de fideos instantáneas,en:Instant-noodle-soups
+Tartaletas De Fresas,en:Strawberry-tartlets
+Hamburguesas,en:Hamburgers
+Hamburguesas vegetales,en:Veggie-burgers
+Caballa de Andalucia,en:Spanish-sea-products
+Mejillón de Galicia,en:Spanish-sea-products
+Caballas enlatadas,en:Tinned-Mackerels
+Gambas,en:Prawns
+Gambas,en:Gambas
+Pescados,en:Fishes
+Marisco congelado,en:Frozen-seafood
+Pescado empanado,en:Breaded-fish
+Sardinas en conserva,en:Canned-sardines
+Sardinas en aceite,en:Sardines-in-oil
+Sardinas en aceite de oliva,en:Sardines-in-olive-oil
+Sardinas en aceite de girasol,en:Sardines-in-sunflower-oil
+Sardinas en salsa de tomate,en:Sardines-in-tomato-sauce
+Salmon enlatado,en:Canned-salmons
+Arenques enlatados,en:Canned-herrings
+Filetes de pescado,en:Fish-fillets
+Anchoa,en:Anchovy
+Filetes de anchoa,en:Anchovy-fillets
+Filetes de bacalao,en:Cod-fillets
+Filetes de sardinas,en:Sardine-fillets
+Filetes de Atún,en:Tuna-fillets
+Salmóns,en:Salmons
+Salmones de granja,en:Salmons-from-farming
+Filetes de salmón,en:Salmon-fillets
+Sardinas,en:Sardines
+Pescado ahumado,en:Smoked-fishes
+Salmones ahumados,en:Smoked-salmons
+Salmones ahumados de granja,en:Smoked-salmons-from-farming
+Salmones ahumados salvajes,en:Wild-smoked-salmons
+Arenques ahumados,en:Smoked-herrings
+Truchas ahumadas,en:Smoked-trouts
+Truchas,en:Trouts
+Bonito del Norte,en:Albacore
+Arenques,en:Herring
+Caballa,en:Mackerels
+Filetes De Caballa,en:Mackerel-fillets
+Bacalaos,en:Cods
+Ostras,en:Oysters
+Calamares,en:Calamari
+Salsas para mojar,en:Dips
+Mermeladas y confituras de flores,en:Flower-preserves
+Mermeladas y confituras de pétalos de rosas,en:Rose-petal-preserves
+Mermeladas y confituras d'espino amarillo,en:Sea-buckthorn-jams
+Mermeladas y confituras de frutas del bosque,en:Berry-jams
+Mermeladas y confituras de arándanos,en:Bilberries-jams
+Mermeladas y confituras de zarzaparrilla negra,en:Blackcurrant-jams
+Mermeladas y confituras de mora,en:Blackberry-jams
+Mermeladas y confituras de frutas del bosque variadas,en:Mixed-berry-jams
+Mermeladas y confituras de grosellas,en:Redcurrants-jams
+Mermeladas y confituras de frambuesas,en:Raspberry-jams
+Mermeladas y confituras de fresa,en:Strawberry-jams
+Mermeladas y confituras de clementinas,en:Clementine-jams
+Mermeladas y confituras de limón,en:Lemon-jams
+Mermeladas y confituras de naranja,en:Orange-jams
+Mermeladas y confituras de frutas tropicales,en:Tropical-fruit-jams
+Mermeladas y confituras de plátano,en:Banana-jams
+Mermeladas y confituras de guayaba,en:Guava-jams
+Mermeladas y confituras de lichis,en:Lychee-jams
+Mermeladas y confituras de papaya,en:Papaya-jams
+Mermeladas y confituras de piña,en:Pineapple-jams
+Mermeladas y confituras de mango,en:Mango-jams
+Mermeladas y confituras de manzana,en:Apple-jams
+Mermeladas y confituras de cereza,en:Cherry-jams
+Mermeladas y confituras de higos,en:Figs-jams
+Mermeladas y confituras de uvas,en:Grape-jams
+Mermeladas y confituras de melón,en:Melon-jams
+Mermeladas y confituras de melocotón,en:Peach-jams
+Mermeladas y confituras de peras,en:Pear-jams
+Mermelada de kiwi,en:Kiwi-jams
+Mermeladas y confituras de ciruela,en:Plum-jams
+Mermeladas y confituras multifruta,en:Mixed-fruit-jams
+Mermeladas y confituras de cebolla,en:Onion-jams
+Mermeladas y confituras de calabaza,en:Pumpkin-jams
+Mermeladas y confituras de ruibarbo,en:Rhubarb-jams
+Mermeladas y confituras de tomate,en:Tomato-jams
+Mermeladas y confituras de pimiento,en:Sweet-pepper-jams
+Mermeladas,en:Marmalades
+Mermeladas de albaricoque,en:Apricot-Marmalades
+Mermeladas de naranja,en:Orange-Marmalades
+Semillas de calabaza,en:Pumpkin-seeds
+Semillas de calabaza tostadas,en:Roasted-pumpkin-seeds
+Semillas de calabaza con cáscara,en:Unshelled-pumpkin-seeds
+Semillas de calabaza con cáscara tostadas,en:Roasted-unshelled-pumpkin-seeds
+Semillas de calabaza sin cáscara tostadas,en:Roasted-shelled-pumpkin-seeds
+Semillas de girasol y derivados,en:Sunflower-seeds-and-their-products
+Semillas de girasol,en:Sunflower-seeds
+Azúcar,en:Sugars
+Azúcar moreno,en:Brown-sugars
+Azúcar mascabado,en:Muscovado
+Panela,en:Panela
+Panela en bloque,en:Panela-blocks
+Panela en polvo,en:Powdered-panela
+Azúcar de caña,en:Cane-sugar
+Azúcar de coco,en:Coconut-sugar
+Azúcar invertido,en:Inverted-sugar-syrups
+Azúcar glas,en:Powdered-sugars
+Azúcar blanco,en:Granulated-sugars
+Azúcar vainillado,en:Vanilla-sugars
+Melazas de caña,en:Molasses
+Ajos y derivados,en:Garlic-and-their-products
+Cebollas y derivados,en:Onions-and-their-products
+Cebollas fritas,en:Fried-onions
+Calabazas y derivados,en:Pumpkins-and-their-products
+Tomates y sus productos,en:Tomatoes-and-their-products
+Alcachofas en conserva,en:Canned-artichokes
+Remolacha en conserva,en:Canned-beet
+Coles de Bruselas en conserva,en:Canned-Brussels-sprouts
+Zanahorias en conserva,en:Canned-carrots
+Coliflor en conserva,en:Canned-cauliflowers
+Apio en conserva,en:Canned-celery
+Puerros en conserva,en:Canned-leeks
+Pimientos en conserva,en:Canned-peppers
+Pimientos rojos en conserva,en:Canned-red-peppers
+Patatas en conserva,en:Canned-potatoes
+Salsifis en conserva,en:Canned-salsifis
+Espinacas en conserva,en:Canned-spinachs
+Tomates en conserva,en:Canned-tomatoes
+Remolacha encurtida,en:Pickled-beets
+Zanahorias encurtidas,en:Pickled-carrots
+Pepinos encurtidos,en:Pickled-cucumbers
+Berenjenas encurtidas,en:Pickled-eggplants
+Ajos encurtidos,en:Pickled-garlic
+Cebollas encurtidas,en:Pickled-onions
+Pimientos encurtidos,en:Pickled-peppers
+Alcachofas,en:Artichokes
+Espárragos,en:Asparagus
+Espárragos en conserva,en:Canned-asparagus
+Espárragos verdes en conserva,en:Canned-green-asparagus
+Espárragos blancos en conserva,en:Canned-white-asparagus
+Espárragos blancos,en:White-asparagus
+Espárragos morados,en:Purple-asparagus
+Espárragos verdes,en:Green-asparagus
+Espárragos frescos,en:Fresh-Asparagus
+Berenjenas,en:Aubergines
+Remolachas,en:Beet
+Coles de Bruselas,en:Brussels-sprouts
+Coles de Bruselas frescas,en:Fresh-Brussels-sprouts
+Zanahorias,en:Carrots
+Zanahorias frescas,en:Fresh-carrots
+Coliflores,en:Cauliflowers
+Coliflor fresca,en:Fresh-cauliflowers
+Apios,en:Celery
+Pepinos,en:Cucumbers
+Pepinos frescos,en:Fresh-cucumbers
+Escarolas,en:Endives
+Endibias,en:Belgian-endives
+Ajos,en:Garlic
+Ajos tiernos,en:Green-garlic
+Puerros,en:Leeks
+Puerro fresco,en:Fresh-leeks
+Lechuga,en:Lettuces
+Cebollas,en:onions
+Pimientos,en:Sweet-peppers
+Pimientos verdes,en:Green-bell-peppers
+Pimientos rojos,en:Red-bell-peppers
+Pimientos amarillos,en:Yellow-bell-peppers
+Pimientos del piquillo,en:Piquillo-pepper
+Pimientos rellenos,en:Stuffed-peppers
+Patatas,en:Potatoes
+Calabazas,en:Pumpkins
+Calabazas Butternut,en:Butternut-squashes
+Calabazas espagueti,en:Spaghetti-squashes
+Rábanos,en:Radishes
+Rábanos rojos,en:Red-radishes
+Rábanos blancos,en:Daikon-radishes
+Cebolletas tiernas,en:scallions
+Espinacas,en:Spinachs
+Espinacas frescas,en:Fresh-spinachs
+Tomates,en:Tomatoes
+Tomates frescos,en:Fresh-tomatoes
+Tomates cherry,en:Cherry-tomatoes
+Tomates pelados,en:Peeled-tomatoes
+Calabacín fresco,en:Fresh-zucchini
+Ensaladas,en:Salads
+Ensaladas vegetales,en:Leaf-salads
+Berros hortelanos,en:Garden-cress
+Berros,en:Watercress
+Tomates secos,en:Dried-tomatoes
+Tomates secos al natural,en:Natural-dried-tomatoes
+Tomates secos en aceite,en:Dried-tomato-in-oil
+Tomate seco molido,en:Dried-tomato-powder
+Ajo seco molido,en:Garlic-powder
+Cebolla seca molida,en:onion-powder
+Leguminosas y derivados,en:Legumes-and-their-products
+Leguminosas,en:Legumes
+Leguminosas frescas,en:Fresh-legumes
+Guisantes verdes,en:Green-peas
+Legumbres secas,en:Pulses
+Garrofones,en:Butter-beans
+Garbanzos,en:Chickpeas
+Garbanzos de Escacena,en:Escacena-chickpeas
+Lentejas,en:Lentils
+Lentejas cocidas,en:Cooked-lentils
+Lentejas negras,en:Black-lentils
+Lentejas peladas,en:Decorticated-lentils
+Lentejas rubias,en:Blonde-lentils
+Lentejas verdes,en:Green-lentils
+Lentejas rojas,en:Red-lentils
+Habas,en:Fresh-broad-beans
+Habas en conserva,en:Canned-broad-beans
+Guisantes,en:Peas
+Habas espada,en:Sword-beans
+Leguminosas en conserva,en:Canned-legumes
+Guisantes en conserva,en:Canned-peas
+Guisantes y zanahorias en conserva,en:Canned-peas-and-carrots
+Leguminosas encurtidas,en:Legume-pickles
+Harinas de leguminosas,en:Legume-flours
+Harinas de garbanzos,en:Chickpeas-flours
+Harinas de habas,en:Fresh-broad-flours
+Harinas de alubias,en:Green-bean-flours
+Harinas de lentejas,en:Lentil-flours
+Harinas de altramuces,en:Lupin-bean-flours
+Harinas de soja,en:Soybean-flours
+Vinagres,en:Vinegars
+Vinagres españoles,en:Spanish-vinegars
+Vinagre de Montilla-Moriles,en:Spanish-vinegars
+Vinagre del Condado de Huelva,en:Spanish-vinegars
+Vinagre de Jerez,en:Spanish-vinegars
+Vinagres balsámicos,en:Balsamic-vinegars
+Vinagres balsámicos de Módena,en:Balsamic-vinegars-of-Modena
+Vinagres de sidra y manzana,en:Cider-vinegars
+Vinagres de arroz,en:Rice-vinegars
+Vinagres de vino,en:Wine-vinegars
+Vinagres de vino rojo,en:Red-wine-vinegars
+Vinagres de vino blanco,en:White-wine-vinegars
+Vinagres de umeboshi,en:Umeboshi-vinegars
+Vinagres de alcohol,en:Alcohol-vinegars
+Algas lechuga de mar,en:Sea-lettuce-seaweeds
+Salteados de vegetales congelados,en:Frozen-plant-based-foods-mixes
+Patatas panadera congeladas,en:Frozen-baked-potatoes
+Cereales congelados,en:Frozen-cereals
+Puerro congelado,en:Frozen-leeks
+Alcachofas congeladas,en:Frozen-artichokes
+Espárragos congelados,en:Frozen-asparagus
+Espárragos verdes congelados,en:Frozen-green-asparagus
+Espárragos verdes troceados congelados,en:Frozen-chopped-green-asparagus
+Espárragos verdes enteros congelados,en:Frozen-whole-green-asparagus
+Espárragos blancos congelados,en:Frozen-white-asparagus
+Berenjenas congeladas,en:Frozen-aubergines
+Coles de Bruselas congeladas,en:Frozen-Brussels-sprouts
+Habas frescas congeladas,en:Frozen-fresh-broad-beans
+Guisantes verdes congelados,en:Frozen-green-peas
+Pimientos congelados,en:Frozen-peppers
+Pimientos verdes congelados,en:Frozen-green-peppers
+Pimientos rojos congelados,en:Frozen-red-peppers
+Pimientos amarillos congelados,en:Frozen-yellow-peppers
+Patatas congeladas,en:Frozen-potatoes
+Calabazas congeladas,en:Frozen-pumpkins
+Espinacas congeladas,en:Frozen-spinachs
+Espinacas troceadas congeladas,en:Frozen-chopped-spinachs
+Espinacas en hojas congeladas,en:Frozen-spinach-leaves
+Castañas congeladas,en:Frozen-chestnuts
+Panes de leche,en:Milk-bread-rolls
+Carnes vegetales,en:Meat-analogues
+Filetes vegetales para hamburguesas,en:Veggie-patties
+Salchichas vegetales,en:Vegetarian-sausages
+Salchichas vegetales para perritos calientes,en:Vegetarian-hot-dog-sausages
+Salchichas vegetales de tipo Frankfurt,en:Vegetarian-Frankfurt-sausages
+Salchichas vegetales de tipo Viena,en:Vegetarian-Vienna-sausages
+Quesos vegetales,en:Non-dairy-cheeses
+Masa De Pizza,en:Pizza-dough
+Pan de jengibre de Tula,en:Tula-gingerbread
+Paté,en:Pâté
+Quesos doble crema,en:Double-cream-cheeses
